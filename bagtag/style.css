@@ -1,68 +1,65 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  padding: 0;
-  background-color: #121212;
-  color: #fff;
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #0e0e0e;
+  color: #ffffff;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   min-height: 100vh;
+  padding: 20px;
 }
 
 .container {
-  max-width: 500px;
-  width: 90%;
-  padding: 2em;
   text-align: center;
+  max-width: 500px;
+  width: 100%;
 }
 
 h1 {
   font-size: 2.5em;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.3em;
+  color: #ffffff;
 }
 
-p {
-  margin-bottom: 2em;
+.description {
   font-size: 1.1em;
-  color: #ccc;
+  margin-bottom: 2em;
+  color: #bbbbbb;
+}
+
+.contact-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
 
 .card {
   background-color: #1f1f1f;
   border: 1px solid #333;
-  border-radius: 10px;
   padding: 1em;
-  margin: 1em 0;
+  border-radius: 10px;
+  color: #ffffff;
   text-decoration: none;
-  color: #fff;
-  display: block;
-  transition: background-color 0.3s, transform 0.2s;
+  font-size: 1.2em;
+  transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .card:hover {
-  background-color: #2a2a2a;
-  transform: scale(1.02);
+  background-color: #2b2b2b;
+  transform: scale(1.03);
 }
 
-.map-embed {
-  padding: 0;
-  overflow: hidden;
+.fade-in {
+  animation: fadeIn 1.2s ease-in;
 }
 
-.map-label {
-  padding: 1em;
-  font-size: 1.2em;
-  background-color: #1f1f1f;
-  border-bottom: 1px solid #333;
-  border-radius: 10px 10px 0 0;
-}
-
-.map-embed iframe {
-  width: 100%;
-  height: 200px;
-  border: none;
-  display: block;
-  border-radius: 0 0 10px 10px;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
