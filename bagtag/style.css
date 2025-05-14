@@ -48,33 +48,32 @@ h1 {
   font-size: 1.2em;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  overflow: hidden;
 }
 
-.card {
-  background-color: #1f1f1f;
-  border: 1px solid #333;
-  padding: 1em;
-  border-radius: 10px;
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 1.2em;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  overflow: hidden;
+.card:hover {
+  background-color: #2b2b2b;
+  transform: scale(1.03);
 }
 
 .map-embed {
   padding: 0;
+  display: block;
+}
+
+.map-label {
+  padding: 1em;
+  font-size: 1.2em;
+  color: #ffffff;
 }
 
 .map-embed iframe {
-  display: block;
   width: 100%;
   height: 200px;
   border: none;
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px;
+  display: block;
 }
-
 
 .fade-in {
   animation: fadeIn 1.2s ease-in;
