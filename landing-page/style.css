@@ -1,40 +1,56 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  background: linear-gradient(to right, #2c3e50, #3498db);
-  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #121212;
+  color: #f1f1f1;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  text-align: center;
+  min-height: 100vh;
+  padding: 20px;
 }
 
 .container {
-  max-width: 600px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
 }
 
 h1 {
-  font-size: 3em;
-  margin-bottom: 0.2em;
+  font-size: 2.5em;
+  margin-bottom: 0.3em;
+  color: #ffffff;
 }
 
-p {
-  font-size: 1.2em;
-  margin-bottom: 1.5em;
+.description {
+  font-size: 1.1em;
+  margin-bottom: 2em;
+  color: #cccccc;
 }
 
-.button {
-  background-color: white;
-  color: #3498db;
-  padding: 0.7em 1.5em;
-  border-radius: 8px;
+.contact-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.card {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  padding: 1em;
+  border-radius: 10px;
+  color: #ffffff;
   text-decoration: none;
-  font-weight: bold;
-  transition: 0.3s;
+  font-size: 1.2em;
+  transition: all 0.2s ease;
 }
 
-.button:hover {
-  background-color: #ecf0f1;
+.card:hover {
+  background-color: #2a2a2a;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
