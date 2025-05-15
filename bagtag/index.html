@@ -33,5 +33,13 @@
       </a>
     </div>
   </div>
+  <script>
+  function copyPassword() {
+    const pass = document.getElementById("wifi-pass").innerText;
+    navigator.clipboard.writeText(pass).then(() => {
+      alert("Wi-Fi password copied to clipboard!");
+    });
+  }
+</script>
 </body>
 </html>
