@@ -6,6 +6,36 @@
   <title>Dutta Residence</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <style>
+    /* Inline style to match your theme */
+    .copy-btn {
+      margin-top: 1em;
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 0.8em 1.5em;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background-color 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background-color: #444;
+    }
+
+    #copy-msg {
+      font-size: 0.9em;
+      color: #00cc66;
+      margin-top: 0.7em;
+      display: none;
+    }
+
+    #wifi-pass {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <div class="container fade-in">
@@ -16,15 +46,14 @@
     <div class="card wifi-card">
       <h3>🛜 Connect to Home Wi-Fi</h3>
       <p><strong>Network:</strong> Dutta Residence 2.4G</p>
-      <p><strong>Password:</strong> <span id="wifi-pass">SchemingCat@74/82</span></p>
-      <button onclick="copyPassword()">📋 Copy Password</button>
-      <p id="copy-msg" style="display: none; color: #00cc66; margin-top: 0.5em;">Password copied!</p>
+      <p><strong>Password:</strong> <span id="wifi-pass">dutta1234</span></p>
+      <button class="copy-btn" onclick="copyPassword()">📋 Copy Password</button>
+      <p id="copy-msg">Password copied!</p>
     </div>
 
-    <!-- Spacer -->
-    <div class="spacer"><h3> </h3></div>
+    <div class="spacer"></div>
 
-    <!-- Member Access Card -->
+    <!-- Member Sign-In Card -->
     <div class="card cctv-card">
       <h3>🔑 Sign-in as Member</h3>
       <p>• CCTV feed</p>
@@ -33,7 +62,6 @@
     </div>
   </div>
 
-  <!-- Script for Copy-to-Clipboard -->
   <script>
     function copyPassword() {
       const pass = "SchemingCat@74/82";
