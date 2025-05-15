@@ -8,15 +8,23 @@
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
+  <div class="container fade-in">
+    <h1>Dutta Residence</h1>
+    <p class="description">📍 129/2 Prince Gullam Hussain Shah Road, Kolkata 700032, India</p>
+
+    <!-- Wi-Fi Card -->
     <div class="card wifi-card">
       <h3>🛜 Connect to Home Wi-Fi</h3>
       <p><strong>Network:</strong> Dutta Residence 2.4G</p>
+      <p><strong>Password:</strong> <span id="wifi-pass">dutta1234</span></p>
       <button onclick="copyPassword()">📋 Copy Password</button>
       <p id="copy-msg" style="display: none; color: #00cc66; margin-top: 0.5em;">Password copied!</p>
     </div>
-    <div class="spacer">
-      <h3>  </h3>
-    </div> <!-- vertical space -->
+
+    <!-- Spacer -->
+    <div class="spacer"><h3> </h3></div>
+
+    <!-- Member Access Card -->
     <div class="card cctv-card">
       <h3>🔑 Sign-in as Member</h3>
       <p>• CCTV feed</p>
@@ -24,17 +32,19 @@
       <p>• NAS media access</p>
     </div>
   </div>
+
+  <!-- Script for Copy-to-Clipboard -->
   <script>
-  function copyPassword() {
-    const pass = document.getElementById("wifi-pass").innerText;
-    navigator.clipboard.writeText(pass).then(() => {
-      const msg = document.getElementById("copy-msg");
-      msg.style.display = "block";
-      setTimeout(() => {
-        msg.style.display = "none";
-      }, 2000);
-    });
-  }
-</script>
+    function copyPassword() {
+      const pass = document.getElementById("wifi-pass").innerText;
+      navigator.clipboard.writeText(pass).then(() => {
+        const msg = document.getElementById("copy-msg");
+        msg.style.display = "block";
+        setTimeout(() => {
+          msg.style.display = "none";
+        }, 2000);
+      });
+    }
+  </script>
 </body>
 </html>
