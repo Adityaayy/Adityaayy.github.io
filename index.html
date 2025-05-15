@@ -36,9 +36,9 @@
   <!-- Script for Copy-to-Clipboard -->
   <script>
     function copyPassword() {
-      const pass = document.getElementById("wifi-pass").innerText;
+      const pass = "SchemingCat@74/82";
       navigator.clipboard.writeText(pass).then(() => {
-        const msg = document.getElementById("copy-msg");
+        const msg = "Password Copied !";
         msg.style.display = "block";
         setTimeout(() => {
           msg.style.display = "none";
