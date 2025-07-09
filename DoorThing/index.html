@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DoorThing - Smart Hostel Lock</nmeta>
+  <title>DoorThing - Smart Hostel Lock</title>
   <style>
     /* Reset & Base */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,46 +15,59 @@
     .fade-up { animation: fadeUp 1s ease forwards; opacity: 0; }
 
     /* Container */
-    .container { width: 90%; max-width: 1100px; margin: auto; padding: 2rem 0; }
+    .container { width: 90%; max-width: 1200px; margin: auto; padding: 2rem 0; }
 
     /* Header */
     header { position: relative; height: 80vh; min-height: 500px; color: #fff; text-align: center; display: flex; align-items: center; justify-content: center;
       background: url('placeholder-hero-bg.jpg') center/cover no-repeat; }
-    header::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); }
+    header::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); }
     header .content { position: relative; z-index:1; }
-    header h1 { font-size: 4rem; margin-bottom: 0.5rem; }
-    header p { font-size: 1.5rem; }
+    header h1 { font-size: 5rem; margin-bottom: 1rem; letter-spacing: 2px; }
+    header p { font-size: 1.8rem; }
 
     /* Section Titles */
-    .section-title { text-align: center; margin: 4rem 0 2rem; font-size: 2.5rem; color: #222; }
+    .section-title { text-align: center; margin: 4rem 0 2rem; font-size: 3rem; color: #222; }
 
     /* Features */
-    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
-    .feature { background: #fff; border-radius: 10px; padding: 2rem; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .feature img { width: 80px; height: 80px; margin-bottom: 1rem; }
-    .feature h3 { font-size: 1.4rem; margin-bottom: 0.5rem; }
-    .feature p { color: #555; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+    .feature { background: #fff; border-radius: 10px; padding: 2.5rem 1.5rem; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .feature img { width: 100px; height: 100px; margin-bottom: 1rem; }
+    .feature h3 { font-size: 1.6rem; margin-bottom: 0.75rem; }
+    .feature p { color: #555; font-size: 1rem; }
 
     /* Pricing */
-    .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
-    .tier { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.1); transform: translateY(20px); opacity:0; animation: fadeUp 1s ease forwards; }
+    .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2.5rem; }
+    .tier { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 18px rgba(0,0,0,0.1); transform: translateY(20px); opacity:0; animation: fadeUp 1s ease forwards; }
     .tier:nth-child(1) { animation-delay: 0.2s; }
     .tier:nth-child(2) { animation-delay: 0.4s; }
     .tier:nth-child(3) { animation-delay: 0.6s; }
-    .tier img { width: 100%; height: 150px; object-fit: cover; }
-    .tier-content { padding: 1.5rem; text-align: center; }
-    .tier-content h4 { font-size: 1.6rem; margin-bottom: 0.5rem; }
-    .tier-content .price { font-size: 2rem; margin: 1rem 0; color: #222; }
-    .tier-content ul { list-style: none; margin-bottom: 1.5rem; }
-    .tier-content ul li { margin: 0.5rem 0; color: #555; }
-    .tier-content button { padding: 0.8rem 1.8rem; border: none; border-radius: 5px; background: #007bff; color: #fff; cursor: pointer; font-size: 1rem; }
+    .tier img { width: 100%; height: 180px; object-fit: cover; }
+    .tier-content { padding: 2rem; text-align: center; }
+    .tier-content h4 { font-size: 1.8rem; margin-bottom: 0.75rem; }
+    .tier-content .price { font-size: 2.4rem; margin: 1.2rem 0; color: #222; }
+    .tier-content ul { list-style: none; margin-bottom: 1.8rem; }
+    .tier-content ul li { margin: 0.6rem 0; color: #555; font-size: 1rem; }
+    .tier-content button { padding: 1rem 2rem; border: none; border-radius: 6px; background: #007bff; color: #fff; cursor: pointer; font-size: 1rem; }
+
+    /* Tinkerers Section */
+    .tinker { background: #eef4ff; border-radius: 10px; padding: 3rem 2rem; margin: 4rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .tinker h3 { font-size: 2rem; margin-bottom: 1rem; text-align: center; }
+    .tinker p { font-size: 1rem; color: #444; max-width: 800px; margin: auto 0 2rem; text-align: center; }
+    .tinker img { display: block; margin: 0 auto 2rem; max-width: 200px; }
 
     /* Contact */
-    footer { background: #007bff; color: #fff; padding: 3rem 0; }
+    footer { background: #007bff; color: #fff; padding: 4rem 0; }
     .contact { text-align: center; }
-    .contact h3 { font-size: 2rem; margin-bottom: 1rem; }
-    .contact p { margin-bottom: 1.5rem; font-size: 1rem; }
-    .contact a { padding: 0.8rem 1.8rem; background: #fff; color: #007bff; border-radius: 5px; font-weight: bold; }
+    .contact h3 { font-size: 2.5rem; margin-bottom: 1rem; }
+    .contact p { margin-bottom: 1.5rem; font-size: 1.1rem; }
+    .contact a { padding: 1rem 2rem; background: #fff; color: #007bff; border-radius: 6px; font-weight: bold; font-size: 1rem; }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      header h1 { font-size: 3.5rem; }
+      header p { font-size: 1.3rem; }
+      .section-title { font-size: 2.2rem; }
+    }
   </style>
 </head>
 <body>
@@ -99,19 +112,19 @@
           <div class="price">₹4499</div>
           <ul>
             <li>30+ day battery life</li>
-            <li>USB-C rechargeable</li>
-            <li>30s self-installation</li>
+            <li>Register and remove any RFID capable ID card</li>
+            <li>30 second self Installation</li>
           </ul>
           <button>Order Lite</button>
         </div>
       </div>
       <div class="tier">
-        <img src="placeholder-tier2.jpg" alt="Core">
+        <img src="placeholder-tier2.jpg" alt="Standard">
         <div class="tier-content">
           <h4>Standard</h4>
           <div class="price">₹4999</div>
           <ul>
-            <li>Unlimited use with included USB-c adapter</li>
+            <li>Includes USB-c adapter for unlimited use</li>
             <li>30+ day battery backup</li>
             <li>installation included</li>
           </ul>
@@ -125,11 +138,17 @@
           <div class="price">₹5999</div>
           <ul>
             <li>All Standard features</li>
-            <li>Custom colour combinations, skins and animations</li>
+            <li>Custom colour combinations, skins, animations and lighting</li>
           </ul>
           <button>Order Forge</button>
         </div>
       </div>
+    </section>
+
+    <section class="tinker fade-up">
+      <img src="placeholder-open-source.png" alt="Open Source">
+      <h3>Open Source & Wi-Fi Ready</h3>
+      <p>DoorThing is built on open hardware and software. Future firmware updates and Wi-Fi modules allow you to tinker, add features, or connect to your own smart home server.</p>
     </section>
   </div>
 
