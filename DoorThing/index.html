@@ -13,19 +13,21 @@
     /* Animation */
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .fade-up { animation: fadeUp 1s ease forwards; opacity: 0; }
+    .fade-in { opacity: 0; transition: opacity 1s ease-in-out; }
+    .fade-in.show { opacity: 1; }
 
     /* Container */
     .container { width: 90%; max-width: 1200px; margin: auto; padding: 2rem 0; }
 
     /* Header */
-    header { position: relative; height: auto; min-height: 500px; color: #fff; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: url('placeholder-hero-bg.jpg') center/cover no-repeat; padding: 4rem 0; }
-    header::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); }
+    header { position: relative; height: auto; min-height: 500px; color: #fff; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; padding: 4rem 0; }
     header .content { position: relative; z-index:1; }
     header h1 { font-size: 5rem; margin-bottom: 1rem; letter-spacing: 2px; }
     header p { font-size: 1.8rem; margin-bottom: 2rem; }
-    /* Cover Photo under header text */
-    .cover-photo { position: relative; z-index:1; width: 80%; max-width: 800px; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .cover-wrapper { position: relative; width: 80%; max-width: 800px; }
+    .cover-video, .cover-image { width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); position: absolute; top: 0; left: 0; }
+    .cover-video { z-index: 2; }
+    .cover-image { z-index: 1; }
 
     /* Section Titles */
     .section-title { text-align: center; margin: 4rem 0 2rem; font-size: 3rem; color: #222; }
@@ -69,7 +71,7 @@
       header h1 { font-size: 3.5rem; }
       header p { font-size: 1.3rem; }
       .section-title { font-size: 2.2rem; }
-      .cover-photo { width: 100%; }
+      .cover-wrapper { width: 100%; }
     }
   </style>
 </head>
@@ -78,8 +80,13 @@
     <div class="content fade-up">
       <h1>DoorThing</h1>
       <p>Your campus ID is now your key.</p>
-      <!-- Cover Photo -->
-      <img src="placeholder-cover.jpg" alt="DoorThing in action" class="cover-photo fade-up">
+      <div class="cover-wrapper">
+        <video class="cover-video" autoplay muted playsinline onended="this.style.display='none'; document.getElementById('cover-img').classList.add('show');">
+          <source src="placeholder-video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <img src="placeholder-cover.jpg" alt="DoorThing in action" id="cover-img" class="cover-image fade-in">
+      </div>
     </div>
   </header>
 
