@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostel Smart Lock</title>
+  <style>
+    /* Base reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; background: #fdfdfd; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* Container */
+    .container { width: 90%; max-width: 1000px; margin: 0 auto; padding: 2rem 0; }
+
+    /* Header */
+    header { text-align: center; padding: 4rem 0; }
+    header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    header p { font-size: 1.1rem; color: #555; }
+
+    /* Hero image placeholder */
+    .hero-img { background: #e2e2e2; height: 300px; margin: 2rem 0; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 1.2rem; }
+
+    /* Features */
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 3rem 0; }
+    .feature { text-align: center; }
+    .feature img { width: 64px; height: 64px; margin-bottom: 1rem; }
+    .feature h3 { margin-bottom: 0.5rem; font-size: 1.2rem; }
+    .feature p { color: #666; font-size: 0.95rem; }
+
+    /* Pricing */
+    .pricing { margin: 4rem 0; }
+    .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+    .tier { border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; text-align: center; transition: box-shadow 0.2s; background: #fff; }
+    .tier:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+    .tier h4 { margin-bottom: 1rem; font-size: 1.4rem; }
+    .tier .price { font-size: 2rem; margin: 1rem 0; color: #222; }
+    .tier ul { list-style: none; text-align: left; margin-bottom: 1.5rem; }
+    .tier ul li { margin-bottom: 0.5rem; color: #555; }
+    .tier button { padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; background: #333; color: #fff; }
+
+    /* Contact */
+    footer { background: #f5f5f5; padding: 2rem 0; margin-top: 4rem; }
+    .contact { text-align: center; }
+    .contact h3 { margin-bottom: 1rem; font-size: 1.5rem; }
+    .contact p { margin-bottom: 1rem; color: #555; }
+    .contact a { display: inline-block; padding: 0.75rem 1.5rem; background: #333; color: #fff; border-radius: 4px; }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      header h1 { font-size: 2rem; }
+      .hero-img { height: 200px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>SmartLock Pro</h1>
+      <p>Never carry keys again — secure your hostel room with your ID card</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="hero-img">Image Placeholder</div>
+
+    <section class="features">
+      <div class="feature">
+        <img src="placeholder-icon.png" alt="RFID Reader">
+        <h3>Seamless Access</h3>
+        <p>Authenticate with any standard ID card—no app or Wi-Fi needed.</p>
+      </div>
+      <div class="feature">
+        <img src="placeholder-icon.png" alt="Long Battery">
+        <h3>Long Battery Life</h3>
+        <p>Up to 30 days of standby on a single charge—reliable all month.</p>
+      </div>
+      <div class="feature">
+        <img src="placeholder-icon.png" alt="Customizable">
+        <h3>Fully Customizable</h3>
+        <p>3D-printed shells and skins to match your personal style (Pro).</p>
+      </div>
+      <div class="feature">
+        <img src="placeholder-icon.png" alt="Plug & Play">
+        <h3>Hassle-Free Setup</h3>
+        <p>Installs in minutes without altering your existing key mechanism.</p>
+      </div>
+    </section>
+
+    <section class="pricing">
+      <h2 style="text-align:center; margin-bottom:2rem;">Choose Your Tier</h2>
+      <div class="tiers">
+        <div class="tier">
+          <h4>Core</h4>
+          <div class="price">₹XXX</div>
+          <ul>
+            <li>30-day battery life</li>
+            <li>RFID only</li>
+            <li>Basic shell</li>
+          </ul>
+          <button>Order Now</button>
+        </div>
+        <div class="tier">
+          <h4>Edge</h4>
+          <div class="price">₹XXX</div>
+          <ul>
+            <li>30-day battery + Charger</li>
+            <li>Premium shell</li>
+            <li>AC adapter included</li>
+          </ul>
+          <button>Order Now</button>
+        </div>
+        <div class="tier">
+          <h4>Quantum</h4>
+          <div class="price">₹XXX</div>
+          <ul>
+            <li>All Edge features</li>
+            <li>Custom colors & skins</li>
+            <li>Priority support</li>
+          </ul>
+          <button>Order Now</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container contact">
+      <h3>Get in Touch</h3>
+      <p>Ready to upgrade your hostel experience? Drop us a line:</p>
+      <a href="mailto:youremail@example.com">Contact Us</a>
+    </div>
+  </footer>
+</body>
+</html>
