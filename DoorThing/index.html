@@ -7,77 +7,71 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     /* Reset & Base */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Montserrat', sans-serif; color: #1a1a1a; background: #fafafa; overflow-x: hidden; }
-    a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Montserrat', sans-serif; color:#1a1a1a; background:#fafafa; line-height:1.6; }
+    a { text-decoration:none; color:inherit; }
+    ul { list-style:none; }
 
     /* Utility */
-    .container { width: 90%; max-width: 1400px; margin: 0 auto; padding: 6rem 0; }
-    .text-center { text-align: center; }
-    .btn { display: inline-block; padding: 1.2rem 2.5rem; border-radius: 50px; background: #ff4157; color: #fff; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; transition: background 0.3s, transform 0.3s; }
-    .btn:hover { background: #e03349; transform: translateY(-3px); }
-    h1, h2, h3, h4 { font-weight: 900; }
-    p, li { font-weight: 400; line-height: 1.6; }
-    .fade-up { opacity: 0; animation: fadeUp 1s ease forwards; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: none;} }
+    .container { width:90%; max-width:1400px; margin:0 auto; }
+    .text-center { text-align:center; }
+    .btn { display:inline-block; padding:1rem 2.5rem; border-radius:50px; background:#ff4157; color:#fff; font-weight:900; text-transform:uppercase; letter-spacing:1px; transition:transform .3s, background .3s; }
+    .btn:hover { background:#e03349; transform:translateY(-3px); }
+    .fade-up { opacity:0; animation:fadeUp 1s ease forwards; }
+    @keyframes fadeUp { from{opacity:0; transform:translateY(30px);} to{opacity:1; transform:none;} }
 
-    /* Header Hero */
-    header { position: relative; height: 100vh; min-height: 600px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    header::before { content: ''; position: absolute; inset: 0; background: url('placeholder-hero-bg.jpg') center/cover no-repeat; filter: brightness(0.5); }
-    .hero-content { position: relative; z-index: 1; text-align: center; max-width: 800px; padding: 0 1rem; }
-    .hero-content h1 { font-size: 5.5rem; color: #fff; margin-bottom: 1rem; letter-spacing: 4px; line-height: 1.1; }
-    .hero-content p { font-size: 2rem; color: #ddd; margin-bottom: 2rem; }
+    /* Header */
+    header { position:relative; height:100vh; min-height:600px; display:flex; align-items:center; justify-content:center; background:#000; overflow:hidden; }
+    header::before { content:''; position:absolute; inset:0; background:url('placeholder-hero-bg.jpg') center/cover no-repeat; filter:brightness(0.4); }
+    .hero-content { position:relative; z-index:1; text-align:center; padding:0 1rem; }
+    .hero-content h1 { font-size:5.5rem; color:#fff; margin-bottom:1rem; letter-spacing:4px; line-height:1.1; }
+    .hero-content p { font-size:2rem; color:#ddd; margin-bottom:2rem; }
 
-    /* Video & Fallback */
-    .media-wrapper { position: relative; width: 90%; max-width: 900px; margin: 2rem auto 0; }
-    .media-wrapper video,
-    .media-wrapper img { width: 100%; height: auto; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
-    .media-wrapper img { display: none; }
-    .media-wrapper video { display: block; }
-    .media-wrapper video:ended + img { display: block; }
+    /* Media */
+    .media-wrapper { position:relative; width:90%; max-width:900px; margin:2rem auto 0; }
+    .media-wrapper video, .media-wrapper img { width:100%; height:auto; border-radius:20px; box-shadow:0 20px 50px rgba(0,0,0,0.3); }
+    .media-wrapper img { display:none; }
+    .media-wrapper video[ended] + img { display:block; }
 
-    /* Features Section */
-    section.features { background: #fff; }
-    .features .section-title { font-size: 3.2rem; margin-bottom: 3rem; color: #1a1a1a; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px,1fr)); gap: 3rem; }
-    .feature-card { background: #fdfdfd; border-radius: 20px; padding: 3rem; box-shadow: 0 20px 40px rgba(0,0,0,0.1); transition: transform 0.3s; }
-    .feature-card:hover { transform: translateY(-10px); }
-    .feature-card img { width: 140px; margin-bottom: 1.5rem; }
-    .feature-card h3 { font-size: 2.2rem; margin-bottom: 1rem; color: #111; }
-    .feature-card p { font-size: 1.2rem; color: #555; }
+    /* Features */
+    section.features { padding:6rem 0; }
+    .section-title { font-size:3.2rem; margin-bottom:2rem; }
+    .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:3rem; }
+    .feature-card { background:#fff; border-radius:20px; padding:3rem; box-shadow:0 20px 40px rgba(0,0,0,0.1); text-align:center; transition:transform .3s; }
+    .feature-card:hover { transform:translateY(-10px); }
+    .feature-card img { width:120px; margin-bottom:1.5rem; }
+    .feature-card h3 { font-size:2.2rem; margin-bottom:1rem; color:#111; }
+    .feature-card p { font-size:1.2rem; color:#555; }
 
-    /* Pricing Section */
-    section.pricing { background: #fafafa; }
-    .pricing .section-title { font-size: 3.2rem; margin-bottom: 3rem; color: #1a1a1a; }
-    .tiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 3.5rem; }
-    .card-tier { position: relative; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.1); transition: transform 0.3s; }
-    .card-tier:hover { transform: translateY(-10px); }
-    .card-tier img { width: 100%; height: 280px; object-fit: cover; }
-    .card-content { padding: 3rem; text-align: center; }
-    .card-content h4 { font-size: 2.8rem; margin-bottom: 0.8rem; color: #ff4157; }
-    .card-content .price { font-size: 3.6rem; margin: 1.2rem 0; color: #111; font-weight: 900; }
-    .card-content ul { margin: 2rem 0; }
-    .card-content ul li { font-size: 1.3rem; margin: 1rem 0; padding-left: 2rem; position: relative; }
-    .card-content ul li::before { content: '\2713'; position: absolute; left: 0; top: 0; color: #ff4157; font-size: 1.5rem; line-height: 1; }
-    .card-content .btn { width: 100%; }
+    /* Pricing */
+    section.pricing { background:#f5f5f5; padding:6rem 0; }
+    .tiers-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:3.5rem; }
+    .card-tier { background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.1); transition:transform .3s; }
+    .card-tier:hover { transform:translateY(-10px); }
+    .card-tier img { width:100%; height:300px; object-fit:cover; }
+    .card-content { padding:3rem; text-align:center; }
+    .card-content h4 { font-size:2.8rem; margin-bottom:.8rem; color:#ff4157; }
+    .card-content .price { font-size:3.6rem; color:#111; font-weight:900; margin:1rem 0; }
+    .card-content ul { margin:2rem 0; text-align:left; }
+    .card-content ul li { font-size:1.3rem; margin:1rem 0; padding-left:2rem; position:relative; }
+    .card-content ul li::before { content:'✔'; position:absolute; left:0; top:0; color:#ff4157; font-size:1.5rem; }
 
-    /* Open Source Section */
-    section.open-source { background: #fff; text-align: center; }
-    .open-source h2 { font-size: 3rem; margin-bottom: 2rem; color: #1a1a1a; }
-    .open-source p { max-width: 700px; margin: auto; font-size: 1.25rem; color: #555; }
-    .open-source .btn { margin-top: 2rem; }
+    /* Open Source */
+    section.open-source { padding:6rem 0; }
+    .open-source h2 { font-size:3rem; margin-bottom:1rem; }
+    .open-source p { max-width:800px; margin:1rem auto 2rem; font-size:1.25rem; color:#555; }
 
-    /* Contact Section */
-    footer { background: #111; color: #eee; text-align: center; padding: 6rem 0; }
-    footer h3 { font-size: 3rem; margin-bottom: 1.5rem; }
-    footer p { font-size: 1.4rem; margin-bottom: 2rem; color: #ccc; }
-    footer a.btn { background: #ff4157; }
+    /* Contact */
+    footer { background:#111; color:#eee; text-align:center; padding:6rem 0; }
+    footer h3 { font-size:3rem; margin-bottom:1.5rem; }
+    footer p { font-size:1.4rem; margin-bottom:2rem; color:#ccc; }
+    footer a.btn { background:#ff4157; }
 
     /* Responsive */
-    @media (max-width: 768px) {
-      .hero-content h1 { font-size: 4rem; }
-      .hero-content p { font-size: 1.5rem; }
+    @media(max-width:768px) {
+      .hero-content h1 { font-size:4rem; }
+      .hero-content p { font-size:1.5rem; }
     }
   </style>
 </head>
@@ -86,9 +80,9 @@
     <div class="hero-content fade-up">
       <h1>DoorThing</h1>
       <p>Elevate your hostel security with a single tap</p>
-      <a href="#pricing" class="btn">See Plans</a>
+      <a href="#pricing" class="btn">Explore Plans</a>
       <div class="media-wrapper">
-        <video autoplay muted playsinline>
+        <video autoplay muted playsinline onended="this.nextElementSibling.style.display='block';" class="fade-up">
           <source src="placeholder-video.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -98,7 +92,7 @@
   </header>
 
   <section class="features container" id="features">
-    <h2 class="section-title fade-up">Key Features</h2>
+    <h2 class="section-title text-center fade-up">Key Features</h2>
     <div class="features-grid">
       <div class="feature-card fade-up">
         <img src="placeholder-icon1.png" alt="RFID">
@@ -108,26 +102,26 @@
       <div class="feature-card fade-up">
         <img src="placeholder-icon2.png" alt="Battery">
         <h3>30-Day Battery</h3>
-        <p>Ultra-low power sleep mode keeps you covered all month.</p>
+        <p>Our deep sleep mode keeps DoorThing powered all month.</p>
       </div>
       <div class="feature-card fade-up">
         <img src="placeholder-icon3.png" alt="Design">
         <h3>Premium 3D Shell</h3>
-        <p>Choose from exquisite finishes or craft your own.</p>
+        <p>Select from luxe finishes or customize your own design.</p>
       </div>
       <div class="feature-card fade-up">
         <img src="placeholder-icon4.png" alt="Setup">
         <h3>Zero Mod Installation</h3>
-        <p>Clips over your lock—retain original key access.</p>
+        <p>Clips over your lock—retain original key access as backup.</p>
       </div>
     </div>
   </section>
 
   <section class="pricing container" id="pricing">
-    <h2 class="section-title fade-up">Choose Your DoorThing</h2>
+    <h2 class="section-title text-center fade-up">Choose Your DoorThing</h2>
     <div class="tiers-grid">
       <div class="card-tier fade-up">
-        <img src="placeholder-tier1.jpg" alt="Lite">
+        <img src="placeholder-tier1.jpg" alt="Lite Plan">
         <div class="card-content">
           <h4>Lite</h4>
           <div class="price">₹4,499</div>
@@ -141,4 +135,45 @@
         </div>
       </div>
       <div class="card-tier fade-up">
-        <img src="placeholder-tier2.jpg```
+        <img src="placeholder-tier2.jpg" alt="Standard Plan">
+        <div class="card-content">
+          <h4>Standard</h4>
+          <div class="price">₹5,499</div>
+          <ul>
+            <li>Includes USB-C adapter & cable mounts</li>
+            <li>30+ day battery backup without AC</li>
+            <li>Pro Installation Service</li>
+          </ul>
+          <a href="#" class="btn">Order Standard</a>
+        </div>
+      </div>
+      <div class="card-tier fade-up">
+        <img src="placeholder-tier3.jpg" alt="Forge Plan">
+        <div class="card-content">
+          <h4>Forge</h4>
+          <div class="price">₹6,499</div>
+          <ul>
+            <li>All Standard features</li>
+            <li>Custom color combos & skins</li>
+            <li>Exclusive lighting animations</li>
+          </ul>
+          <a href="#" class="btn">Order Forge</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="open-source container" id="open-source">
+    <h2 class="fade-up text-center">Open Source & Wi-Fi Ready</h2>
+    <p class="fade-up text-center">Powered by open-source firmware and Wi-Fi/BLE capable hardware, DoorThing lets you tinker, extend, or integrate with your own smart home setup. <a href="#" class="btn">GitHub Repo</a></p>
+  </section>
+
+  <footer>
+    <div class="container fade-up">
+      <h3>Get in Touch</h3>
+      <p>Ready to upgrade your hostel experience? Reach out to us:</p>
+      <a href="mailto:youremail@example.com" class="btn">Email Us</a>
+    </div>
+  </footer>
+</body>
+</html>
