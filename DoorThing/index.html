@@ -7,8 +7,12 @@
   <style>
     /* Reset & Base */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; background: #f9f9f9; overflow-x: hidden; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #222; background: #f5f7fa; overflow-x: hidden; }
     a { text-decoration: none; color: inherit; }
+
+    /* Typography */
+    h1, h2, h3, h4 { font-weight: 700; color: #111; }
+    p, li { font-weight: 300; }
 
     /* Animation */
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -17,61 +21,64 @@
     .fade-in.show { opacity: 1; }
 
     /* Container */
-    .container { width: 90%; max-width: 1200px; margin: auto; padding: 2rem 0; }
+    .container { width: 90%; max-width: 1200px; margin: auto; padding: 3rem 0; }
 
     /* Header */
-    header { position: relative; height: auto; min-height: 500px; color: #fff; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; padding: 4rem 0; }
-    header .content { position: relative; z-index:1; }
-    header h1 { font-size: 5rem; margin-bottom: 1rem; letter-spacing: 2px; }
-    header p { font-size: 1.8rem; margin-bottom: 2rem; }
-    .cover-wrapper { position: relative; width: 80%; max-width: 800px; }
-    .cover-video, .cover-image { width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); position: absolute; top: 0; left: 0; }
+    header { position: relative; min-height: 600px; color: #fff; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; background: url('placeholder-hero-bg.jpg') center/cover no-repeat; }
+    header::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); }
+    header .content { position: relative; z-index:1; width: 80%; }
+    header h1 { font-size: 6rem; margin-bottom: 1rem; letter-spacing: 3px; }
+    header p { font-size: 2rem; margin-bottom: 2rem; }
+    .cover-wrapper { position: relative; width: 70%; max-width: 800px; margin: auto; }
+    .cover-video, .cover-image { width: 100%; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); position: absolute; top: 0; left: 0; }
     .cover-video { z-index: 2; }
     .cover-image { z-index: 1; }
 
     /* Section Titles */
-    .section-title { text-align: center; margin: 4rem 0 2rem; font-size: 3rem; color: #222; }
+    .section-title { text-align: center; margin: 4rem 0 2rem; font-size: 3.5rem; color: #333; }
 
     /* Features */
-    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-    .feature { background: #fff; border-radius: 10px; padding: 2.5rem 1.5rem; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .feature img { width: 100px; height: 100px; margin-bottom: 1rem; }
-    .feature h3 { font-size: 1.6rem; margin-bottom: 0.75rem; }
-    .feature p { color: #555; font-size: 1rem; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; }
+    .feature { background: #fff; border-radius: 15px; padding: 3rem 2rem; text-align: center; box-shadow: 0 6px 24px rgba(0,0,0,0.1); }
+    .feature img { width: 120px; height: 120px; margin-bottom: 1.5rem; }
+    .feature h3 { font-size: 2rem; margin-bottom: 1rem; }
+    .feature p { color: #555; font-size: 1.1rem; line-height: 1.6; }
 
     /* Pricing */
-    .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2.5rem; }
-    .tier { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 18px rgba(0,0,0,0.1); transform: translateY(20px); opacity:0; animation: fadeUp 1s ease forwards; }
+    .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem; }
+    .tier { background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.1); transform: translateY(20px); opacity:0; animation: fadeUp 1s ease forwards; }
     .tier:nth-child(1) { animation-delay: 0.2s; }
     .tier:nth-child(2) { animation-delay: 0.4s; }
     .tier:nth-child(3) { animation-delay: 0.6s; }
-    .tier img { width: 100%; height: 180px; object-fit: cover; }
-    .tier-content { padding: 2rem; text-align: center; }
-    .tier-content h4 { font-size: 1.8rem; margin-bottom: 0.75rem; }
-    .tier-content .price { font-size: 2.4rem; margin: 1.2rem 0; color: #222; }
-    .tier-content ul { list-style: none; margin-bottom: 1.8rem; }
-    .tier-content ul li { margin: 0.6rem 0; color: #555; font-size: 1rem; }
-    .tier-content button { padding: 1rem 2rem; border: none; border-radius: 6px; background: #007bff; color: #fff; cursor: pointer; font-size: 1rem; }
+    .tier img { width: 100%; height: 200px; object-fit: cover; }
+    .tier-content { padding: 3rem 2.5rem; text-align: left; }
+    .tier-content h4 { font-size: 2.2rem; margin-bottom: 1rem; }
+    .tier-content .price { font-size: 3rem; margin: 1.5rem 0; color: #007bff; font-weight: 700; }
+    .tier-content ul { list-style: none; margin-bottom: 2rem; }
+    .tier-content ul li { margin: 0.8rem 0; color: #555; font-size: 1.1rem; }
+    .tier-content button { width: 100%; padding: 1.2rem; border: none; border-radius: 8px; background: #007bff; color: #fff; cursor: pointer; font-size: 1.2rem; font-weight: 600; }
 
     /* Tinkerers Section */
-    .tinker { background: #eef4ff; border-radius: 10px; padding: 3rem 2rem; margin: 4rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .tinker h3 { font-size: 2rem; margin-bottom: 1rem; text-align: center; }
-    .tinker p { font-size: 1rem; color: #444; max-width: 800px; margin: auto 0 2rem; text-align: center; }
-    .tinker img { display: block; margin: 0 auto 2rem; max-width: 200px; }
+    .tinker { background: #eef4ff; border-radius: 15px; padding: 4rem 3rem; margin: 5rem 0; box-shadow: 0 6px 24px rgba(0,0,0,0.05); text-align: center; }
+    .tinker img { display: block; margin: 0 auto 2rem; max-width: 180px; }
+    .tinker h3 { font-size: 2.4rem; margin-bottom: 1.5rem; }
+    .tinker p { font-size: 1.2rem; color: #444; line-height: 1.8; max-width: 900px; margin: auto; }
 
     /* Contact */
-    footer { background: #007bff; color: #fff; padding: 4rem 0; }
+    footer { background: #007bff; color: #fff; padding: 5rem 0; }
     .contact { text-align: center; }
-    .contact h3 { font-size: 2.5rem; margin-bottom: 1rem; }
-    .contact p { margin-bottom: 1.5rem; font-size: 1.1rem; }
-    .contact a { padding: 1rem 2rem; background: #fff; color: #007bff; border-radius: 6px; font-weight: bold; font-size: 1rem; }
+    .contact h3 { font-size: 2.8rem; margin-bottom: 1.5rem; }
+    .contact p { margin-bottom: 2rem; font-size: 1.3rem; }
+    .contact a { padding: 1.2rem 2.5rem; background: #fff; color: #007bff; border-radius: 8px; font-weight: 700; font-size: 1.2rem; }
 
     /* Responsive tweaks */
-    @media (max-width: 600px) {
-      header h1 { font-size: 3.5rem; }
-      header p { font-size: 1.3rem; }
-      .section-title { font-size: 2.2rem; }
-      .cover-wrapper { width: 100%; }
+    @media (max-width: 768px) {
+      header h1 { font-size: 4.5rem; }
+      header p { font-size: 1.6rem; }
+      .section-title { font-size: 2.8rem; }
+      .feature h3 { font-size: 1.8rem; }
+      .tier-content h4 { font-size: 1.9rem; }
+      .tinker h3 { font-size: 2rem; }
     }
   </style>
 </head>
@@ -83,7 +90,6 @@
       <div class="cover-wrapper">
         <video class="cover-video" autoplay muted playsinline onended="this.style.display='none'; document.getElementById('cover-img').classList.add('show');">
           <source src="placeholder-video.mp4" type="video/mp4">
-          Your browser does not support the video tag.
         </video>
         <img src="placeholder-cover.jpg" alt="DoorThing in action" id="cover-img" class="cover-image fade-in">
       </div>
@@ -124,9 +130,9 @@
           <div class="price">₹4499</div>
           <ul>
             <li>30+ day battery life</li>
-            <li>usb-c rechargeable</li>
-            <li>Register and remove any RFID capable ID card</li>
-            <li>30 second self Installation</li>
+            <li>USB-C rechargeable</li>
+            <li>Register/remove any RFID ID card</li>
+            <li>30s self-installation</li>
           </ul>
           <button>Order DoorThing Lite</button>
         </div>
@@ -137,9 +143,9 @@
           <h4>Standard</h4>
           <div class="price">₹4999</div>
           <ul>
-            <li>Includes USB-c wall adapter and colour-matched cable mounts</li>
-            <li>30+ day battery backup in case of no AC power</li>
-            <li>installation included</li>
+            <li>Includes USB‑C wall adapter</li>
+            <li>30+ day battery backup</li>
+            <li>Installation included</li>
           </ul>
           <button>Order DoorThing Standard</button>
         </div>
@@ -151,7 +157,7 @@
           <div class="price">₹5999</div>
           <ul>
             <li>All Standard features</li>
-            <li>Custom colour combinations, skins, animations and lighting</li>
+            <li>Custom colors, skins & animations</li>
           </ul>
           <button>Order DoorThing Forge</button>
         </div>
@@ -160,15 +166,14 @@
 
     <section class="tinker fade-up">
       <img src="placeholder-open-source.png" alt="Open Source">
-      <h3>Open Source & Wi-Fi Ready</h3>
-      <p>DoorThing is built on open-source software, and Wi-Fi and BLE capable hardware.
- The Github Repository allows you to tinker, add features, or connect to your own smart home server.</p>
+      <h3>Open Source &amp; Wi‑Fi Ready</h3>
+      <p>DoorThing is built on open-source software and Wi‑Fi/BLE capable hardware. Explore our GitHub repo to customize firmware, add features, or integrate with your smart home setup.</p>
     </section>
   </div>
 
   <footer>
     <div class="container contact fade-up">
-      <h3>Contact & Orders</h3>
+      <h3>Contact &amp; Orders</h3>
       <p>Ready to upgrade your hostel experience? Reach out now!</p>
       <a href="mailto:youremail@example.com">Email Us</a>
     </div>
