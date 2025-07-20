@@ -3,93 +3,128 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DoorThing - Smart Hostel Lock</title>
+  <title>DoorThing - Premium Smart Hostel Lock</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     /* Reset & Base */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Montserrat', sans-serif; color: #222; background: #f1f3f5; }
+    body { font-family: 'Montserrat', sans-serif; color: #1a1a1a; background: #fafafa; overflow-x: hidden; }
     a { text-decoration: none; color: inherit; }
-    img, video { display: block; max-width: 100%; }
+    ul { list-style: none; }
 
     /* Utility */
-    .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 4rem 0; }
-    .btn { display: inline-block; padding: 1rem 2rem; border-radius: 50px; background: #ff5f57; color: #fff; font-weight: 700; transition: background 0.3s; }
-    .btn:hover { background: #e14e46; }
-    h1, h2, h3, h4 { font-weight: 800; }
-    p, li { font-weight: 400; line-height: 1.6; }
+    .container { width: 90%; max-width: 1400px; margin: 0 auto; padding: 6rem 0; }
     .text-center { text-align: center; }
-    .fade-up { opacity: 0; animation: fadeUp 0.8s ease forwards; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: none;} }
+    .btn { display: inline-block; padding: 1.2rem 2.5rem; border-radius: 50px; background: #ff4157; color: #fff; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; transition: background 0.3s, transform 0.3s; }
+    .btn:hover { background: #e03349; transform: translateY(-3px); }
+    h1, h2, h3, h4 { font-weight: 900; }
+    p, li { font-weight: 400; line-height: 1.6; }
+    .fade-up { opacity: 0; animation: fadeUp 1s ease forwards; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: none;} }
 
     /* Header Hero */
-    header { position: relative; height: 90vh; overflow: hidden; }
-    header video, header img { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: auto; min-height: 100%; }
-    header::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.5); }
-    .hero-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #fff; text-align: center; padding: 0 2rem; }
-    .hero-content h1 { font-size: 6rem; margin-bottom: 1rem; letter-spacing: 4px; text-shadow: 0 4px 10px rgba(0,0,0,0.7); }
-    .hero-content p { font-size: 2rem; margin-bottom: 2rem; text-shadow: 0 2px 6px rgba(0,0,0,0.7); }
+    header { position: relative; height: 100vh; min-height: 600px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    header::before { content: ''; position: absolute; inset: 0; background: url('placeholder-hero-bg.jpg') center/cover no-repeat; filter: brightness(0.5); }
+    .hero-content { position: relative; z-index: 1; text-align: center; max-width: 800px; padding: 0 1rem; }
+    .hero-content h1 { font-size: 5.5rem; color: #fff; margin-bottom: 1rem; letter-spacing: 4px; line-height: 1.1; }
+    .hero-content p { font-size: 2rem; color: #ddd; margin-bottom: 2rem; }
+
+    /* Video & Fallback */
+    .media-wrapper { position: relative; width: 90%; max-width: 900px; margin: 2rem auto 0; }
+    .media-wrapper video,
+    .media-wrapper img { width: 100%; height: auto; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+    .media-wrapper img { display: none; }
+    .media-wrapper video { display: block; }
+    .media-wrapper video:ended + img { display: block; }
 
     /* Features Section */
-    section.features { padding: 6rem 0; background: #fff; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 3rem; }
-    .feature-card { background: #fdfdfd; border-radius: 20px; padding: 3rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; transition: transform 0.3s; }
+    section.features { background: #fff; }
+    .features .section-title { font-size: 3.2rem; margin-bottom: 3rem; color: #1a1a1a; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px,1fr)); gap: 3rem; }
+    .feature-card { background: #fdfdfd; border-radius: 20px; padding: 3rem; box-shadow: 0 20px 40px rgba(0,0,0,0.1); transition: transform 0.3s; }
     .feature-card:hover { transform: translateY(-10px); }
-    .feature-card img { width: 120px; margin-bottom: 1.5rem; }
-    .feature-card h3 { font-size: 2rem; margin-bottom: 1rem; }
-    .feature-card p { font-size: 1.1rem; color: #555; }
+    .feature-card img { width: 140px; margin-bottom: 1.5rem; }
+    .feature-card h3 { font-size: 2.2rem; margin-bottom: 1rem; color: #111; }
+    .feature-card p { font-size: 1.2rem; color: #555; }
 
     /* Pricing Section */
-    section.pricing { padding: 6rem 0; }
-    .tiers-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 3rem; }
-    .card-tier { position: relative; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.1); transition: transform 0.3s; }
+    section.pricing { background: #fafafa; }
+    .pricing .section-title { font-size: 3.2rem; margin-bottom: 3rem; color: #1a1a1a; }
+    .tiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 3.5rem; }
+    .card-tier { position: relative; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.1); transition: transform 0.3s; }
     .card-tier:hover { transform: translateY(-10px); }
-    .card-tier img { width: 100%; height: 260px; object-fit: cover; }
-    .card-content { padding: 3rem; }
-    .card-content h4 { font-size: 2.6rem; margin-bottom: 1rem; color: #ff5f57; }
-    .card-content .price { font-size: 3.2rem; margin: 1rem 0; font-weight: 900; }
-    .card-content ul { list-style: none; margin: 2rem 0; }
-    .card-content ul li { font-size: 1.2rem; margin: 1rem 0; padding-left: 1.5rem; position: relative; }
-    .card-content ul li::before { content: '✓'; position: absolute; left: 0; color: #ff5f57; }
-    .card-content .btn { width: 100%; text-align: center; }
+    .card-tier img { width: 100%; height: 280px; object-fit: cover; }
+    .card-content { padding: 3rem; text-align: center; }
+    .card-content h4 { font-size: 2.8rem; margin-bottom: 0.8rem; color: #ff4157; }
+    .card-content .price { font-size: 3.6rem; margin: 1.2rem 0; color: #111; font-weight: 900; }
+    .card-content ul { margin: 2rem 0; }
+    .card-content ul li { font-size: 1.3rem; margin: 1rem 0; padding-left: 2rem; position: relative; }
+    .card-content ul li::before { content: '\2713'; position: absolute; left: 0; top: 0; color: #ff4157; font-size: 1.5rem; line-height: 1; }
+    .card-content .btn { width: 100%; }
 
     /* Open Source Section */
-    section.open-source { padding: 6rem 0; background: #fffbf8; text-align: center; }
-    .open-source h2 { font-size: 3.5rem; margin-bottom: 2rem; color: #333; }
-    .open-source p { max-width: 800px; margin: auto; font-size: 1.2rem; color: #555; }
-    .open-source a { margin-top: 2rem; }
+    section.open-source { background: #fff; text-align: center; }
+    .open-source h2 { font-size: 3rem; margin-bottom: 2rem; color: #1a1a1a; }
+    .open-source p { max-width: 700px; margin: auto; font-size: 1.25rem; color: #555; }
+    .open-source .btn { margin-top: 2rem; }
 
     /* Contact Section */
-    footer { background: #222; color: #fff; padding: 6rem 0; text-align: center; }
+    footer { background: #111; color: #eee; text-align: center; padding: 6rem 0; }
     footer h3 { font-size: 3rem; margin-bottom: 1.5rem; }
     footer p { font-size: 1.4rem; margin-bottom: 2rem; color: #ccc; }
-    footer a { text-decoration: none; }
+    footer a.btn { background: #ff4157; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-content h1 { font-size: 4rem; }
+      .hero-content p { font-size: 1.5rem; }
+    }
   </style>
 </head>
 <body>
   <header>
-    <video autoplay muted playsinline onended="this.style.display='none';document.querySelector('#hero-img').style.display='block';">
-      <source src="placeholder-video.mp4" type="video/mp4">
-    </video>
-    <img id="hero-img" src="placeholder-cover.jpg" alt="DoorThing" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
     <div class="hero-content fade-up">
       <h1>DoorThing</h1>
-      <p>Your campus ID is now your key</p>
+      <p>Elevate your hostel security with a single tap</p>
       <a href="#pricing" class="btn">See Plans</a>
+      <div class="media-wrapper">
+        <video autoplay muted playsinline>
+          <source src="placeholder-video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <img src="placeholder-hero-image.jpg" alt="DoorThing in action">
+      </div>
     </div>
   </header>
 
   <section class="features container" id="features">
-    <h2 class="section-title fade-up text-center">Features</h2>
+    <h2 class="section-title fade-up">Key Features</h2>
     <div class="features-grid">
-      <div class="feature-card fade-up"><img src="placeholder-icon1.png" alt="RFID"><h3>Instant Unlock</h3><p>Seamlessly unlock with any compatible ID card—no Wi-Fi or apps.</p></div>
-      <div class="feature-card fade-up"><img src="placeholder-icon2.png" alt="Battery"><h3>Month-Long Battery</h3><p>Deep sleep mode for up to 30 days on a single charge.</p></div>
-      <div class="feature-card fade-up"><img src="placeholder-icon3.png" alt="Customization"><h3>Personalized Shell</h3><p>3D-printed shells and skins to reflect your style (Forge tier).</p></div>
-      <div class="feature-card fade-up"><img src="placeholder-icon4.png" alt="Easy Install"><h3>Plug & Play</h3><p>Clips onto your existing lock—keys still fully functional.</p></div>
+      <div class="feature-card fade-up">
+        <img src="placeholder-icon1.png" alt="RFID">
+        <h3>Instant Card Unlock</h3>
+        <p>Scan any ID card to unlock—effortless and secure.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <img src="placeholder-icon2.png" alt="Battery">
+        <h3>30-Day Battery</h3>
+        <p>Ultra-low power sleep mode keeps you covered all month.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <img src="placeholder-icon3.png" alt="Design">
+        <h3>Premium 3D Shell</h3>
+        <p>Choose from exquisite finishes or craft your own.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <img src="placeholder-icon4.png" alt="Setup">
+        <h3>Zero Mod Installation</h3>
+        <p>Clips over your lock—retain original key access.</p>
+      </div>
     </div>
   </section>
 
   <section class="pricing container" id="pricing">
-    <h2 class="section-title fade-up text-center">Choose Your DoorThing</h2>
+    <h2 class="section-title fade-up">Choose Your DoorThing</h2>
     <div class="tiers-grid">
       <div class="card-tier fade-up">
         <img src="placeholder-tier1.jpg" alt="Lite">
@@ -100,54 +135,10 @@
             <li>30+ day battery life</li>
             <li>USB-C rechargeable</li>
             <li>RFID unlock only</li>
-            <li>Self-install in 30 seconds</li>
+            <li>30s self-install</li>
           </ul>
           <a href="#" class="btn">Order Lite</a>
         </div>
       </div>
       <div class="card-tier fade-up">
-        <img src="placeholder-tier2.jpg" alt="Standard">
-        <div class="card-content">
-          <h4>Standard</h4>
-          <div class="price">₹4,999</div>
-          <ul>
-            <li>All Lite features</li>
-            <li>Includes USB-C adapter</li>
-            <li>Premium matte shell</li>
-            <li>Installation service</li>
-          </ul>
-          <a href="#" class="btn">Order Standard</a>
-        </div>
-      </div>
-      <div class="card-tier fade-up">
-        <img src="placeholder-tier3.jpg" alt="Forge">
-        <div class="card-content">
-          <h4>Forge</h4>
-          <div class="price">₹5,999</div>
-          <ul>
-            <li>All Standard benefits</li>
-            <li>Custom colors & skins</li>
-            <li>Dynamic lighting & animations</li>
-            <li>Priority support</li>
-          </ul>
-          <a href="#" class="btn">Order Forge</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="open-source container">
-    <h2>Open Source & Wi‑Fi Ready</h2>
-    <p>DoorThing is built on open-source firmware with Wi‑Fi/BLE capable hardware, empowering you to customize, add features, or integrate with your smart home. Explore our GitHub repository to start tinkering.</p>
-    <a href="#" class="btn">View on GitHub</a>
-  </section>
-
-  <footer>
-    <div class="container">
-      <h3>Get in Touch</h3>
-      <p>Email us at <a href="mailto:youremail@example.com">youremail@example.com</a> or follow us on social media.</p>
-    </div>
-  </footer>
-</body>
-</html>
-
+        <img src="placeholder-tier2.jpg```
