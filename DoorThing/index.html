@@ -5,18 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DoorThing | Premium Smart Lock System</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* Base & Reset */
     :root {
-      --primary: #00f5ff;
-      --primary-dark: #00c2cb;
-      --secondary: #ff2a6d;
-      --dark: #0a0a18;
-      --darker: #050510;
-      --light: #f5f7fa;
-      --gray: #8a94a6;
-      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      --primary: #0066ff;
+      --primary-dark: #0051cc;
+      --accent: #ff3366;
+      --light: #ffffff;
+      --light-gray: #f8f9fc;
+      --medium-gray: #eef2f7;
+      --dark: #1a1d2b;
+      --text: #33354d;
+      --text-light: #6b6d85;
+      --transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.1);
+      --border-radius: 16px;
     }
     
     * {
@@ -31,17 +36,19 @@
     
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--darker);
-      color: var(--light);
+      background: var(--light);
+      color: var(--text);
       overflow-x: hidden;
       line-height: 1.6;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
     }
     
     h1, h2, h3, h4 {
-      font-family: 'Orbitron', sans-serif;
       font-weight: 700;
       line-height: 1.2;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.02em;
+      color: var(--dark);
     }
     
     a {
@@ -51,28 +58,49 @@
     
     .container {
       width: 90%;
-      max-width: 1400px;
+      max-width: 1280px;
       margin: 0 auto;
       padding: 0 20px;
     }
     
+    section {
+      padding: 120px 0;
+    }
+    
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 80px;
+    }
+    
+    .section-title {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .section-subtitle {
+      font-size: 1.3rem;
+      color: var(--text-light);
+      font-weight: 400;
+      line-height: 1.7;
+    }
+    
     .btn {
-      display: inline-block;
-      padding: 16px 36px;
-      background: transparent;
-      border: 2px solid var(--primary);
-      color: var(--primary);
-      font-family: 'Orbitron', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 40px;
+      background: var(--primary);
+      color: var(--light);
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      font-size: 14px;
-      border-radius: 0;
+      font-size: 1rem;
+      border-radius: 12px;
       transition: var(--transition);
       cursor: pointer;
+      border: none;
+      box-shadow: 0 8px 20px rgba(0, 102, 255, 0.2);
       position: relative;
       overflow: hidden;
-      z-index: 1;
     }
     
     .btn:before {
@@ -82,30 +110,38 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: var(--primary);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
       transition: var(--transition);
-      z-index: -1;
     }
     
     .btn:hover {
-      color: var(--dark);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(0, 102, 255, 0.3);
     }
     
     .btn:hover:before {
-      left: 0;
+      left: 100%;
     }
     
-    .btn-secondary {
-      border-color: var(--secondary);
-      color: var(--secondary);
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      box-shadow: none;
     }
     
-    .btn-secondary:before {
-      background: var(--secondary);
+    .btn-outline:hover {
+      background: var(--primary);
+      color: var(--light);
     }
     
-    .btn-secondary:hover {
-      color: var(--dark);
+    .btn-accent {
+      background: var(--accent);
+      box-shadow: 0 8px 20px rgba(255, 51, 102, 0.2);
+    }
+    
+    .btn-accent:hover {
+      box-shadow: 0 15px 30px rgba(255, 51, 102, 0.3);
     }
     
     /* Animations */
@@ -120,15 +156,9 @@
       100% { transform: translateY(0px); }
     }
     
-    @keyframes glow {
-      0% { text-shadow: 0 0 5px rgba(0, 245, 255, 0.5); }
-      50% { text-shadow: 0 0 20px rgba(0, 245, 255, 0.8), 0 0 30px rgba(0, 245, 255, 0.6); }
-      100% { text-shadow: 0 0 5px rgba(0, 245, 255, 0.5); }
-    }
-    
     .fade-in {
       opacity: 0;
-      animation: fadeIn 1s ease forwards;
+      animation: fadeIn 0.8s ease forwards;
     }
     
     .delayed-1 { animation-delay: 0.2s; }
@@ -142,15 +172,11 @@
       top: 0;
       width: 100%;
       z-index: 1000;
-      padding: 20px 0;
+      padding: 24px 0;
       transition: var(--transition);
-    }
-    
-    header.scrolled {
-      background: rgba(5, 5, 16, 0.95);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
-      box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
-      padding: 15px 0;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
     }
     
     .nav-container {
@@ -160,16 +186,13 @@
     }
     
     .logo {
-      font-family: 'Orbitron', sans-serif;
       font-size: 28px;
       font-weight: 800;
       color: var(--primary);
-      display: flex;
-      align-items: center;
     }
     
     .logo span {
-      color: var(--secondary);
+      color: var(--accent);
     }
     
     .nav-links {
@@ -182,6 +205,7 @@
       font-size: 16px;
       position: relative;
       transition: var(--transition);
+      color: var(--text);
     }
     
     .nav-links a:after {
@@ -205,177 +229,145 @@
     
     /* Hero Section */
     .hero {
-      height: 100vh;
-      min-height: 800px;
-      display: flex;
-      align-items: center;
+      padding: 180px 0 120px;
       position: relative;
       overflow: hidden;
-      padding-top: 80px;
+      background: var(--light-gray);
+      border-bottom-left-radius: 80px;
+      border-bottom-right-radius: 80px;
     }
     
-    .hero:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, rgba(10, 10, 24, 0.6) 0%, rgba(5, 5, 16, 0.95) 70%);
-      z-index: -1;
-    }
-    
-    .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -2;
-      opacity: 0.3;
+    .hero .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
     }
     
     .hero-content {
-      max-width: 800px;
+      position: relative;
       z-index: 2;
     }
     
     .hero h1 {
-      font-size: 5.5rem;
-      margin-bottom: 20px;
+      font-size: 4.5rem;
+      margin-bottom: 24px;
       line-height: 1.1;
-      background: linear-gradient(to right, #fff 30%, var(--primary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
     
     .hero h1 span {
-      display: block;
-      color: var(--secondary);
-      -webkit-text-fill-color: var(--secondary);
+      color: var(--primary);
     }
     
     .hero p {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       margin-bottom: 40px;
-      max-width: 600px;
-      color: var(--gray);
+      color: var(--text-light);
+      max-width: 520px;
+      line-height: 1.7;
     }
     
     .hero-btns {
       display: flex;
-      gap: 20px;
-      margin-top: 50px;
+      gap: 16px;
     }
     
     .hero-image {
-      position: absolute;
-      right: -100px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 50%;
-      max-width: 800px;
+      position: relative;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
       animation: float 6s ease-in-out infinite;
+      background: var(--light);
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .hero-image img {
+      width: 100%;
+      border-radius: 12px;
     }
     
     /* Features Section */
     .features {
-      padding: 150px 0 100px;
-      position: relative;
-    }
-    
-    .section-title {
-      text-align: center;
-      font-size: 3.5rem;
-      margin-bottom: 80px;
-      background: linear-gradient(to right, #fff, var(--primary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      background: var(--light);
     }
     
     .features-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 40px;
+      gap: 30px;
     }
     
     .feature-card {
-      background: rgba(20, 20, 40, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
+      background: var(--light);
+      border-radius: var(--border-radius);
       padding: 40px;
       transition: var(--transition);
-      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--medium-gray);
     }
     
     .feature-card:hover {
       transform: translateY(-10px);
-      border-color: rgba(0, 245, 255, 0.3);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(0, 102, 255, 0.15);
     }
     
     .feature-icon {
-      width: 80px;
-      height: 80px;
-      background: rgba(0, 245, 255, 0.1);
-      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      background: rgba(0, 102, 255, 0.08);
+      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 30px;
-      font-size: 32px;
+      font-size: 28px;
       color: var(--primary);
     }
     
     .feature-card h3 {
       font-size: 1.8rem;
       margin-bottom: 20px;
-      color: var(--light);
+      color: var(--dark);
     }
     
     .feature-card p {
-      color: var(--gray);
+      color: var(--text-light);
       font-size: 1.1rem;
+      line-height: 1.7;
     }
     
     /* Pricing Section */
     .pricing {
-      padding: 100px 0;
-      position: relative;
-    }
-    
-    .pricing:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to bottom, transparent 0%, var(--darker) 100%);
-      z-index: -1;
+      background: var(--light-gray);
+      border-radius: 80px;
     }
     
     .tiers {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 30px;
-      margin-top: 50px;
+      margin-top: 30px;
     }
     
     .tier {
-      background: rgba(20, 20, 40, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
+      background: var(--light);
+      border: 1px solid var(--medium-gray);
+      border-radius: var(--border-radius);
       overflow: hidden;
       position: relative;
       transition: var(--transition);
-      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
     }
     
     .tier:hover {
       transform: translateY(-10px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(0, 102, 255, 0.15);
     }
     
     .tier-featured {
@@ -385,21 +377,17 @@
     
     .tier-featured .tier-header {
       background: var(--primary);
-      color: var(--dark);
-    }
-    
-    .tier-featured .tier-price {
-      color: var(--primary);
+      color: var(--light);
     }
     
     .tier-header {
       padding: 30px;
       text-align: center;
-      background: rgba(0, 245, 255, 0.1);
+      background: rgba(0, 102, 255, 0.05);
     }
     
     .tier-name {
-      font-size: 2rem;
+      font-size: 1.8rem;
       margin-bottom: 10px;
     }
     
@@ -407,6 +395,10 @@
       font-size: 3rem;
       font-weight: 700;
       margin: 20px 0;
+      color: var(--dark);
+    }
+    
+    .tier-featured .tier-price {
       color: var(--light);
     }
     
@@ -416,15 +408,20 @@
     
     .tier-features ul {
       list-style: none;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
     
     .tier-features li {
       padding: 12px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid var(--medium-gray);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      color: var(--text-light);
+    }
+    
+    .tier-features li:last-child {
+      border-bottom: none;
     }
     
     .tier-features li:before {
@@ -432,6 +429,7 @@
       font-family: 'Font Awesome 5 Free';
       font-weight: 900;
       color: var(--primary);
+      font-size: 14px;
     }
     
     .tier-cta {
@@ -439,107 +437,93 @@
       text-align: center;
     }
     
-    /* Tech Specs */
+    /* Tech Section */
     .tech {
-      padding: 150px 0;
-      position: relative;
+      background: var(--light);
     }
     
-    .tech-content {
+    .tech .container {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 60px;
+      gap: 80px;
       align-items: center;
     }
     
     .tech-image {
       position: relative;
-      border-radius: 16px;
+      border-radius: var(--border-radius);
       overflow: hidden;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--shadow);
+      background: var(--light);
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     
     .tech-image img {
       width: 100%;
-      display: block;
-    }
-    
-    .tech-image:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, var(--primary), var(--secondary));
-      mix-blend-mode: overlay;
-      opacity: 0.3;
+      border-radius: 12px;
     }
     
     .specs-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 30px;
+      gap: 24px;
       margin-top: 40px;
     }
     
     .spec-card {
-      background: rgba(20, 20, 40, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      padding: 25px;
-      backdrop-filter: blur(10px);
+      background: var(--light-gray);
+      border-radius: 16px;
+      padding: 30px;
+      border: 1px solid var(--medium-gray);
     }
     
     .spec-card h4 {
       font-size: 1.1rem;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       color: var(--primary);
     }
     
     .spec-card p {
       font-size: 1.1rem;
-      color: var(--light);
+      color: var(--text);
+      line-height: 1.6;
     }
     
     /* CTA Section */
     .cta {
-      padding: 150px 0;
+      background: var(--primary);
+      color: var(--light);
       text-align: center;
-      position: relative;
-      overflow: hidden;
+      border-radius: 80px;
     }
     
-    .cta:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, rgba(0, 245, 255, 0.1) 0%, transparent 70%);
-      z-index: -1;
+    .cta .section-title {
+      color: var(--light);
     }
     
-    .cta h2 {
-      font-size: 4rem;
-      margin-bottom: 30px;
-      background: linear-gradient(to right, #fff, var(--primary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .cta .section-subtitle {
+      color: rgba(255, 255, 255, 0.8);
     }
     
-    .cta p {
-      font-size: 1.4rem;
-      max-width: 700px;
-      margin: 0 auto 50px;
-      color: var(--gray);
+    .cta .btn {
+      background: var(--light);
+      color: var(--primary);
+      font-weight: 700;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .cta .btn:hover {
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     }
     
     /* Footer */
     footer {
       padding: 80px 0 40px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      background: var(--light);
+      border-top: 1px solid var(--medium-gray);
     }
     
     .footer-content {
@@ -556,10 +540,16 @@
       margin-bottom: 20px;
     }
     
+    .footer-info p {
+      color: var(--text-light);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+    
     .footer-links h4 {
       font-size: 1.2rem;
       margin-bottom: 25px;
-      color: var(--light);
+      color: var(--dark);
     }
     
     .footer-links ul {
@@ -571,7 +561,7 @@
     }
     
     .footer-links a {
-      color: var(--gray);
+      color: var(--text-light);
       transition: var(--transition);
     }
     
@@ -581,73 +571,58 @@
     
     .social-links {
       display: flex;
-      gap: 20px;
+      gap: 16px;
       margin-top: 20px;
     }
     
     .social-links a {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.05);
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--light-gray);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: var(--transition);
+      color: var(--text);
     }
     
     .social-links a:hover {
       background: var(--primary);
-      color: var(--dark);
+      color: var(--light);
       transform: translateY(-5px);
     }
     
     .copyright {
       text-align: center;
       padding-top: 40px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      color: var(--gray);
-      font-size: 0.9rem;
+      border-top: 1px solid var(--medium-gray);
+      color: var(--text-light);
+      font-size: 0.95rem;
     }
     
     /* Responsive Design */
-    @media (max-width: 1200px) {
-      .hero h1 {
-        font-size: 4.5rem;
-      }
-      
-      .hero-image {
-        width: 45%;
-      }
-    }
-    
     @media (max-width: 992px) {
-      .hero {
-        min-height: auto;
-        padding: 150px 0 100px;
+      .hero .container {
+        grid-template-columns: 1fr;
         text-align: center;
-      }
-      
-      .hero-content {
-        margin: 0 auto;
-      }
-      
-      .hero-image {
-        position: relative;
-        width: 80%;
-        max-width: 600px;
-        margin: 60px auto 0;
-        right: auto;
-        top: auto;
-        transform: none;
       }
       
       .hero-btns {
         justify-content: center;
       }
       
-      .tech-content {
+      .hero p {
+        margin: 0 auto 40px;
+      }
+      
+      .tech .container {
         grid-template-columns: 1fr;
+        gap: 60px;
+      }
+      
+      .section-title {
+        font-size: 3rem;
       }
     }
     
@@ -661,11 +636,7 @@
       }
       
       .section-title {
-        font-size: 2.8rem;
-      }
-      
-      .hero p, .cta p {
-        font-size: 1.2rem;
+        font-size: 2.5rem;
       }
       
       .hero-btns {
@@ -685,11 +656,19 @@
       }
       
       .section-title {
-        font-size: 2.3rem;
+        font-size: 2.2rem;
       }
       
       .specs-grid {
         grid-template-columns: 1fr;
+      }
+      
+      .hero {
+        padding: 150px 0 80px;
+      }
+      
+      section {
+        padding: 80px 0;
       }
     }
   </style>
@@ -702,7 +681,7 @@
       <nav class="nav-links">
         <a href="#features" class="fade-in delayed-1">Features</a>
         <a href="#pricing" class="fade-in delayed-2">Pricing</a>
-        <a href="#tech" class="fade-in delayed-3">Tech Specs</a>
+        <a href="#tech" class="fade-in delayed-3">Technology</a>
         <a href="#contact" class="fade-in delayed-4">Contact</a>
       </nav>
     </div>
@@ -712,28 +691,34 @@
   <section class="hero">
     <div class="container">
       <div class="hero-content fade-in">
-        <h1>Redefine<br><span>Access Control</span></h1>
-        <p>Your campus ID is now your key. Experience the future of secure, effortless entry with DoorThing - the premium smart lock system designed for modern living spaces.</p>
+        <h1>Elevate Your <span>Security</span></h1>
+        <p>Your campus ID is now your key. Experience effortless access with DoorThing - the premium smart lock system designed for modern living.</p>
         <div class="hero-btns">
           <a href="#pricing" class="btn">Order Now</a>
-          <a href="#features" class="btn btn-secondary">Explore Features</a>
+          <a href="#features" class="btn btn-outline">Explore Features</a>
         </div>
       </div>
+      <div class="hero-image fade-in delayed-1">
+        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="DoorThing Smart Lock">
+      </div>
     </div>
-    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1085&q=80" alt="DoorThing Smart Lock" class="hero-image fade-in delayed-2">
   </section>
 
   <!-- Features Section -->
   <section class="features" id="features">
     <div class="container">
-      <h2 class="section-title fade-in">Engineered Excellence</h2>
+      <div class="section-header fade-in">
+        <h2 class="section-title">Premium Experience</h2>
+        <p class="section-subtitle">Designed with precision engineering and premium materials for a seamless user experience</p>
+      </div>
+      
       <div class="features-grid">
         <div class="feature-card fade-in">
           <div class="feature-icon">
             <i class="fas fa-id-card"></i>
           </div>
           <h3>Instant Card Unlock</h3>
-          <p>Seamlessly scan student IDs without Wi-Fi or extra apps. Our advanced RFID technology recognizes credentials in milliseconds.</p>
+          <p>Seamlessly scan student IDs without Wi-Fi or extra apps. Our advanced RFID technology recognizes credentials instantly.</p>
         </div>
         
         <div class="feature-card fade-in delayed-1">
@@ -741,23 +726,23 @@
             <i class="fas fa-battery-full"></i>
           </div>
           <h3>Deep Sleep Battery</h3>
-          <p>Engineered for endurance with up to 90 days standby on a single charge. Our power management system ensures reliable operation.</p>
+          <p>Engineered for endurance with up to 90 days standby on a single charge. Intelligent power management ensures reliability.</p>
         </div>
         
         <div class="feature-card fade-in delayed-2">
           <div class="feature-icon">
             <i class="fas fa-cube"></i>
           </div>
-          <h3>Custom 3D-Printed Shell</h3>
-          <p>Personalize your security with interchangeable, premium-grade shells available in a spectrum of colors and finishes.</p>
+          <h3>Custom 3D Shell</h3>
+          <p>Personalize your security with premium-grade, interchangeable shells available in various colors and textures.</p>
         </div>
         
         <div class="feature-card fade-in delayed-3">
           <div class="feature-icon">
             <i class="fas fa-tools"></i>
           </div>
-          <h3>Zero Modification Installation</h3>
-          <p>Mounts over existing locks in minutes without tools. Maintains mechanical key functionality as a secure backup.</p>
+          <h3>Zero Modification</h3>
+          <p>Install in minutes without tools. Mounts over existing locks while maintaining mechanical key functionality.</p>
         </div>
       </div>
     </div>
@@ -766,7 +751,11 @@
   <!-- Pricing Section -->
   <section class="pricing" id="pricing">
     <div class="container">
-      <h2 class="section-title fade-in">Premium Experience</h2>
+      <div class="section-header fade-in">
+        <h2 class="section-title">Simple Pricing</h2>
+        <p class="section-subtitle">Choose the perfect DoorThing for your needs with our straightforward pricing options</p>
+      </div>
+      
       <div class="tiers">
         <div class="tier fade-in">
           <div class="tier-header">
@@ -783,7 +772,7 @@
             </ul>
           </div>
           <div class="tier-cta">
-            <a href="#" class="btn">Order DoorThing Lite</a>
+            <a href="#" class="btn btn-outline">Order Now</a>
           </div>
         </div>
         
@@ -803,7 +792,7 @@
             </ul>
           </div>
           <div class="tier-cta">
-            <a href="#" class="btn">Order DoorThing Standard</a>
+            <a href="#" class="btn">Order Now</a>
           </div>
         </div>
         
@@ -823,46 +812,43 @@
             </ul>
           </div>
           <div class="tier-cta">
-            <a href="#" class="btn">Order DoorThing Forge</a>
+            <a href="#" class="btn btn-outline">Order Now</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Tech Specs -->
+  <!-- Tech Section -->
   <section class="tech" id="tech">
     <div class="container">
-      <div class="tech-content">
-        <div class="tech-text fade-in">
-          <h2 class="section-title">Cutting-Edge Technology</h2>
-          <p>DoorThing represents the pinnacle of smart lock engineering, combining military-grade security with intuitive operation.</p>
-          
-          <div class="specs-grid">
-            <div class="spec-card fade-in">
-              <h4>RFID Technology</h4>
-              <p>13.56 MHz ISO 14443 compliant with 128-bit encryption</p>
-            </div>
-            
-            <div class="spec-card fade-in delayed-1">
-              <h4>Battery Life</h4>
-              <p>Up to 90 days standby with ultra-low power consumption</p>
-            </div>
-            
-            <div class="spec-card fade-in delayed-2">
-              <h4>Connectivity</h4>
-              <p>Bluetooth 5.2 and Wi-Fi 6 ready for future expansion</p>
-            </div>
-            
-            <div class="spec-card fade-in delayed-3">
-              <h4>Materials</h4>
-              <p>Aerospace-grade aluminum with reinforced polymer core</p>
-            </div>
-          </div>
-        </div>
+      <div class="tech-image fade-in">
+        <img src="https://images.unsplash.com/photo-1600353068440-6365ef0cbd11?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="DoorThing Technology">
+      </div>
+      <div class="tech-content fade-in delayed-1">
+        <h2 class="section-title">Cutting-Edge Technology</h2>
+        <p class="section-subtitle">DoorThing represents the pinnacle of smart lock engineering, combining security with intuitive operation.</p>
         
-        <div class="tech-image fade-in delayed-1">
-          <img src="https://images.unsplash.com/photo-1600353068440-6365ef0cbd11?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1085&q=80" alt="DoorThing Technology">
+        <div class="specs-grid">
+          <div class="spec-card fade-in">
+            <h4>RFID Technology</h4>
+            <p>13.56 MHz ISO 14443 compliant with 128-bit encryption</p>
+          </div>
+          
+          <div class="spec-card fade-in delayed-1">
+            <h4>Battery Life</h4>
+            <p>Up to 90 days standby with ultra-low power consumption</p>
+          </div>
+          
+          <div class="spec-card fade-in delayed-2">
+            <h4>Connectivity</h4>
+            <p>Bluetooth 5.2 and Wi-Fi 6 ready for future expansion</p>
+          </div>
+          
+          <div class="spec-card fade-in delayed-3">
+            <h4>Materials</h4>
+            <p>Aerospace-grade aluminum with reinforced polymer core</p>
+          </div>
         </div>
       </div>
     </div>
@@ -871,9 +857,13 @@
   <!-- CTA Section -->
   <section class="cta" id="contact">
     <div class="container">
-      <h2 class="fade-in">Transform Your Space</h2>
-      <p class="fade-in delayed-1">Join thousands of students and professionals who have upgraded their security with DoorThing.</p>
-      <a href="mailto:orders@doorthing.com" class="btn fade-in delayed-2">Contact Our Team</a>
+      <div class="section-header fade-in">
+        <h2 class="section-title">Transform Your Space</h2>
+        <p class="section-subtitle">Join thousands of students who have upgraded their security with DoorThing</p>
+        <div class="fade-in delayed-1" style="margin-top: 40px;">
+          <a href="mailto:orders@doorthing.com" class="btn">Contact Our Team</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -897,7 +887,7 @@
           <ul>
             <li><a href="#features">Features</a></li>
             <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#tech">Tech Specs</a></li>
+            <li><a href="#tech">Technology</a></li>
             <li><a href="#">Accessories</a></li>
           </ul>
         </div>
@@ -933,10 +923,10 @@
     // Header scroll effect
     window.addEventListener('scroll', function() {
       const header = document.getElementById('header');
-      if (window.scrollY > 100) {
-        header.classList.add('scrolled');
+      if (window.scrollY > 50) {
+        header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.05)';
       } else {
-        header.classList.remove('scrolled');
+        header.style.boxShadow = 'none';
       }
     });
     
