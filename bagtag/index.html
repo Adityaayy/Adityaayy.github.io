@@ -5,338 +5,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dutta Residence | Lost Baggage</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Base & Reset */
     :root {
       --primary: #0066ff;
-      --primary-dark: #0051cc;
-      --accent: #ff3366;
-      --dark: #0a0a18;
-      --darker: #050510;
-      --light: #ffffff;
-      --medium-gray: #2a2a3a;
-      --text: #e0e0ff;
-      --text-light: #a0a0c0;
-      --transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      --border-radius: 16px;
+      --bg: #1e1e1e;
+      --surface: #2a2a2a;
+      --gray-light: #333333;
+      --gray: #555555;
+      --gray-dark: #888888;
+      --text: #e0e0e0;
+      --text-light: #aaaaaa;
+      --radius: 8px;
+      --transition: 0.2s ease;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    html, body {
-      height: 100%;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, var(--darker), var(--dark));
-      color: var(--text);
-      overflow-x: hidden;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-    
-    h1, h2, h3, h4 {
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      color: var(--light);
-    }
-    
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-    
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
-    }
-    
-    .fade-in {
-      opacity: 0;
-      animation: fadeIn 0.8s ease forwards;
-    }
-    
-    .delayed-1 { animation-delay: 0.1s; }
-    .delayed-2 { animation-delay: 0.2s; }
-    .delayed-3 { animation-delay: 0.3s; }
-    .delayed-4 { animation-delay: 0.4s; }
-    .delayed-5 { animation-delay: 0.5s; }
-    .delayed-6 { animation-delay: 0.6s; }
-    
-    /* Layout */
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
     .logo {
-      position: absolute;
-      top: 30px;
-      left: 30px;
       font-size: 1.8rem;
       font-weight: 700;
       color: var(--primary);
-      z-index: 10;
+      margin-bottom: 2rem;
+      text-align: center;
     }
-    
-    .logo span {
-      color: var(--accent);
-    }
-    
-    /* Content Styling */
+    .logo span { color: var(--text-light); }
     .content {
       text-align: center;
-      max-width: 800px;
-      margin-bottom: 3rem;
-      z-index: 2;
+      margin-bottom: 2rem;
     }
-    
-    .title {
-      font-size: 3.2rem;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(to right, var(--light), var(--primary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .content .title {
+      font-size: 2.4rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
     }
-    
-    .description {
-      font-size: 1.2rem;
+    .content .description {
+      font-size: 1rem;
       color: var(--text-light);
       margin-bottom: 1rem;
-      line-height: 1.7;
     }
-    
     .highlight {
-      display: inline-block;
-      padding: 0.2rem 0.8rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      color: var(--light);
-      font-weight: 500;
+      background: var(--primary);
+      color: var(--bg);
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius);
+      font-weight: 600;
     }
-    
-    /* Contact Options */
     .contact-options {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px;
-      width: 100%;
-      max-width: 1000px;
-      z-index: 2;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
     }
-    
     .card {
-      background: rgba(30, 30, 50, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--border-radius);
-      padding: 30px 25px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem;
       text-align: center;
       transition: var(--transition);
-      backdrop-filter: blur(10px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 180px;
-    }
-    
-    .card:hover {
-      transform: translateY(-10px);
-      border-color: var(--primary);
       box-shadow: var(--shadow);
-      background: rgba(40, 40, 60, 0.7);
     }
-    
     .card-icon {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
+      font-size: 2rem;
+      margin-bottom: 1rem;
       color: var(--primary);
     }
-    
     .card-text {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 500;
-      color: var(--light);
+      color: var(--text);
     }
-    
-    /* Background Elements */
-    .background-elements {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-      overflow: hidden;
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--primary);
     }
-    
-    .element {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0.05;
-    }
-    
-    .element-1 {
-      width: 400px;
-      height: 400px;
-      background: var(--primary);
-      top: -150px;
-      right: -100px;
-      filter: blur(60px);
-    }
-    
-    .element-2 {
-      width: 300px;
-      height: 300px;
-      background: var(--accent);
-      bottom: -100px;
-      left: -100px;
-      filter: blur(60px);
-    }
-    
-    .element-3 {
-      width: 200px;
-      height: 200px;
-      background: var(--primary);
-      top: 40%;
-      left: 10%;
-      filter: blur(40px);
-      animation: float 8s ease-in-out infinite;
-    }
-    
-    /* Footer */
     .footer {
-      position: absolute;
-      bottom: 30px;
-      width: 100%;
+      margin-top: 2rem;
       text-align: center;
       font-size: 0.9rem;
       color: var(--text-light);
-      z-index: 2;
     }
-    
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .title {
-        font-size: 2.5rem;
-      }
-      
-      .description {
-        font-size: 1.1rem;
-      }
-      
-      .contact-options {
-        grid-template-columns: 1fr;
-      }
-      
-      .card {
-        min-height: 140px;
-        padding: 25px 20px;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .title {
-        font-size: 2rem;
-      }
-      
-      .description {
-        font-size: 1rem;
-      }
-      
-      .logo {
-        font-size: 1.5rem;
-      }
+    @media (max-width: 600px) {
+      .content .title { font-size: 2rem; }
+      .content .description { font-size: 0.95rem; }
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="background-elements">
-    <div class="element element-1"></div>
-    <div class="element element-2"></div>
-    <div class="element element-3"></div>
-  </div>
-  
-  <div class="logo fade-in">Dutta<span>Residence</span></div>
-  
   <div class="container">
-    <div class="content fade-in">
+    <div class="logo">Dutta<span>Residence</span></div>
+    <div class="content">
       <h1 class="title">Looks like you've scanned one of our bagtags.</h1>
       <p class="description">If this baggage appears lost, please contact us using any of the options below.</p>
       <p class="description">📍 <span class="highlight">129/2 Prince Gullam Hussain Shah Road, Kolkata 700032, India</span></p>
     </div>
-    
     <div class="contact-options">
-      <a href="https://maps.app.goo.gl/HRzSZXbVNca1R6LP9" target="_blank" class="card fade-in delayed-1">
+      <a href="https://maps.app.goo.gl/HRzSZXbVNca1R6LP9" target="_blank" class="card">
         <div class="card-icon">📍</div>
         <div class="card-text">Home Location</div>
       </a>
-      
-      <a href="mailto:adityadutta2006@gmail.com?cc=papiad22@gmail.com" class="card fade-in delayed-2">
+      <a href="mailto:adityadutta2006@gmail.com?cc=papiad22@gmail.com" class="card">
         <div class="card-icon">📧</div>
         <div class="card-text">Email us</div>
       </a>
-      
-      <a href="tel:+919874458859" class="card fade-in delayed-3">
+      <a href="tel:+919874458859" class="card">
         <div class="card-icon">📞</div>
         <div class="card-text">Call Aditya Dutta</div>
       </a>
-      
-      <a href="https://wa.me/919874458859" target="_blank" class="card fade-in delayed-4">
+      <a href="https://wa.me/919874458859" target="_blank" class="card">
         <div class="card-icon">💬</div>
         <div class="card-text">WhatsApp Aditya Dutta</div>
-      </a>   
-      
-      <a href="tel:+919831077023" class="card fade-in delayed-5">
+      </a>
+      <a href="tel:+919831077023" class="card">
         <div class="card-icon">📞</div>
         <div class="card-text">Call Papia Das Dutta</div>
-      </a>   
-      
-      <a href="https://wa.me/919831077023" target="_blank" class="card fade-in delayed-6">
+      </a>
+      <a href="https://wa.me/919831077023" target="_blank" class="card">
         <div class="card-icon">💬</div>
         <div class="card-text">WhatsApp Papia Das Dutta</div>
       </a>
     </div>
-    
-    <div class="footer fade-in">
+    <div class="footer">
       <p>Thank you for helping return our belongings</p>
     </div>
   </div>
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Add subtle interactive effect to cards
-      const cards = document.querySelectorAll('.card');
-      cards.forEach(card => {
-        card.addEventListener('mousemove', function(e) {
-          const rect = this.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          
-          this.style.setProperty('--mouse-x', `${x}px`);
-          this.style.setProperty('--mouse-y', `${y}px`);
-        });
-      });
-    });
-  </script>
 </body>
 </html>
