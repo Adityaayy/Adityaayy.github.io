@@ -3,950 +3,173 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DoorThing | Premium Smart Lock System</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>DoorThing | Smart Lock</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Base & Reset */
     :root {
       --primary: #0066ff;
-      --primary-dark: #0051cc;
-      --accent: #ff3366;
-      --light: #ffffff;
-      --light-gray: #f8f9fc;
-      --medium-gray: #eef2f7;
-      --dark: #1a1d2b;
-      --text: #33354d;
-      --text-light: #6b6d85;
-      --transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.1);
-      --border-radius: 16px;
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    html {
-      scroll-behavior: smooth;
-    }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--light);
-      color: var(--text);
-      overflow-x: hidden;
-      line-height: 1.6;
-      font-weight: 400;
-      -webkit-font-smoothing: antialiased;
-    }
-    
-    h1, h2, h3, h4 {
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      color: var(--dark);
-    }
-    
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-    
-    .container {
-      width: 90%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    
-    section {
-      padding: 120px 0;
-    }
-    
-    .section-header {
-      text-align: center;
-      max-width: 700px;
-      margin: 0 auto 80px;
-    }
-    
-    .section-title {
-      font-size: 3.5rem;
-      margin-bottom: 20px;
-    }
-    
-    .section-subtitle {
-      font-size: 1.3rem;
-      color: var(--text-light);
-      font-weight: 400;
-      line-height: 1.7;
-    }
-    
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 18px 40px;
-      background: var(--primary);
-      color: var(--light);
-      font-weight: 600;
-      font-size: 1rem;
-      border-radius: 12px;
-      transition: var(--transition);
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 8px 20px rgba(0, 102, 255, 0.2);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .btn:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: var(--transition);
-    }
-    
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 30px rgba(0, 102, 255, 0.3);
-    }
-    
-    .btn:hover:before {
-      left: 100%;
-    }
-    
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--primary);
-      color: var(--primary);
-      box-shadow: none;
-    }
-    
-    .btn-outline:hover {
-      background: var(--primary);
-      color: var(--light);
-    }
-    
-    .btn-accent {
-      background: var(--accent);
-      box-shadow: 0 8px 20px rgba(255, 51, 102, 0.2);
-    }
-    
-    .btn-accent:hover {
-      box-shadow: 0 15px 30px rgba(255, 51, 102, 0.3);
-    }
-    
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
-      100% { transform: translateY(0px); }
-    }
-    
-    .fade-in {
-      opacity: 0;
-      animation: fadeIn 0.8s ease forwards;
-    }
-    
-    .delayed-1 { animation-delay: 0.2s; }
-    .delayed-2 { animation-delay: 0.4s; }
-    .delayed-3 { animation-delay: 0.6s; }
-    .delayed-4 { animation-delay: 0.8s; }
-    
-    /* Header & Navigation */
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      padding: 24px 0;
-      transition: var(--transition);
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
-    }
-    
-    .nav-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .logo {
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-    
-    .logo span {
-      color: var(--accent);
-    }
-    
-    .nav-links {
-      display: flex;
-      gap: 40px;
-    }
-    
-    .nav-links a {
-      font-weight: 500;
-      font-size: 16px;
-      position: relative;
-      transition: var(--transition);
-      color: var(--text);
-    }
-    
-    .nav-links a:after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--primary);
-      transition: var(--transition);
-    }
-    
-    .nav-links a:hover {
-      color: var(--primary);
-    }
-    
-    .nav-links a:hover:after {
-      width: 100%;
-    }
-    
-    /* Hero Section */
-    .hero {
-      padding: 180px 0 120px;
-      position: relative;
-      overflow: hidden;
-      background: var(--light-gray);
-      border-bottom-left-radius: 80px;
-      border-bottom-right-radius: 80px;
-    }
-    
-    .hero .container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-    
-    .hero-content {
-      position: relative;
-      z-index: 2;
-    }
-    
-    .hero h1 {
-      font-size: 4.5rem;
-      margin-bottom: 24px;
-      line-height: 1.1;
-    }
-    
-    .hero h1 span {
-      color: var(--primary);
-    }
-    
-    .hero p {
-      font-size: 1.3rem;
-      margin-bottom: 40px;
-      color: var(--text-light);
-      max-width: 520px;
-      line-height: 1.7;
-    }
-    
-    .hero-btns {
-      display: flex;
-      gap: 16px;
-    }
-    
-    .hero-image {
-      position: relative;
-      border-radius: var(--border-radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      animation: float 6s ease-in-out infinite;
-      background: var(--light);
-      padding: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .hero-image img {
-      width: 100%;
-      border-radius: 12px;
-    }
-    
-    /* Features Section */
-    .features {
-      background: var(--light);
-    }
-    
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-    }
-    
-    .feature-card {
-      background: var(--light);
-      border-radius: var(--border-radius);
-      padding: 40px;
-      transition: var(--transition);
-      box-shadow: var(--shadow);
-      border: 1px solid var(--medium-gray);
-    }
-    
-    .feature-card:hover {
-      transform: translateY(-10px);
-      box-shadow: var(--shadow-hover);
-      border-color: rgba(0, 102, 255, 0.15);
-    }
-    
-    .feature-icon {
-      width: 70px;
-      height: 70px;
-      background: rgba(0, 102, 255, 0.08);
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 30px;
-      font-size: 28px;
-      color: var(--primary);
-    }
-    
-    .feature-card h3 {
-      font-size: 1.8rem;
-      margin-bottom: 20px;
-      color: var(--dark);
-    }
-    
-    .feature-card p {
-      color: var(--text-light);
-      font-size: 1.1rem;
-      line-height: 1.7;
-    }
-    
-    /* Pricing Section */
-    .pricing {
-      background: var(--light-gray);
-      border-radius: 80px;
-    }
-    
-    .tiers {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      margin-top: 30px;
-    }
-    
-    .tier {
-      background: var(--light);
-      border: 1px solid var(--medium-gray);
-      border-radius: var(--border-radius);
-      overflow: hidden;
-      position: relative;
-      transition: var(--transition);
-      box-shadow: var(--shadow);
-    }
-    
-    .tier:hover {
-      transform: translateY(-10px);
-      box-shadow: var(--shadow-hover);
-      border-color: rgba(0, 102, 255, 0.15);
-    }
-    
-    .tier-featured {
-      border-color: var(--primary);
-      transform: scale(1.03);
-    }
-    
-    .tier-featured .tier-header {
-      background: var(--primary);
-      color: var(--light);
-    }
-    
-    .tier-header {
-      padding: 30px;
-      text-align: center;
-      background: rgba(0, 102, 255, 0.05);
-    }
-    
-    .tier-name {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-    }
-    
-    .tier-price {
-      font-size: 3rem;
-      font-weight: 700;
-      margin: 20px 0;
-      color: var(--dark);
-    }
-    
-    .tier-featured .tier-price {
-      color: var(--light);
-    }
-    
-    .tier-features {
-      padding: 30px;
-    }
-    
-    .tier-features ul {
-      list-style: none;
-      margin-bottom: 30px;
-    }
-    
-    .tier-features li {
-      padding: 12px 0;
-      border-bottom: 1px solid var(--medium-gray);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--text-light);
-    }
-    
-    .tier-features li:last-child {
-      border-bottom: none;
-    }
-    
-    .tier-features li:before {
-      content: '\f00c';
-      font-family: 'Font Awesome 5 Free';
-      font-weight: 900;
-      color: var(--primary);
-      font-size: 14px;
-    }
-    
-    .tier-cta {
-      padding: 0 30px 30px;
-      text-align: center;
-    }
-    
-    /* Tech Section */
-    .tech {
-      background: var(--light);
-    }
-    
-    .tech .container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-    }
-    
-    .tech-image {
-      position: relative;
-      border-radius: var(--border-radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      background: var(--light);
-      padding: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .tech-image img {
-      width: 100%;
-      border-radius: 12px;
-    }
-    
-    .specs-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-top: 40px;
-    }
-    
-    .spec-card {
-      background: var(--light-gray);
-      border-radius: 16px;
-      padding: 30px;
-      border: 1px solid var(--medium-gray);
-    }
-    
-    .spec-card h4 {
-      font-size: 1.1rem;
-      margin-bottom: 12px;
-      color: var(--primary);
-    }
-    
-    .spec-card p {
-      font-size: 1.1rem;
-      color: var(--text);
-      line-height: 1.6;
-    }
-    
-    /* CTA Section */
-    .cta {
-      background: var(--primary);
-      color: var(--light);
-      text-align: center;
-      border-radius: 80px;
-    }
-    
-    .cta .section-title {
-      color: var(--light);
-    }
-    
-    .cta .section-subtitle {
-      color: rgba(255, 255, 255, 0.8);
-    }
-    
-    .cta .btn {
-      background: var(--light);
-      color: var(--primary);
-      font-weight: 700;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-    
-    .cta .btn:hover {
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-    }
-    
-    /* Footer */
-    footer {
-      padding: 80px 0 40px;
-      background: var(--light);
-      border-top: 1px solid var(--medium-gray);
-    }
-    
-    .footer-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 50px;
-      margin-bottom: 60px;
-    }
-    
-    .footer-logo {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 20px;
-    }
-    
-    .footer-info p {
-      color: var(--text-light);
-      margin-bottom: 24px;
-      line-height: 1.7;
-    }
-    
-    .footer-links h4 {
-      font-size: 1.2rem;
-      margin-bottom: 25px;
-      color: var(--dark);
-    }
-    
-    .footer-links ul {
-      list-style: none;
-    }
-    
-    .footer-links li {
-      margin-bottom: 15px;
-    }
-    
-    .footer-links a {
-      color: var(--text-light);
-      transition: var(--transition);
-    }
-    
-    .footer-links a:hover {
-      color: var(--primary);
-    }
-    
-    .social-links {
-      display: flex;
-      gap: 16px;
-      margin-top: 20px;
-    }
-    
-    .social-links a {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: var(--light-gray);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-      color: var(--text);
-    }
-    
-    .social-links a:hover {
-      background: var(--primary);
-      color: var(--light);
-      transform: translateY(-5px);
-    }
-    
-    .copyright {
-      text-align: center;
-      padding-top: 40px;
-      border-top: 1px solid var(--medium-gray);
-      color: var(--text-light);
-      font-size: 0.95rem;
-    }
-    
-    /* Responsive Design */
-    @media (max-width: 992px) {
-      .hero .container {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-      
-      .hero-btns {
-        justify-content: center;
-      }
-      
-      .hero p {
-        margin: 0 auto 40px;
-      }
-      
-      .tech .container {
-        grid-template-columns: 1fr;
-        gap: 60px;
-      }
-      
-      .section-title {
-        font-size: 3rem;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-      
-      .hero h1 {
-        font-size: 3.5rem;
-      }
-      
-      .section-title {
-        font-size: 2.5rem;
-      }
-      
-      .hero-btns {
-        flex-direction: column;
-        gap: 15px;
-      }
-      
-      .btn {
-        width: 100%;
-        text-align: center;
-      }
-    }
-    
-    @media (max-width: 576px) {
-      .hero h1 {
-        font-size: 2.8rem;
-      }
-      
-      .section-title {
-        font-size: 2.2rem;
-      }
-      
-      .specs-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .hero {
-        padding: 150px 0 80px;
-      }
-      
-      section {
-        padding: 80px 0;
-      }
-    }
+      --bg: #f9f9f9;
+      --surface: #ffffff;
+      --gray-light: #e5e5e5;
+      --gray: #b0b0b0;
+      --gray-dark: #4a4a4a;
+      --text: #2e2e2e;
+      --radius: 8px;
+      --transition: 0.2s ease;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+    header { position: sticky; top: 0; background: var(--surface); padding: 16px 0; box-shadow: 0 1px 4px var(--gray-light); }
+    .nav { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-weight: 700; color: var(--primary); }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a:hover { color: var(--primary); }
+
+    section { padding: 80px 0; }
+    .hero { text-align: center; }
+    .hero h1 { font-size: 2.5rem; margin-bottom: 16px; }
+    .hero p { color: var(--gray-dark); margin-bottom: 24px; }
+    .btn { display: inline-block; padding: 12px 32px; background: var(--primary); color: #fff; border-radius: var(--radius); font-weight: 600; transition: var(--transition); }
+    .btn + .btn { margin-left: 12px; background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+    .btn:hover { opacity: 0.9; }
+
+    .grid { display: grid; gap: 32px; }
+    .features .grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .card { background: var(--surface); border-radius: var(--radius); padding: 24px; box-shadow: 0 2px 8px var(--gray-light); transition: var(--transition); }
+    .card:hover { box-shadow: 0 4px 12px var(--gray-light); }
+    .card-icon { font-size: 1.5rem; color: var(--primary); margin-bottom: 16px; }
+    .card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+    .card p { font-size: 0.95rem; color: var(--gray-dark); }
+
+    .tiers .grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    .tier { text-align: center; padding: 24px; }
+    .tier .name { font-weight: 600; margin-bottom: 8px; }
+    .tier .price { font-size: 1.8rem; margin: 16px 0; }
+    .tier ul { list-style: none; margin-bottom: 16px; }
+    .tier li { font-size: 0.9rem; color: var(--gray-dark); margin: 8px 0; }
+
+    footer { text-align: center; padding: 40px 0; color: var(--gray-dark); font-size: 0.85rem; }
   </style>
 </head>
 <body>
-  <!-- Header & Navigation -->
-  <header id="header">
-    <div class="container nav-container">
-      <a href="#" class="logo fade-in">Door<span>Thing</span></a>
+  <header>
+    <div class="container nav">
+      <div class="logo">DoorThing</div>
       <nav class="nav-links">
-        <a href="#features" class="fade-in delayed-1">Features</a>
-        <a href="#pricing" class="fade-in delayed-2">Pricing</a>
-        <a href="#tech" class="fade-in delayed-3">Technology</a>
-        <a href="#contact" class="fade-in delayed-4">Contact</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#tech">Tech</a>
+        <a href="#contact">Contact</a>
       </nav>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content fade-in">
-        <h1>Elevate Your <span>Security</span></h1>
-        <p>Your campus ID is now your key. Experience effortless access with DoorThing - the premium smart lock system designed for modern living.</p>
-        <div class="hero-btns">
-          <a href="#pricing" class="btn">Order Now</a>
-          <a href="#features" class="btn btn-outline">Explore Features</a>
-        </div>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Effortless Smart Access</h1>
+        <p>Use your campus ID as a key. No apps, no fuss—just tap and go.</p>
+        <a href="#pricing" class="btn">Order Now</a>
+        <a href="#features" class="btn">Learn More</a>
       </div>
-      <div class="hero-image fade-in delayed-1">
-        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="DoorThing Smart Lock">
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Features Section -->
-  <section class="features" id="features">
-    <div class="container">
-      <div class="section-header fade-in">
-        <h2 class="section-title">Premium Experience</h2>
-        <p class="section-subtitle">Designed with precision engineering and premium materials for a seamless user experience</p>
-      </div>
-      
-      <div class="features-grid">
-        <div class="feature-card fade-in">
-          <div class="feature-icon">
-            <i class="fas fa-id-card"></i>
+    <section id="features">
+      <div class="container">
+        <h2>Premium Features</h2>
+        <div class="features grid">
+          <div class="card">
+            <div class="card-icon">🔓</div>
+            <h3>Instant Unlock</h3>
+            <p>Tap any RFID card—no Wi-Fi needed.</p>
           </div>
-          <h3>Instant Card Unlock</h3>
-          <p>Seamlessly scan student IDs without Wi-Fi or extra apps. Our advanced RFID technology recognizes credentials instantly.</p>
-        </div>
-        
-        <div class="feature-card fade-in delayed-1">
-          <div class="feature-icon">
-            <i class="fas fa-battery-full"></i>
+          <div class="card">
+            <div class="card-icon">🔋</div>
+            <h3>Long Battery</h3>
+            <p>Up to 90 days standby on a single charge.</p>
           </div>
-          <h3>Deep Sleep Battery</h3>
-          <p>Engineered for endurance with up to 90 days standby on a single charge. Intelligent power management ensures reliability.</p>
-        </div>
-        
-        <div class="feature-card fade-in delayed-2">
-          <div class="feature-icon">
-            <i class="fas fa-cube"></i>
+          <div class="card">
+            <div class="card-icon">🎨</div>
+            <h3>Custom Shells</h3>
+            <p>Swap colors and textures to suit your style.</p>
           </div>
-          <h3>Custom 3D Shell</h3>
-          <p>Personalize your security with premium-grade, interchangeable shells available in various colors and textures.</p>
-        </div>
-        
-        <div class="feature-card fade-in delayed-3">
-          <div class="feature-icon">
-            <i class="fas fa-tools"></i>
+          <div class="card">
+            <div class="card-icon">🛠️</div>
+            <h3>Tool-Free Install</h3>
+            <p>Mount over existing locks in minutes.</p>
           </div>
-          <h3>Zero Modification</h3>
-          <p>Install in minutes without tools. Mounts over existing locks while maintaining mechanical key functionality.</p>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Pricing Section -->
-  <section class="pricing" id="pricing">
-    <div class="container">
-      <div class="section-header fade-in">
-        <h2 class="section-title">Simple Pricing</h2>
-        <p class="section-subtitle">Choose the perfect DoorThing for your needs with our straightforward pricing options</p>
-      </div>
-      
-      <div class="tiers">
-        <div class="tier fade-in">
-          <div class="tier-header">
-            <h3 class="tier-name">Lite</h3>
-            <div class="tier-price">₹4499</div>
-          </div>
-          <div class="tier-features">
+    <section id="pricing">
+      <div class="container">
+        <h2>Simple Pricing</h2>
+        <div class="tiers grid">
+          <div class="tier card">
+            <div class="name">Lite</div>
+            <div class="price">₹4,499</div>
             <ul>
-              <li>90+ day battery life</li>
-              <li>USB-C fast charging</li>
-              <li>Register any RFID capable ID</li>
-              <li>Tool-free installation</li>
-              <li>Basic shell design</li>
+              <li>90+ day battery</li>
+              <li>USB-C fast charge</li>
+              <li>Tool-free install</li>
             </ul>
+            <a href="#" class="btn">Buy</a>
           </div>
-          <div class="tier-cta">
-            <a href="#" class="btn btn-outline">Order Now</a>
-          </div>
-        </div>
-        
-        <div class="tier tier-featured fade-in delayed-1">
-          <div class="tier-header">
-            <h3 class="tier-name">Standard</h3>
-            <div class="tier-price">₹4999</div>
-          </div>
-          <div class="tier-features">
+          <div class="tier card">
+            <div class="name">Standard</div>
+            <div class="price">₹4,999</div>
             <ul>
               <li>All Lite features</li>
-              <li>Premium charging accessories</li>
-              <li>90+ day battery backup</li>
-              <li>Professional installation</li>
-              <li>Enhanced shell designs</li>
+              <li>Premium accessories</li>
               <li>Priority support</li>
             </ul>
+            <a href="#" class="btn">Buy</a>
           </div>
-          <div class="tier-cta">
-            <a href="#" class="btn">Order Now</a>
-          </div>
-        </div>
-        
-        <div class="tier fade-in delayed-2">
-          <div class="tier-header">
-            <h3 class="tier-name">Forge</h3>
-            <div class="tier-price">₹5999</div>
-          </div>
-          <div class="tier-features">
+          <div class="tier card">
+            <div class="name">Forge</div>
+            <div class="price">₹5,999</div>
             <ul>
               <li>All Standard features</li>
-              <li>Custom color combinations</li>
-              <li>Premium materials selection</li>
-              <li>Animated LED indicators</li>
-              <li>Personalized engraving</li>
-              <li>VIP customer service</li>
+              <li>Custom engraving</li>
+              <li>VIP service</li>
             </ul>
-          </div>
-          <div class="tier-cta">
-            <a href="#" class="btn btn-outline">Order Now</a>
+            <a href="#" class="btn">Buy</a>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Tech Section -->
-  <section class="tech" id="tech">
-    <div class="container">
-      <div class="tech-image fade-in">
-        <img src="https://images.unsplash.com/photo-1600353068440-6365ef0cbd11?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="DoorThing Technology">
-      </div>
-      <div class="tech-content fade-in delayed-1">
-        <h2 class="section-title">Cutting-Edge Technology</h2>
-        <p class="section-subtitle">DoorThing represents the pinnacle of smart lock engineering, combining security with intuitive operation.</p>
-        
-        <div class="specs-grid">
-          <div class="spec-card fade-in">
-            <h4>RFID Technology</h4>
-            <p>13.56 MHz ISO 14443 compliant with 128-bit encryption</p>
-          </div>
-          
-          <div class="spec-card fade-in delayed-1">
-            <h4>Battery Life</h4>
-            <p>Up to 90 days standby with ultra-low power consumption</p>
-          </div>
-          
-          <div class="spec-card fade-in delayed-2">
-            <h4>Connectivity</h4>
-            <p>Bluetooth 5.2 and Wi-Fi 6 ready for future expansion</p>
-          </div>
-          
-          <div class="spec-card fade-in delayed-3">
-            <h4>Materials</h4>
-            <p>Aerospace-grade aluminum with reinforced polymer core</p>
-          </div>
+    <section id="tech">
+      <div class="container">
+        <h2>Technology</h2>
+        <div class="grid" style="grid-template-columns:1fr 1fr; gap:32px; align-items:center;">
+          <img src="https://images.unsplash.com/photo-1600353068440-6365ef0cbd11`?auto=format&fit=crop&w=600&q=80`" alt="Tech image" style="width:100%; border-radius:var(--radius); box-shadow:0 2px 8px var(--gray-light);">
+          <ul style="list-style:none;">
+            <li><strong>RFID:</strong> ISO 14443, 128-bit encryption</li>
+            <li><strong>Connectivity:</strong> Bluetooth 5.2, Wi-Fi ready</li>
+            <li><strong>Material:</strong> Aero-grade aluminum</li>
+            <li><strong>Power:</strong> Ultra low consumption</li>
+          </ul>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- CTA Section -->
-  <section class="cta" id="contact">
-    <div class="container">
-      <div class="section-header fade-in">
-        <h2 class="section-title">Transform Your Space</h2>
-        <p class="section-subtitle">Join thousands of students who have upgraded their security with DoorThing</p>
-        <div class="fade-in delayed-1" style="margin-top: 40px;">
-          <a href="mailto:orders@doorthing.com" class="btn">Contact Our Team</a>
-        </div>
+    <section id="contact">
+      <div class="container" style="text-align:center;">
+        <h2>Get in Touch</h2>
+        <p>Questions? Email us at <a href="mailto:orders@doorthing.com">orders@doorthing.com</a></p>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <!-- Footer -->
   <footer>
     <div class="container">
-      <div class="footer-content">
-        <div class="footer-info">
-          <div class="footer-logo">DoorThing</div>
-          <p>Premium smart lock systems engineered for security, convenience, and style.</p>
-          <div class="social-links">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            <a href="#"><i class="fab fa-github"></i></a>
-          </div>
-        </div>
-        
-        <div class="footer-links">
-          <h4>Product</h4>
-          <ul>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#tech">Technology</a></li>
-            <li><a href="#">Accessories</a></li>
-          </ul>
-        </div>
-        
-        <div class="footer-links">
-          <h4>Company</h4>
-          <ul>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Press</a></li>
-            <li><a href="#">Sustainability</a></li>
-          </ul>
-        </div>
-        
-        <div class="footer-links">
-          <h4>Support</h4>
-          <ul>
-            <li><a href="#">Documentation</a></li>
-            <li><a href="#">Community</a></li>
-            <li><a href="#">Contact Support</a></li>
-            <li><a href="#">FAQs</a></li>
-          </ul>
-        </div>
-      </div>
-      
-      <div class="copyright">
-        <p>&copy; 2023 DoorThing Technologies. All rights reserved. Crafted with precision in India.</p>
-      </div>
+      <p>&copy; 2025 DoorThing Technologies. All rights reserved.</p>
     </div>
   </footer>
-
-  <script>
-    // Header scroll effect
-    window.addEventListener('scroll', function() {
-      const header = document.getElementById('header');
-      if (window.scrollY > 50) {
-        header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.05)';
-      } else {
-        header.style.boxShadow = 'none';
-      }
-    });
-    
-    // Fade-in animation on scroll
-    const fadeElements = document.querySelectorAll('.fade-in');
-    
-    const fadeObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.animationPlayState = 'running';
-          fadeObserver.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.2
-    });
-    
-    fadeElements.forEach(element => {
-      fadeObserver.observe(element);
-    });
-  </script>
 </body>
 </html>
