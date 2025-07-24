@@ -3,173 +3,1066 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DoorThing | Smart Lock</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>DoorThing | Smart Hostel Lock System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    /* Base Styles */
     :root {
-      --primary: #0066ff;
-      --bg: #f9f9f9;
-      --surface: #ffffff;
-      --gray-light: #e5e5e5;
-      --gray: #b0b0b0;
-      --gray-dark: #4a4a4a;
-      --text: #2e2e2e;
-      --radius: 8px;
-      --transition: 0.2s ease;
+      --primary: #4682B4;
+      --primary-dark: #3a6d9b;
+      --secondary: #2c3e50;
+      --light: #f8f9fa;
+      --gray: #e9ecef;
+      --text: #333;
+      --text-light: #6c757d;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
-    a { color: inherit; text-decoration: none; }
-    .container { max-width: 960px; margin: 0 auto; padding: 0 16px; }
-    header { position: sticky; top: 0; background: var(--surface); padding: 16px 0; box-shadow: 0 1px 4px var(--gray-light); }
-    .nav { display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-weight: 700; color: var(--primary); }
-    .nav-links { display: flex; gap: 24px; }
-    .nav-links a:hover { color: var(--primary); }
-
-    section { padding: 80px 0; }
-    .hero { text-align: center; }
-    .hero h1 { font-size: 2.5rem; margin-bottom: 16px; }
-    .hero p { color: var(--gray-dark); margin-bottom: 24px; }
-    .btn { display: inline-block; padding: 12px 32px; background: var(--primary); color: #fff; border-radius: var(--radius); font-weight: 600; transition: var(--transition); }
-    .btn + .btn { margin-left: 12px; background: transparent; border: 2px solid var(--primary); color: var(--primary); }
-    .btn:hover { opacity: 0.9; }
-
-    .grid { display: grid; gap: 32px; }
-    .features .grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-    .card { background: var(--surface); border-radius: var(--radius); padding: 24px; box-shadow: 0 2px 8px var(--gray-light); transition: var(--transition); }
-    .card:hover { box-shadow: 0 4px 12px var(--gray-light); }
-    .card-icon { font-size: 1.5rem; color: var(--primary); margin-bottom: 16px; }
-    .card h3 { font-size: 1.2rem; margin-bottom: 8px; }
-    .card p { font-size: 0.95rem; color: var(--gray-dark); }
-
-    .tiers .grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-    .tier { text-align: center; padding: 24px; }
-    .tier .name { font-weight: 600; margin-bottom: 8px; }
-    .tier .price { font-size: 1.8rem; margin: 16px 0; }
-    .tier ul { list-style: none; margin-bottom: 16px; }
-    .tier li { font-size: 0.9rem; color: var(--gray-dark); margin: 8px 0; }
-
-    footer { text-align: center; padding: 40px 0; color: var(--gray-dark); font-size: 0.85rem; }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 1rem 2.2rem;
+      background: var(--primary);
+      color: white;
+      border-radius: 50px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(70, 130, 180, 0.3);
+    }
+    
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(70, 130, 180, 0.4);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .section {
+      padding: 6rem 0;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+    
+    .section-title h2 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-title p {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+      opacity: 0;
+    }
+    
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    .delay-4 { animation-delay: 0.8s; }
+    
+    /* Header & Navigation */
+    header {
+      position: relative;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 2rem 0;
+    }
+    
+    .header-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1;
+    }
+    
+    .header-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 4rem 0;
+    }
+    
+    .header-content h1 {
+      font-size: 4.5rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+      line-height: 1.1;
+    }
+    
+    .header-content p {
+      font-size: 1.8rem;
+      margin-bottom: 2.5rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      font-weight: 300;
+    }
+    
+    .header-image {
+      max-width: 800px;
+      margin: 3rem auto 0;
+      position: relative;
+      z-index: 2;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+      border: 15px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .header-image img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+    }
+    
+    /* Features */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    
+    .feature-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    }
+    
+    .feature-icon {
+      width: 100px;
+      height: 100px;
+      background: rgba(70, 130, 180, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+      font-size: 2.5rem;
+      color: var(--primary);
+    }
+    
+    .feature-card h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      color: var(--secondary);
+    }
+    
+    .feature-card p {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+    
+    /* Pricing */
+    .pricing {
+      background: var(--light);
+    }
+    
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+    
+    .pricing-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .pricing-card:hover {
+      transform: scale(1.03);
+    }
+    
+    .pricing-card.popular {
+      border: 3px solid var(--primary);
+      transform: scale(1.05);
+      z-index: 2;
+    }
+    
+    .pricing-card.popular::before {
+      content: 'POPULAR';
+      position: absolute;
+      top: 20px;
+      right: -35px;
+      background: var(--primary);
+      color: white;
+      padding: 0.5rem 2rem;
+      transform: rotate(45deg);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+    }
+    
+    .pricing-header {
+      padding: 2.5rem 2rem;
+      background: var(--secondary);
+      color: white;
+    }
+    
+    .pricing-header h3 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .pricing-price {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin: 1.5rem 0;
+      color: white;
+    }
+    
+    .pricing-price span {
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
+    
+    .pricing-features {
+      padding: 2.5rem 2rem;
+    }
+    
+    .pricing-features ul {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+    
+    .pricing-features li {
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--gray);
+      font-size: 1.1rem;
+    }
+    
+    .pricing-features li:last-child {
+      border-bottom: none;
+    }
+    
+    .pricing-features li i {
+      color: var(--primary);
+      margin-right: 0.5rem;
+    }
+    
+    /* Open Source */
+    .opensource {
+      background: linear-gradient(135deg, #2c3e50 0%, #1a2530 100%);
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .opensource::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjQwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIj48L3JlY3Q+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIj48L3JlY3Q+PC9zdmc+');
+      opacity: 0.1;
+    }
+    
+    .opensource-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .opensource-content h2 {
+      color: white;
+      margin-bottom: 2rem;
+    }
+    
+    .opensource-content p {
+      font-size: 1.2rem;
+      margin-bottom: 2.5rem;
+      opacity: 0.9;
+      line-height: 1.8;
+    }
+    
+    .github-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .stat {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      border-radius: 10px;
+      min-width: 150px;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.7;
+    }
+    
+    /* Testimonials */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+    
+    .testimonial-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    
+    .testimonial-card::before {
+      content: ''';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 5rem;
+      color: rgba(70, 130, 180, 0.1);
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+    
+    .testimonial-text {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+      color: var(--text);
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+    }
+    
+    .author-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 1rem;
+      background: var(--gray);
+    }
+    
+    .author-info h4 {
+      font-size: 1.2rem;
+      margin-bottom: 0.2rem;
+    }
+    
+    .author-info p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    /* FAQ */
+    .faq-grid {
+      max-width: 800px;
+      margin: 3rem auto 0;
+    }
+    
+    .faq-item {
+      background: white;
+      border-radius: 15px;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    
+    .faq-question {
+      padding: 1.8rem;
+      font-size: 1.3rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--light);
+    }
+    
+    .faq-answer {
+      padding: 0 1.8rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .faq-answer p {
+      padding-bottom: 1.8rem;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+    
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+    }
+    
+    .faq-toggle {
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .faq-item.active .faq-toggle {
+      transform: rotate(45deg);
+    }
+    
+    /* CTA */
+    .cta {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      text-align: center;
+      padding: 6rem 0;
+    }
+    
+    .cta h2 {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .cta p {
+      font-size: 1.3rem;
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+      opacity: 0.9;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--secondary);
+      color: white;
+      padding: 4rem 0 2rem;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    
+    .footer-col h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.8rem;
+    }
+    
+    .footer-col h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--primary);
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      transition: var(--transition);
+    }
+    
+    .footer-links a:hover {
+      color: white;
+      padding-left: 5px;
+    }
+    
+    .footer-contact li {
+      display: flex;
+      margin-bottom: 1.2rem;
+    }
+    
+    .footer-contact i {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-right: 1rem;
+      min-width: 20px;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      transition: var(--transition);
+    }
+    
+    .social-links a:hover {
+      background: var(--primary);
+      transform: translateY(-5px);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+      .header-content h1 {
+        font-size: 3.5rem;
+      }
+      
+      .header-content p {
+        font-size: 1.5rem;
+      }
+      
+      .section-title h2 {
+        font-size: 2.5rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header-content h1 {
+        font-size: 2.8rem;
+      }
+      
+      .header-content p {
+        font-size: 1.3rem;
+      }
+      
+      .pricing-card.popular {
+        transform: scale(1);
+      }
+      
+      .pricing-card.popular::before {
+        top: 10px;
+        right: -30px;
+        padding: 0.4rem 1.5rem;
+        font-size: 0.7rem;
+      }
+      
+      .cta h2 {
+        font-size: 2.5rem;
+      }
+      
+      .cta p {
+        font-size: 1.1rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .header-content {
+        padding: 2rem 0;
+      }
+      
+      .header-content h1 {
+        font-size: 2.2rem;
+      }
+      
+      .section {
+        padding: 4rem 0;
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+      }
+      
+      .pricing-card.popular::before {
+        display: none;
+      }
+      
+      .github-stats {
+        flex-wrap: wrap;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Header -->
   <header>
-    <div class="container nav">
-      <div class="logo">DoorThing</div>
-      <nav class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#tech">Tech</a>
-        <a href="#contact">Contact</a>
-      </nav>
+    <div class="header-overlay"></div>
+    <div class="container">
+      <div class="header-content">
+        <h1 class="fade-in">Campus Life, Simplified</h1>
+        <p class="fade-in delay-1">Your student ID is now your master key</p>
+        <div class="fade-in delay-2">
+          <a href="#pricing" class="btn">Order Now</a>
+          <a href="#features" class="btn btn-outline">Learn More</a>
+        </div>
+        <div class="header-image fade-in delay-3">
+          <img src="data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'%3e%3crect width='800' height='500' fill='%234682B4'/%3e%3cpath d='M200,250 Q400,150 600,250 L600,350 Q400,450 200,350 Z' fill='%233a6d9b'/%3e%3ccircle cx='400' cy='250' r='80' fill='white'/%3e%3ccircle cx='400' cy='250' r='50' fill='%232c3e50'/%3e%3cpath d='M400,230 L420,270 L380,270 Z' fill='white'/%3e%3c/svg%3e" alt="DoorThing Smart Lock">
+        </div>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="container">
-        <h1>Effortless Smart Access</h1>
-        <p>Use your campus ID as a key. No apps, no fuss—just tap and go.</p>
-        <a href="#pricing" class="btn">Order Now</a>
-        <a href="#features" class="btn">Learn More</a>
+  <!-- Features -->
+  <section id="features" class="section">
+    <div class="container">
+      <div class="section-title fade-in">
+        <h2>Smart Access, Simplified</h2>
+        <p>DoorThing transforms your existing lock into a smart access system without compromising security or convenience</p>
       </div>
-    </section>
+      
+      <div class="features-grid">
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <i class="fas fa-id-card"></i>
+          </div>
+          <h3>Instant Card Unlock</h3>
+          <p>Scan your student ID to unlock your door instantly. No Wi-Fi required, no apps to install, just tap and go.</p>
+        </div>
+        
+        <div class="feature-card fade-in delay-1">
+          <div class="feature-icon">
+            <i class="fas fa-battery-full"></i>
+          </div>
+          <h3>30-Day Battery Life</h3>
+          <p>Advanced power management ensures up to 30 days of standby on a single charge. Never worry about being locked out.</p>
+        </div>
+        
+        <div class="feature-card fade-in delay-2">
+          <div class="feature-icon">
+            <i class="fas fa-cube"></i>
+          </div>
+          <h3>Customizable Design</h3>
+          <p>Choose from multiple colors and finishes, or create your own custom 3D-printed shell to match your style.</p>
+        </div>
+        
+        <div class="feature-card fade-in delay-3">
+          <div class="feature-icon">
+            <i class="fas fa-tools"></i>
+          </div>
+          <h3>Zero Modification</h3>
+          <p>Installs in seconds without tools or modifications to your door. Your physical key still works as backup.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section id="features">
-      <div class="container">
-        <h2>Premium Features</h2>
-        <div class="features grid">
-          <div class="card">
-            <div class="card-icon">🔓</div>
-            <h3>Instant Unlock</h3>
-            <p>Tap any RFID card—no Wi-Fi needed.</p>
+  <!-- Pricing -->
+  <section id="pricing" class="section pricing">
+    <div class="container">
+      <div class="section-title fade-in">
+        <h2>Choose Your DoorThing</h2>
+        <p>Find the perfect smart lock solution for your hostel room</p>
+      </div>
+      
+      <div class="pricing-grid">
+        <div class="pricing-card fade-in">
+          <div class="pricing-header">
+            <h3>Lite</h3>
+            <div class="pricing-price">₹4,499</div>
           </div>
-          <div class="card">
-            <div class="card-icon">🔋</div>
-            <h3>Long Battery</h3>
-            <p>Up to 90 days standby on a single charge.</p>
+          <div class="pricing-features">
+            <ul>
+              <li><i class="fas fa-check"></i> 30+ day battery life</li>
+              <li><i class="fas fa-check"></i> USB-C rechargeable</li>
+              <li><i class="fas fa-check"></i> Register any RFID capable ID</li>
+              <li><i class="fas fa-check"></i> 30-second installation</li>
+              <li><i class="fas fa-check"></i> Basic black finish</li>
+            </ul>
+            <a href="#" class="btn">Order Now</a>
           </div>
-          <div class="card">
-            <div class="card-icon">🎨</div>
-            <h3>Custom Shells</h3>
-            <p>Swap colors and textures to suit your style.</p>
+        </div>
+        
+        <div class="pricing-card popular fade-in delay-1">
+          <div class="pricing-header">
+            <h3>Standard</h3>
+            <div class="pricing-price">₹4,999</div>
           </div>
-          <div class="card">
-            <div class="card-icon">🛠️</div>
-            <h3>Tool-Free Install</h3>
-            <p>Mount over existing locks in minutes.</p>
+          <div class="pricing-features">
+            <ul>
+              <li><i class="fas fa-check"></i> All Lite features</li>
+              <li><i class="fas fa-check"></i> Includes wall adapter</li>
+              <li><i class="fas fa-check"></i> Color-matched cable mounts</li>
+              <li><i class="fas fa-check"></i> Battery backup for power outages</li>
+              <li><i class="fas fa-check"></i> Professional installation option</li>
+            </ul>
+            <a href="#" class="btn">Order Now</a>
+          </div>
+        </div>
+        
+        <div class="pricing-card fade-in delay-2">
+          <div class="pricing-header">
+            <h3>Forge</h3>
+            <div class="pricing-price">₹5,999</div>
+          </div>
+          <div class="pricing-features">
+            <ul>
+              <li><i class="fas fa-check"></i> All Standard features</li>
+              <li><i class="fas fa-check"></i> Custom color combinations</li>
+              <li><i class="fas fa-check"></i> Premium textured skins</li>
+              <li><i class="fas fa-check"></i> Custom LED animations</li>
+              <li><i class="fas fa-check"></i> Priority support</li>
+            </ul>
+            <a href="#" class="btn">Order Now</a>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="pricing">
-      <div class="container">
-        <h2>Simple Pricing</h2>
-        <div class="tiers grid">
-          <div class="tier card">
-            <div class="name">Lite</div>
-            <div class="price">₹4,499</div>
-            <ul>
-              <li>90+ day battery</li>
-              <li>USB-C fast charge</li>
-              <li>Tool-free install</li>
-            </ul>
-            <a href="#" class="btn">Buy</a>
+  <!-- Open Source -->
+  <section class="section opensource">
+    <div class="container">
+      <div class="opensource-content fade-in">
+        <div class="section-title">
+          <h2>Built for Tinkerers</h2>
+          <p>Open source and extensible for tech enthusiasts</p>
+        </div>
+        
+        <p>DoorThing is built on open-source software with Wi-Fi and Bluetooth capable hardware. Our GitHub repository allows you to tinker, add features, or connect to your own smart home server. Customize your lock experience beyond imagination.</p>
+        
+        <a href="#" class="btn btn-outline">Explore on GitHub</a>
+        
+        <div class="github-stats">
+          <div class="stat">
+            <div class="stat-number">2.4K+</div>
+            <div class="stat-label">Developers</div>
           </div>
-          <div class="tier card">
-            <div class="name">Standard</div>
-            <div class="price">₹4,999</div>
-            <ul>
-              <li>All Lite features</li>
-              <li>Premium accessories</li>
-              <li>Priority support</li>
-            </ul>
-            <a href="#" class="btn">Buy</a>
+          <div class="stat">
+            <div class="stat-number">87</div>
+            <div class="stat-label">Contributors</div>
           </div>
-          <div class="tier card">
-            <div class="name">Forge</div>
-            <div class="price">₹5,999</div>
-            <ul>
-              <li>All Standard features</li>
-              <li>Custom engraving</li>
-              <li>VIP service</li>
-            </ul>
-            <a href="#" class="btn">Buy</a>
+          <div class="stat">
+            <div class="stat-number">320+</div>
+            <div class="stat-label">Forks</div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="tech">
-      <div class="container">
-        <h2>Technology</h2>
-        <div class="grid" style="grid-template-columns:1fr 1fr; gap:32px; align-items:center;">
-          <img src="https://images.unsplash.com/photo-1600353068440-6365ef0cbd11`?auto=format&fit=crop&w=600&q=80`" alt="Tech image" style="width:100%; border-radius:var(--radius); box-shadow:0 2px 8px var(--gray-light);">
-          <ul style="list-style:none;">
-            <li><strong>RFID:</strong> ISO 14443, 128-bit encryption</li>
-            <li><strong>Connectivity:</strong> Bluetooth 5.2, Wi-Fi ready</li>
-            <li><strong>Material:</strong> Aero-grade aluminum</li>
-            <li><strong>Power:</strong> Ultra low consumption</li>
+  <!-- Testimonials -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title fade-in">
+        <h2>Trusted by Students</h2>
+        <p>See what campus residents are saying about DoorThing</p>
+      </div>
+      
+      <div class="testimonials-grid">
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-text">
+            "I used to lose my keys at least once a semester. DoorThing has been a lifesaver! Now I just tap my student ID and I'm in. The battery lasts forever and installation took literally 30 seconds."
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar"></div>
+            <div class="author-info">
+              <h4>Rahul Sharma</h4>
+              <p>IIT Delhi</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card fade-in delay-1">
+          <div class="testimonial-text">
+            "The customizability is amazing! I designed my own shell on Tinkercad and 3D printed it in our campus lab. Now my lock matches my room decor perfectly. Plus the security features give me peace of mind."
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar"></div>
+            <div class="author-info">
+              <h4>Priya Patel</h4>
+              <p>NIT Surat</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card fade-in delay-2">
+          <div class="testimonial-text">
+            "As someone who's into home automation, I love that I could extend DoorThing's functionality. I connected it to my Home Assistant setup and now my lights turn on automatically when I unlock the door."
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar"></div>
+            <div class="author-info">
+              <h4>Arjun Mehta</h4>
+              <p>BITS Pilani</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title fade-in">
+        <h2>Frequently Asked Questions</h2>
+        <p>Everything you need to know about DoorThing</p>
+      </div>
+      
+      <div class="faq-grid">
+        <div class="faq-item fade-in">
+          <div class="faq-question">
+            How does DoorThing work with existing locks?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>DoorThing mounts directly over your existing deadbolt. It has a motorized mechanism that turns your lock when you scan your ID. Your physical key still works normally as a backup.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item fade-in delay-1">
+          <div class="faq-question">
+            What types of ID cards are compatible?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>DoorThing works with any RFID-enabled student ID card (125kHz or 13.56MHz). It also supports NFC-enabled smartphones and wearable devices.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item fade-in delay-2">
+          <div class="faq-question">
+            How long does the battery last?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>With typical student usage (10-15 unlocks per day), DoorThing lasts 30+ days on a single charge. You'll get notifications on your phone when battery is low.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item fade-in delay-3">
+          <div class="faq-question">
+            Is DoorThing secure?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Absolutely. We use military-grade encryption for all communications. Your ID card data is never stored or transmitted. DoorThing is more secure than traditional keys which can be duplicated.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <h2 class="fade-in">Ready to Upgrade Your Campus Life?</h2>
+      <p class="fade-in delay-1">Join thousands of students enjoying keyless convenience with DoorThing</p>
+      <div class="cta-buttons fade-in delay-2">
+        <a href="#pricing" class="btn">Choose Your DoorThing</a>
+        <a href="mailto:contact@doorthing.com" class="btn btn-outline">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>DoorThing</h3>
+          <p>Transforming campus security with innovative, student-friendly technology since 2022.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Products</h3>
+          <ul class="footer-links">
+            <li><a href="#">DoorThing Lite</a></li>
+            <li><a href="#">DoorThing Standard</a></li>
+            <li><a href="#">DoorThing Forge</a></li>
+            <li><a href="#">Accessories</a></li>
+            <li><a href="#">Custom Designs</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Support</h3>
+          <ul class="footer-links">
+            <li><a href="#">Installation Guide</a></li>
+            <li><a href="#">Troubleshooting</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Developer Docs</a></li>
+            <li><a href="#">Contact Support</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Contact</h3>
+          <ul class="footer-contact">
+            <li>
+              <i class="fas fa-envelope"></i>
+              <span>contact@doorthing.com</span>
+            </li>
+            <li>
+              <i class="fas fa-phone"></i>
+              <span>+91 98765 43210</span>
+            </li>
+            <li>
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Bengaluru, India</span>
+            </li>
           </ul>
         </div>
       </div>
-    </section>
-
-    <section id="contact">
-      <div class="container" style="text-align:center;">
-        <h2>Get in Touch</h2>
-        <p>Questions? Email us at <a href="mailto:orders@doorthing.com">orders@doorthing.com</a></p>
+      
+      <div class="copyright">
+        <p>&copy; 2023 DoorThing Technologies. All rights reserved.</p>
       </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 DoorThing Technologies. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+    // Animation on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+      const fadeElements = document.querySelectorAll('.fade-in');
+      
+      const fadeInObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.animationPlayState = 'running';
+            entry.target.style.opacity = 1;
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      fadeElements.forEach(element => {
+        fadeInObserver.observe(element);
+      });
+      
+      // FAQ toggle functionality
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', () => {
+          item.classList.toggle('active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>
