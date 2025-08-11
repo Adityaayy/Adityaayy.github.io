@@ -12,7 +12,7 @@
         margin: 0;
         padding: 20px;
     }
-    h1, h2 {
+    h1, h2, h3 {
         color: #ff8c42; /* softer orange accent */
     }
     .container {
@@ -93,7 +93,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script>
-    // === Your existing Firebase config here ===
+    // === Your existing Firebase config ===
+
     // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyC7872cCC6wXWgy8Drj1N0yET9nk0a7KM4",
@@ -210,7 +211,7 @@ const firebaseConfig = {
         const output = {};
         Object.keys(groupsMap).sort((a, b) => Number(a) - Number(b))
             .forEach(gid => {
-                output[`Group ${gid}`] = groupsMap[gid];
+                output[`Group ${gid}`] = { members: groupsMap[gid] };
             });
         output["Unassigned"] = unassigned;
 
