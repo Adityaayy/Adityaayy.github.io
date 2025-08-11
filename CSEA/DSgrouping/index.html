@@ -2,161 +2,333 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>CSE-sec A — Data Analysis Groups</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>CSE-sec A — Student Grouping</title>
+
+  <!-- Minimal reset + system font -->
   <style>
-    body { padding:20px; background:#f6f8fb; }
-    .mono { font-family: monospace; }
-    .small-note { font-size:0.85rem; color:#666; }
+    :root{--accent:#0b74de;--muted:#6b7280;--card:#ffffff}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+         background:linear-gradient(180deg,#f7f9fc 0%, #ffffff 100%); color:#0f172a; padding:28px}
+    .wrap{max-width:980px;margin:0 auto}
+    header{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+    h1{font-weight:600;margin:0}
+    .muted{color:var(--muted);font-size:0.95rem}
+    .grid{display:grid;grid-template-columns:1fr 360px; gap:20px;margin-top:18px}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 20px rgba(11,20,40,0.06)}
+    .small{font-size:0.88rem;color:var(--muted)}
+    .list{list-style:none;padding:0;margin:0}
+    button{cursor:pointer;border:0;background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px}
+    .btn-ghost{background:transparent;color:var(--accent);border:1px solid rgba(11,116,222,0.08)}
+    input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;background:#fff}
+    .group {margin-bottom:12px;padding:10px;border-radius:10px;border:1px solid #eef2ff}
+    .meta{font-size:0.85rem;color:var(--muted)}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;font-size:0.88rem}
+    .tag{display:inline-block;background:#eef6ff;color:var(--accent);padding:4px 8px;border-radius:999px;font-size:0.78rem}
+    footer{margin-top:16px;font-size:0.85rem;color:var(--muted)}
+    .danger{color:#b91c1c}
   </style>
 </head>
 <body>
-<div class="container">
-  <h1>CSE-sec A — Data Analysis Grouping</h1>
-  <p class="small-note">Live updates — powered by Firebase</p>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>CSE-sec A+ — Data Analysis Case Studty Grouping</h1>
+        <div class="muted">Student Grouping — public</div>
+      </div>
+      <div class="meta">Group size ≤ 4 · Changes live for everyone</div>
+    </header>
 
-  <div id="groupsArea" class="mb-3"></div>
-  <h5>Unassigned Students</h5>
-  <div id="unenrolledArea"></div>
+    <div class="grid">
+      <!-- main area -->
+      <div>
+        <div class="card" id="groupsCard">
+          <h3 style="margin-top:0">Groups</h3>
+          <div id="groupsList" class="small"></div>
+          <div id="noGroups" class="small muted" style="margin-top:8px;display:none">No groups yet — create one below.</div>
+        </div>
 
-  <hr>
-  <h5>Join a Group</h5>
-  <input id="searchName" class="form-control mb-2" placeholder="Search your name">
-  <div id="searchResults"></div>
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin-top:0">Unassigned students</h3>
+          <div id="unenrolledList" style="margin-top:8px"></div>
+        </div>
+      </div>
 
-  <div id="joinPanel" style="display:none" class="mt-3">
-    <input id="rollInput" class="form-control mb-2" placeholder="Enter your roll number (password)">
-    <select id="groupSelect" class="form-select mb-2"></select>
-    <button id="joinBtn" class="btn btn-primary">Join</button>
-    <div id="joinError" class="text-danger mt-2"></div>
+      <!-- right panel -->
+      <div>
+        <div class="card">
+          <h4 style="margin:0 0 8px 0">Find yourself</h4>
+          <div class="small muted">Search by name (no roll numbers shown)</div>
+          <div style="margin-top:10px">
+            <input id="searchInput" placeholder="Type part of your name..." autocomplete="off" />
+          </div>
+          <div id="searchResults" style="margin-top:10px"></div>
+
+          <div id="joinBox" style="margin-top:14px;display:none">
+            <div class="small muted">Confirm identity (roll number used as password)</div>
+            <div style="margin-top:8px">
+              <input id="rollInput" placeholder="Enter roll number (not displayed publicly)" autocomplete="off" />
+            </div>
+            <div style="margin-top:8px;display:flex;gap:8px">
+              <select id="groupSelect"></select>
+              <button id="createGroupBtn" class="btn-ghost" style="padding:8px 10px">New</button>
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button id="joinBtn">Join</button>
+              <button id="cancelBtn" class="btn-ghost">Cancel</button>
+            </div>
+            <div id="joinMsg" class="small danger" style="margin-top:8px"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="small muted">CR controls</div>
+              <div style="font-weight:600">Export / admin</div>
+            </div>
+            <div style="text-align:right">
+              <div class="mono" id="statsTotal">0 students</div>
+              <div class="small muted" id="statsEnrolled">0 enrolled · 0 groups</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button id="exportBtn">Export JSON</button>
+            <button id="refreshBtn" class="btn-ghost">Refresh</button>
+          </div>
+
+          <div class="small muted" style="margin-top:10px">No Firebase branding here. Deploy to GitHub Pages and share the link.</div>
+        </div>
+
+        <footer>Tip: open site in two windows to test real-time updates.</footer>
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js"></script>
-
-<script>
-// ===== Replace with your Firebase config =====
+<script type="module">
+/* ==== CONFIG: Replace with your Firebase Web config (from Project Settings > SDK snippet) ==== */
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "ID",
-  appId: "APP_ID"
+  apiKey: "AIzaSyC7872cCC6wXWgy8Drj1N0yET9nk0a7KM4",
+  authDomain: "csea-dsgrouping.firebaseapp.com",
+  projectId: "csea-dsgrouping",
+  storageBucket: "csea-dsgrouping.firebasestorage.app",
+  messagingSenderId: "367385736275",
+  appId: "1:367385736275:web:907bb7e06f7efc550cc2a6"
 };
-// =============================================
+/* ========================================================================================== */
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import {
+  getFirestore, collection, doc, onSnapshot, setDoc, getDocs,
+  runTransaction, query, orderBy
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-let students = [];
-let groups = [];
-let selectedRoll = null;
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-// Live updates from Firestore
-db.collection("students").onSnapshot(snap => {
-  students = snap.docs.map(d => d.data());
-  render();
-});
-db.collection("groups").onSnapshot(snap => {
-  groups = snap.docs.map(d => d.data());
-  render();
-});
+const studentsColl = collection(db, 'students');
+const groupsColl = collection(db, 'groups');
 
-function render(){
+// UI elements
+const groupsList = document.getElementById('groupsList');
+const unenrolledList = document.getElementById('unenrolledList');
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+const joinBox = document.getElementById('joinBox');
+const rollInput = document.getElementById('rollInput');
+const groupSelect = document.getElementById('groupSelect');
+const createGroupBtn = document.getElementById('createGroupBtn');
+const joinBtn = document.getElementById('joinBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+const joinMsg = document.getElementById('joinMsg');
+const statsTotal = document.getElementById('statsTotal');
+const statsEnrolled = document.getElementById('statsEnrolled');
+const exportBtn = document.getElementById('exportBtn');
+const refreshBtn = document.getElementById('refreshBtn');
+const noGroups = document.getElementById('noGroups');
+
+let students = []; // local snapshot
+let groups = [];   // local snapshot
+
+// ------ realtime listeners ------
+onSnapshot(studentsColl, snap => {
+  students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderAll();
+}, err => console.error('students onSnapshot error', err));
+
+onSnapshot(groupsColl, snap => {
+  groups = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderAll();
+}, err => console.error('groups onSnapshot error', err));
+
+// ------ rendering ------
+function renderAll(){
   renderGroups();
   renderUnenrolled();
+  updateStats();
   populateGroupSelect();
 }
 
 function renderGroups(){
-  const area = document.getElementById('groupsArea');
-  if (!groups.length){ area.innerHTML = '<div class="small-note">No groups yet</div>'; return; }
-  area.innerHTML = groups.map(g => {
-    const members = g.members.map(r => {
-      const s = students.find(s => s.roll === r);
-      return `<li>${s ? s.name : r}</li>`;
-    }).join('');
-    return `<div class="card mb-2"><div class="card-body">
-      <strong>Group ${g.id}</strong> (${g.members.length}/4)
-      <ul>${members}</ul>
-    </div></div>`;
+  if (groups.length === 0) {
+    groupsList.innerHTML = '';
+    noGroups.style.display = 'block';
+    return;
+  }
+  noGroups.style.display = 'none';
+  // sort numeric by id if possible
+  const sorted = [...groups].sort((a,b)=> (Number(a.id)||0) - (Number(b.id)||0));
+  groupsList.innerHTML = sorted.map(g => {
+    const membersHtml = (g.members || []).map((roll, idx) => {
+      const s = students.find(x => x.roll === roll);
+      const name = s ? escapeHtml(s.name) : escapeHtml(roll);
+      return `<div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #f3f5fb">
+                <div>${idx+1}. ${name}</div>
+                <div class="tag mono">${escapeHtml(roll)}</div>
+              </div>`;
+    }).join('') || '<div class="small muted">No members yet</div>';
+    return `<div class="group"><div style="display:flex;justify-content:space-between;align-items:center">
+            <div><strong>Group ${escapeHtml(g.id)}</strong></div>
+            <div class="small muted">(${(g.members||[]).length}/4)</div>
+            </div>${membersHtml}</div>`;
   }).join('');
 }
 
 function renderUnenrolled(){
-  const area = document.getElementById('unenrolledArea');
-  const unen = students.filter(s => !s.groupId);
-  if (!unen.length) { area.innerHTML = '<div class="small-note">All assigned</div>'; return; }
-  area.innerHTML = '<ul class="list-group">' + unen.map(s => `<li class="list-group-item">${s.name}</li>`).join('') + '</ul>';
+  const unen = students.filter(s => !s.groupId).sort((a,b)=>a.name.localeCompare(b.name));
+  unenrolledList.innerHTML = unen.length ? `<ul class="list">${unen.map(s=>`<li style="padding:8px 0;border-bottom:1px solid #f6f7fb">${escapeHtml(s.name)} <span class="mono" style="float:right">${escapeHtml(s.roll)}</span></li>`).join('')}</ul>` : '<div class="small muted">All assigned</div>';
 }
 
-document.getElementById('searchName').addEventListener('input', e => {
-  const q = e.target.value.toLowerCase();
-  const res = students.filter(s => s.name.toLowerCase().includes(q));
-  const area = document.getElementById('searchResults');
-  if (!q){ area.innerHTML = ''; hideJoin(); return; }
-  area.innerHTML = res.map(s => 
-    `<div class="py-1 d-flex justify-content-between"><div>${s.name}</div>${
-      s.groupId ? `<span class="badge bg-success">Enrolled</span>` :
-      `<button class="btn btn-sm btn-outline-primary" onclick="selectStudent('${s.roll}')">I am this</button>`
-    }</div>`).join('');
+function updateStats(){
+  statsTotal.textContent = `${students.length} students`;
+  const enrolledCount = students.filter(s=>s.groupId).length;
+  statsEnrolled.textContent = `${enrolledCount} enrolled · ${groups.length} groups`;
+}
+
+// ------ search & join flow ------
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q) { searchResults.innerHTML = '<div class="small muted">Type part of your name</div>'; hideJoin(); return; }
+  const matches = students.filter(s => s.name.toLowerCase().includes(q));
+  if (!matches.length) { searchResults.innerHTML = '<div class="small muted">No matches</div>'; hideJoin(); return; }
+  // show name only (no roll)
+  searchResults.innerHTML = matches.map(s => {
+    const enrolled = s.groupId ? `<span class="tag">G${s.groupId}</span>` : `<button data-roll="${s.roll}" class="btn-ghost" style="padding:6px 8px">I am this</button>`;
+    return `<div style="padding:6px 0;display:flex;justify-content:space-between;align-items:center"><div>${escapeHtml(s.name)}</div><div>${enrolled}</div></div>`;
+  }).join('');
+  // attach handlers to buttons
+  searchResults.querySelectorAll('button[data-roll]').forEach(b => {
+    b.onclick = () => startJoinFlow(b.dataset.roll);
+  });
 });
 
-function selectStudent(roll){
-  selectedRoll = roll;
-  document.getElementById('joinPanel').style.display = 'block';
-  document.getElementById('joinError').innerText = '';
+let pendingRoll = null;
+function startJoinFlow(roll){
+  pendingRoll = roll;
+  joinMsg.textContent = '';
+  rollInput.value = '';
+  joinBox.style.display = 'block';
+  rollInput.focus();
+  populateGroupSelect();
 }
 
-function hideJoin(){
-  document.getElementById('joinPanel').style.display = 'none';
-  selectedRoll = null;
-}
+cancelBtn.onclick = () => { pendingRoll = null; hideJoin(); };
+
+function hideJoin(){ joinBox.style.display = 'none'; joinMsg.textContent=''; }
+
+createGroupBtn.onclick = async () => {
+  // compute next numeric id
+  const numericIds = groups.map(g => Number(g.id)).filter(n => !isNaN(n));
+  const nextId = numericIds.length ? Math.max(...numericIds)+1 : 1;
+  try {
+    await setDoc(doc(db, 'groups', String(nextId)), { id: nextId, members: [] });
+  } catch(e){ console.error(e); alert('Failed to create group: '+(e.message||e)); }
+};
 
 function populateGroupSelect(){
-  const sel = document.getElementById('groupSelect');
-  sel.innerHTML = '';
-  groups.forEach(g => {
-    const opt = document.createElement('option');
-    opt.value = g.id;
-    opt.text = `Group ${g.id} (${g.members.length}/4)`;
-    sel.appendChild(opt);
+  groupSelect.innerHTML = '';
+  const sorted = [...groups].sort((a,b)=> (Number(a.id)||0) - (Number(b.id)||0));
+  sorted.forEach(g => {
+    const text = `Group ${g.id} (${(g.members||[]).length}/4)`;
+    const opt = document.createElement('option'); opt.value = g.id; opt.textContent = text; groupSelect.appendChild(opt);
   });
-  const newOpt = document.createElement('option');
-  newOpt.value = '__new';
-  newOpt.text = `Create new group (next ${nextGroupId()})`;
-  sel.appendChild(newOpt);
+  const optNew = document.createElement('option'); optNew.value='__new'; optNew.textContent = `Create new group (next ${nextGroupId()})`; groupSelect.appendChild(optNew);
+  groupSelect.value='__new';
 }
-function nextGroupId(){ return groups.length ? Math.max(...groups.map(g => g.id))+1 : 1; }
 
-document.getElementById('joinBtn').addEventListener('click', async () => {
-  const entered = document.getElementById('rollInput').value.trim();
-  const err = document.getElementById('joinError');
-  err.innerText = '';
-  if (entered !== selectedRoll){ err.innerText = 'Roll number incorrect'; return; }
+function nextGroupId(){
+  const numericIds = groups.map(g => Number(g.id)).filter(n => !isNaN(n));
+  return numericIds.length ? Math.max(...numericIds)+1 : 1;
+}
+
+joinBtn.onclick = async () => {
+  joinMsg.textContent = '';
+  const entered = rollInput.value.trim();
+  if (!pendingRoll) { joinMsg.textContent = 'Pick yourself from search first.'; return; }
+  if (!entered) { joinMsg.textContent = 'Enter your roll number.'; return; }
+  if (entered !== pendingRoll) { joinMsg.textContent = 'Roll does not match selected student.'; return; }
+
+  // fetch student doc snapshot
   const student = students.find(s => s.roll === entered);
-  if (!student) { err.innerText = 'Not found'; return; }
-  if (student.groupId){ err.innerText = 'Already enrolled'; return; }
+  if (!student) { joinMsg.textContent = 'Student not found. Ask CR.'; return; }
+  if (student.groupId) { joinMsg.textContent = 'You are already enrolled.'; return; }
 
-  let gid = document.getElementById('groupSelect').value;
-  if (gid === '__new'){ gid = nextGroupId(); await db.collection('groups').doc(String(gid)).set({ id: gid, members: [] }); }
-  gid = parseInt(gid);
+  // chosen group
+  let gid = groupSelect.value;
+  if (gid === '__new') gid = nextGroupId();
+  gid = String(gid);
 
-  const grpRef = db.collection('groups').doc(String(gid));
-  const grpSnap = await grpRef.get();
-  const members = grpSnap.exists ? grpSnap.data().members : [];
-  if (members.length >= 4){ err.innerText = 'Group full'; return; }
+  // Use transaction: check capacity and set both documents atomically
+  try {
+    await runTransaction(db, async (tx) => {
+      const groupRef = doc(db, 'groups', gid);
+      const gsnap = await tx.get(groupRef);
+      if (!gsnap.exists()) {
+        tx.set(groupRef, { id: gid, members: [student.roll] });
+      } else {
+        const data = gsnap.data();
+        const members = Array.isArray(data.members) ? [...data.members] : [];
+        if (members.includes(student.roll)) return; // already in
+        if (members.length >= 4) throw new Error('Group full');
+        members.push(student.roll);
+        tx.update(groupRef, { members });
+      }
+      const studRef = doc(db, 'students', student.roll);
+      tx.update(studRef, { groupId: gid });
+    });
+    // success
+    joinMsg.textContent = 'Joined group!';
+    pendingRoll = null;
+    hideJoin();
+  } catch(err) {
+    console.error(err);
+    joinMsg.textContent = err.message || 'Failed to join (maybe group full)';
+  }
+};
 
-  // Update Firestore
-  await db.collection('students').doc(student.roll).update({ groupId: gid });
-  members.push(student.roll);
-  await grpRef.set({ id: gid, members });
-  hideJoin();
-});
+// export JSON
+exportBtn.onclick = async () => {
+  try {
+    const sDocs = await getDocs(studentsColl);
+    const gDocs = await getDocs(groupsColl);
+    const out = {
+      exportedAt: new Date().toISOString(),
+      students: sDocs.docs.map(d => d.data()),
+      groups: gDocs.docs.map(d => d.data())
+    };
+    const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download='groups_export.json'; a.click(); URL.revokeObjectURL(a.href);
+  } catch(e){ alert('Export failed: '+(e.message||e)); }
+};
+
+refreshBtn.onclick = () => { renderAll(); };
+
+// small helpers
+function escapeHtml(s){ return String(s).replace(/[&<>"'`]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',"`":'&#96;'})[c]); }
 
 </script>
 </body>
