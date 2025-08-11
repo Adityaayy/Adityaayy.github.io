@@ -4,168 +4,114 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>CSE-sec A — Student Grouping</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#ffffff;
-    --panel:#fbfbfb;
-    --muted:#6b7280;
-    --accent:#ff6a00;
-    --accent-weak:rgba(255,106,0,0.08);
-    --card-shadow: 0 12px 30px rgba(15,23,42,0.06);
-    --radius:12px;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    padding:32px;
-    font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-    background: linear-gradient(180deg,#ffffff 0%, #f7f8fb 100%);
-    color:#0f172a;
-    -webkit-font-smoothing:antialiased;
-  }
-
-  .wrap{max-width:1080px;margin:0 auto}
-  header{display:flex;justify-content:space-between;align-items:end;gap:12px}
-  h1{margin:0;font-size:1.25rem;font-weight:600}
-  .muted{color:var(--muted);font-size:0.95rem}
-
-  .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:20px;align-items:start}
-  @media (max-width:900px){ .grid{grid-template-columns:1fr} }
-
-  .card{
-    background:var(--panel);
-    border-radius:var(--radius);
-    padding:18px;
-    box-shadow:var(--card-shadow);
-    border:1px solid rgba(11,20,40,0.03);
-    transition:transform .14s ease, box-shadow .14s ease;
-  }
-  .card:hover{ transform:translateY(-3px); box-shadow:0 20px 40px rgba(15,23,42,0.08); }
-
-  .title{font-size:1rem;font-weight:600;margin-bottom:8px}
-  .meta{font-size:0.95rem;color:var(--muted)}
-  .small{font-size:0.9rem;color:var(--muted)}
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;font-size:0.9rem}
-
-  input,select,button{font-family:inherit}
-  input,select{
-    width:100%;padding:12px;border-radius:10px;border:1px solid #eef2f7;background:#fff;font-size:1rem;
-  }
-  input:focus,select:focus{outline:none;box-shadow:0 8px 20px rgba(11,116,222,0.06);border-color:rgba(11,116,222,0.12)}
-
-  .btn{
-    display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600;
-  }
-  .btn-primary{background:linear-gradient(180deg,var(--accent),#e04f00);color:white;box-shadow:0 8px 20px rgba(255,106,0,0.08)}
-  .btn-ghost{background:transparent;border:1px solid var(--accent-weak);color:var(--accent);padding:9px 12px;border-radius:10px}
-  .btn-small{padding:6px 10px;border-radius:8px;font-size:0.93rem}
-
-  .list{list-style:none;padding:0;margin:0}
-  .item{
-    display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #f3f5f8;background:linear-gradient(180deg,#fff,#fcfcfc)
-  }
-  .item .name{font-size:1.02rem;font-weight:500}
-  .group{padding:10px;border-radius:10px;border:1px solid #eef2f7;margin-bottom:10px;background:linear-gradient(180deg,#fff,#fcfcfc)}
-  .group .member{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid #f6f7fb}
-
-  .controls-row{display:flex;gap:10px;align-items:center;margin-top:12px}
-  footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
-
-  .note{font-size:0.92rem;color:var(--muted);margin-top:8px}
+:root{--muted:#6b7280;--accent:#ff6a00;--accent-weak:rgba(255,106,0,0.08);--card-shadow:0 12px 30px rgba(15,23,42,0.06);--radius:12px}
+*{box-sizing:border-box}body{margin:0;padding:32px;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:linear-gradient(180deg,#fff,#f7f8fb);color:#0f172a}
+.wrap{max-width:1080px;margin:0 auto}header{display:flex;justify-content:space-between;align-items:end}
+h1{margin:0;font-size:1.25rem;font-weight:600}.muted{color:var(--muted);font-size:0.95rem}
+.grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:20px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:#fbfbfb;border-radius:var(--radius);padding:18px;box-shadow:var(--card-shadow);border:1px solid rgba(11,20,40,0.03);transition:transform .14s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(15,23,42,0.08)}
+.title{font-size:1rem;font-weight:600;margin-bottom:8px}.meta{font-size:0.95rem;color:var(--muted)}.small{font-size:0.9rem;color:var(--muted)}
+input,select,button{font-family:inherit}input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #eef2f7;background:#fff;font-size:1rem}
+input:focus,select:focus{outline:none;box-shadow:0 8px 20px rgba(11,116,222,0.06);border-color:rgba(11,116,222,0.12)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+.btn-primary{background:linear-gradient(180deg,var(--accent),#e04f00);color:white;box-shadow:0 8px 20px rgba(255,106,0,0.08)}
+.btn-ghost{background:transparent;border:1px solid var(--accent-weak);color:var(--accent);padding:9px 12px;border-radius:10px}
+.btn-small{padding:6px 10px;border-radius:8px;font-size:0.93rem}
+.list{list-style:none;padding:0;margin:0}.item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #f3f5f8;background:linear-gradient(180deg,#fff,#fcfcfc)}
+.item .name{font-size:1.02rem;font-weight:500}.group{padding:10px;border-radius:10px;border:1px solid #eef2f7;margin-bottom:10px;background:linear-gradient(180deg,#fff,#fcfcfc)}
+.group .member{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid #f6f7fb}.controls-row{display:flex;gap:10px;align-items:center;margin-top:12px}footer{margin-top:18px;color:var(--muted);font-size:0.95rem}.note{font-size:0.92rem;color:var(--muted);margin-top:8px}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div>
-        <h1>CSE-sec A — Student Grouping</h1>
-        <div class="muted">Data Analysis Case Study — public scoreboard</div>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>CSE-sec A — Student Grouping</h1>
+      <div class="muted">Data Analysis Case Study — public scoreboard</div>
+    </div>
+    <div class="meta">Groups ≤ 4 · live updates</div>
+  </header>
+
+  <main class="grid">
+    <section>
+      <div class="card" id="groupsCard">
+        <div class="title">Groups</div>
+        <div id="groupsList" class="meta"></div>
+        <div id="noGroups" class="meta" style="margin-top:8px;display:none">No groups yet — create one on the right.</div>
       </div>
-      <div class="meta">Groups ≤ 4 · live updates</div>
-    </header>
 
-    <main class="grid">
-      <!-- LEFT: groups + unenrolled -->
-      <section>
-        <div class="card" id="groupsCard">
-          <div class="title">Groups</div>
-          <div id="groupsList" class="meta"></div>
-          <div id="noGroups" class="meta" style="margin-top:8px;display:none">No groups yet — you can create one from the right panel.</div>
+      <div class="card" style="margin-top:16px">
+        <div class="title">Unassigned students</div>
+        <div id="unenrolledList" class="note" style="margin-top:8px"></div>
+      </div>
+    </section>
+
+    <aside>
+      <div class="card">
+        <div class="title">Find yourself</div>
+        <div class="meta">Search by name — roll numbers required to confirm but not shown publicly.</div>
+
+        <div style="margin-top:12px">
+          <input id="searchInput" placeholder="Type any part of your name..." autocomplete="off" />
         </div>
+        <div id="searchResults" style="margin-top:12px"></div>
 
-        <div class="card" style="margin-top:16px">
-          <div class="title">Unassigned students</div>
-          <div id="unenrolledList" class="note" style="margin-top:8px"></div>
-        </div>
-      </section>
+        <div id="actionBox" style="margin-top:14px;display:none">
+          <div class="meta">Confirm with roll number</div>
+          <div style="margin-top:8px"><input id="rollInput" placeholder="Roll number (kept private)" autocomplete="off" /></div>
 
-      <!-- RIGHT: search + join/leave + controls -->
-      <aside>
-        <div class="card">
-          <div class="title">Find yourself</div>
-          <div class="meta">Search by name — roll numbers are required to confirm identity but are never shown publicly.</div>
-
-          <div style="margin-top:12px">
-            <input id="searchInput" placeholder="Type any part of your name..." autocomplete="off" />
-          </div>
-          <div id="searchResults" style="margin-top:12px"></div>
-
-          <div id="actionBox" style="margin-top:14px;display:none">
-            <div class="meta">Confirm with roll number</div>
-            <div style="margin-top:8px"><input id="rollInput" placeholder="Roll number (kept private)" autocomplete="off" /></div>
-
-            <div class="controls-row" style="margin-top:10px">
-              <select id="groupSelect"></select>
-              <button id="createGroupBtn" class="btn-ghost btn-small">New</button>
-            </div>
-
-            <div class="controls-row" style="margin-top:12px">
-              <button id="joinBtn" class="btn btn-primary">Join</button>
-              <button id="leaveBtn" class="btn-ghost btn-small">Leave</button>
-              <button id="cancelBtn" class="btn-ghost btn-small">Cancel</button>
-            </div>
-
-            <div id="actionMsg" class="note" style="margin-top:8px;color:#b91c1c"></div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:16px">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div class="meta">Dutta controls</div>
-              <div style="font-weight:600">Export & admin</div>
-            </div>
-            <div style="text-align:right">
-              <div class="mono" id="statsTotal">0 students</div>
-              <div class="meta" id="statsEnrolled">0 enrolled · 0 groups</div>
-            </div>
+          <div class="controls-row" style="margin-top:10px">
+            <select id="groupSelect"></select>
+            <button id="createGroupBtn" class="btn-ghost btn-small">New</button>
           </div>
 
           <div class="controls-row" style="margin-top:12px">
-            <button id="exportBtn" class="btn btn-primary">Export JSON</button>
-            <button id="refreshBtn" class="btn-ghost btn-small">Refresh</button>
-            <button id="createGroupCtrl" class="btn-ghost btn-small">Create group</button>
+            <button id="joinBtn" class="btn btn-primary">Join</button>
+            <button id="leaveBtn" class="btn-ghost btn-small">Leave</button>
+            <button id="cancelBtn" class="btn-ghost btn-small">Cancel</button>
           </div>
 
-          <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
-            <label class="meta">Show rolls (Dutta)</label>
-            <input type="checkbox" id="showRollsToggle" />
-            <div style="margin-left:auto" class="meta">Managed by Dutta</div>
-          </div>
-
-          <div class="note" style="margin-top:10px">Polite, minimal, subtle — everything in gray + orange.</div>
+          <div id="actionMsg" class="note" style="margin-top:8px;color:#b91c1c"></div>
         </div>
-      </aside>
-    </main>
+      </div>
 
-    <footer>Open in two windows to test real-time updates. If things look stale, hard-refresh the page.</footer>
-  </div>
+      <div class="card" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="meta">Dutta controls</div>
+            <div style="font-weight:600">Export & admin</div>
+          </div>
+          <div style="text-align:right">
+            <div class="mono" id="statsTotal">0 students</div>
+            <div class="meta" id="statsEnrolled">0 enrolled · 0 groups</div>
+          </div>
+        </div>
+
+        <div class="controls-row" style="margin-top:12px">
+          <button id="exportBtn" class="btn btn-primary">Export JSON</button>
+          <button id="refreshBtn" class="btn-ghost btn-small">Refresh</button>
+          <button id="createGroupCtrl" class="btn-ghost btn-small">Create group</button>
+        </div>
+
+        <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
+          <label class="meta">Show rolls (Dutta)</label>
+          <input type="checkbox" id="showRollsToggle" />
+          <div style="margin-left:auto" class="meta">Managed by Dutta</div>
+        </div>
+
+        <div class="note" style="margin-top:10px">Polite, minimal, subtle — gray + orange.</div>
+      </div>
+    </aside>
+  </main>
+
+  <footer>Open in two windows to test real-time updates. Hard-refresh if stale.</footer>
+</div>
 
 <script type="module">
-/* ===== REPLACE with your Firebase config (Project settings → SDK snippet) ===== */
+// ====== REPLACE with your firebaseConfig from Project settings → SDK snippet (Config) ======
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyC7872cCC6wXWgy8Drj1N0yET9nk0a7KM4",
@@ -175,20 +121,21 @@ const firebaseConfig = {
   messagingSenderId: "367385736275",
   appId: "1:367385736275:web:907bb7e06f7efc550cc2a6"
 };
-/* ========================================================================== */
+// ==========================================================================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import {
-  getFirestore, collection, doc, onSnapshot, setDoc, getDocs, runTransaction,
-  getDoc
+  getFirestore, collection, doc, onSnapshot, setDoc, getDocs, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const studentsColl = collection(db, "students");
-const groupsColl = collection(db, "groups");
 
-/* UI refs */
+// collection refs
+const studentsRef = collection(db, "students");
+const groupsRef = collection(db, "groups");
+
+// UI refs
 const groupsList = document.getElementById("groupsList");
 const unenrolledList = document.getElementById("unenrolledList");
 const searchInput = document.getElementById("searchInput");
@@ -215,18 +162,18 @@ let pendingRoll = null;
 let pendingStudent = null;
 let showRolls = false;
 
-/* realtime listeners */
-onSnapshot(studentsColl, snap => {
+// realtime listeners
+onSnapshot(studentsRef, snap => {
   students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   renderAll();
-}, err => console.error("students snapshot", err));
+}, err => console.error("students snapshot:", err));
 
-onSnapshot(groupsColl, snap => {
+onSnapshot(groupsRef, snap => {
   groups = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   renderAll();
-}, err => console.error("groups snapshot", err));
+}, err => console.error("groups snapshot:", err));
 
-/* rendering */
+// rendering
 function renderAll(){
   renderGroups();
   renderUnenrolled();
@@ -235,67 +182,43 @@ function renderAll(){
 }
 
 function renderGroups(){
-  if (groups.length === 0) {
-    groupsList.innerHTML = "";
-    noGroups.style.display = "block";
-    return;
-  }
+  if (groups.length === 0) { groupsList.innerHTML = ""; noGroups.style.display = "block"; return; }
   noGroups.style.display = "none";
-  const sorted = [...groups].sort((a,b)=> (Number(a.id)||0) - (Number(b.id)||0));
+  const sorted = [...groups].sort((a,b) => (Number(a.id)||0) - (Number(b.id)||0));
   groupsList.innerHTML = sorted.map(g => {
     const mems = (g.members || []).map((roll, idx) => {
       const s = students.find(x => x.roll === roll || x.id === roll);
       const name = s ? escapeHtml(s.name) : escapeHtml(roll);
-      const rollTag = showRolls ? `<span class="mono" style="float:right">${escapeHtml(roll)}</span>` : "";
-      return `<div class="member"><div style="font-weight:500">${idx+1}. ${escapeHtml(name)}</div>${rollTag}</div>`;
+      const rollHtml = showRolls ? `<span class="mono" style="float:right">${escapeHtml(roll)}</span>` : "";
+      return `<div class="member"><div style="font-weight:500">${idx+1}. ${escapeHtml(name)}</div>${rollHtml}</div>`;
     }).join('') || '<div class="meta">No members yet</div>';
     return `<div class="group"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-weight:600">Group ${escapeHtml(g.id)}</div><div class="meta">(${(g.members||[]).length}/4)</div></div>${mems}</div>`;
-  }).join("");
+  }).join('');
 }
 
 function renderUnenrolled(){
   const unen = students.filter(s => !s.groupId).sort((a,b)=>a.name.localeCompare(b.name));
-  if (!unen.length) {
-    unenrolledList.innerHTML = '<div class="meta">All assigned</div>';
-    return;
-  }
-  const html = unen.map(s => {
-    return `<div class="item"><div class="name">${escapeHtml(s.name)}</div><div><button class="btn-ghost btn-small" data-roll="${escapeHtml(s.roll||s.id)}" data-name="${escapeHtml(s.name)}">I am this</button></div></div>`;
-  }).join("");
+  if (!unen.length) { unenrolledList.innerHTML = '<div class="meta">All assigned</div>'; return; }
+  const html = unen.map(s => `<div class="item"><div class="name">${escapeHtml(s.name)}</div><div><button class="btn-ghost btn-small" data-roll="${escapeHtml(s.roll||s.id)}" data-name="${escapeHtml(s.name)}">I am this</button></div></div>`).join('');
   unenrolledList.innerHTML = html;
-  unenrolledList.querySelectorAll('button[data-roll]').forEach(b => {
-    b.addEventListener('click', () => startJoinFlow(b.dataset.roll, b.dataset.name));
-  });
+  unenrolledList.querySelectorAll('button[data-roll]').forEach(b => b.addEventListener('click', () => startJoinFlow(b.dataset.roll, b.dataset.name)));
 }
 
 function updateStats(){
   statsTotal.textContent = `${students.length} students`;
-  const enrolledCount = students.filter(s => s.groupId).length;
+  const enrolledCount = students.filter(s=>s.groupId).length;
   statsEnrolled.textContent = `${enrolledCount} enrolled · ${groups.length} groups`;
 }
 
 function populateGroupSelect(){
   groupSelect.innerHTML = "";
-  const sorted = [...groups].sort((a,b)=> (Number(a.id)||0) - (Number(b.id)||0));
-  sorted.forEach(g => {
-    const opt = document.createElement("option");
-    opt.value = g.id;
-    opt.textContent = `Group ${g.id} (${(g.members||[]).length}/4)`;
-    groupSelect.appendChild(opt);
-  });
-  const optNew = document.createElement("option");
-  optNew.value = "__new";
-  optNew.textContent = `Create new (next ${nextGroupId()})`;
-  groupSelect.appendChild(optNew);
-  groupSelect.value = "__new";
+  const sorted = [...groups].sort((a,b)=>(Number(a.id)||0)-(Number(b.id)||0));
+  sorted.forEach(g => { const opt=document.createElement('option'); opt.value=g.id; opt.textContent=`Group ${g.id} (${(g.members||[]).length}/4)`; groupSelect.appendChild(opt); });
+  const optNew=document.createElement('option'); optNew.value='__new'; optNew.textContent=`Create new (next ${nextGroupId()})`; groupSelect.appendChild(optNew); groupSelect.value='__new';
 }
+function nextGroupId(){ const nums = groups.map(g=>Number(g.id)).filter(n=>!isNaN(n)); return nums.length ? Math.max(...nums)+1 : 1; }
 
-function nextGroupId(){
-  const numeric = groups.map(g => Number(g.id)).filter(n => !isNaN(n));
-  return numeric.length ? Math.max(...numeric)+1 : 1;
-}
-
-/* search & action flow */
+// search / action flow
 searchInput.addEventListener('input', () => {
   const q = searchInput.value.trim().toLowerCase();
   if (!q) { searchResults.innerHTML = '<div class="meta">Type part of your name</div>'; hideActionBox(); return; }
@@ -304,284 +227,89 @@ searchInput.addEventListener('input', () => {
   searchResults.innerHTML = matches.map(s => {
     const enrolled = s.groupId ? `<span class="tag">G${s.groupId}</span>` : `<button class="btn-ghost btn-small" data-roll="${escapeHtml(s.roll||s.id)}" data-name="${escapeHtml(s.name)}">I am this</button>`;
     return `<div style="padding:8px 0;display:flex;justify-content:space-between;align-items:center"><div>${escapeHtml(s.name)}</div><div>${enrolled}</div></div>`;
-  }).join("");
-  searchResults.querySelectorAll('button[data-roll]').forEach(b => {
-    b.onclick = () => startJoinFlow(b.dataset.roll, b.dataset.name);
-  });
+  }).join('');
+  searchResults.querySelectorAll('button[data-roll]').forEach(b => b.onclick = () => startJoinFlow(b.dataset.roll, b.dataset.name));
 });
 
 function startJoinFlow(roll, name){
-  pendingRoll = roll;
-  pendingStudent = name;
-  actionMsg.textContent = '';
-  rollInput.value = '';
-  actionBox.style.display = 'block';
-  rollInput.focus();
-  populateGroupSelect();
+  pendingRoll = roll; pendingStudent = name; actionMsg.textContent=''; rollInput.value=''; actionBox.style.display='block'; rollInput.focus(); populateGroupSelect();
 }
+cancelBtn.addEventListener('click', ()=>{ pendingRoll=null; pendingStudent=null; hideActionBox(); });
+function hideActionBox(){ actionBox.style.display='none'; actionMsg.textContent=''; }
 
-cancelBtn.addEventListener('click', () => { pendingRoll = null; pendingStudent = null; hideActionBox(); });
-function hideActionBox(){ actionBox.style.display = 'none'; actionMsg.textContent = ''; }
+// create group
+createGroupBtn.addEventListener('click', async ()=> createGroup(nextGroupId()));
+createGroupCtrl.addEventListener('click', async ()=> createGroup(nextGroupId()));
+async function createGroup(id){ try { await setDoc(doc(db,'groups',String(id)), { id: String(id), members: [] }); } catch(e){ console.error(e); alert('Create failed: '+e.message); } }
 
-/* create group (control + actionBox) */
-createGroupBtn.addEventListener('click', async () => {
-  const newId = String(nextGroupId());
-  try {
-    await setDoc(doc(groupsColl, newId), { id: newId, members: [] });
-  } catch(e){ console.error(e); alert('Create failed: ' + e.message); }
-});
-createGroupCtrl.addEventListener('click', async () => {
-  const newId = String(nextGroupId());
-  try {
-    await setDoc(doc(groupsColl, newId), { id: newId, members: [] });
-  } catch(e){ console.error(e); alert('Create failed: ' + e.message); }
-});
-
-/* join transaction */
+// join
 joinBtn.addEventListener('click', async () => {
-  actionMsg.textContent = '';
-  const entered = rollInput.value.trim();
-  if (!pendingRoll) { actionMsg.textContent = 'Pick yourself from search first.'; return; }
-  if (!entered) { actionMsg.textContent = 'Enter your roll number.'; return; }
-  if (entered !== pendingRoll) { actionMsg.textContent = 'Roll number does not match selected name.'; return; }
-
+  actionMsg.textContent=''; const entered = rollInput.value.trim();
+  if (!pendingRoll) { actionMsg.textContent='Pick yourself first.'; return; }
+  if (!entered) { actionMsg.textContent='Enter your roll number.'; return; }
+  if (entered !== pendingRoll) { actionMsg.textContent='Roll number does not match.'; return; }
   const student = students.find(s => (s.roll && s.roll === entered) || s.id === entered);
-  if (!student) { actionMsg.textContent = 'Student not found. Ask Dutta.'; return; }
-  if (student.groupId) { actionMsg.textContent = 'You are already enrolled.'; return; }
-
-  let gid = groupSelect.value;
-  if (gid === "__new") gid = String(nextGroupId());
-  gid = String(gid);
+  if (!student) { actionMsg.textContent='Student not found. Ask Dutta.'; return; }
+  if (student.groupId) { actionMsg.textContent='You are already enrolled.'; return; }
+  let gid = groupSelect.value; if (gid === "__new") gid = String(nextGroupId()); gid = String(gid);
 
   try {
     await runTransaction(db, async (tx) => {
-      const gRef = doc(groupsColl, gid);
-      const gSnap = await tx.get(gRef);
-      if (!gSnap.exists()) {
-        tx.set(gRef, { id: gid, members: [student.roll || student.id] });
-      } else {
-        const data = gSnap.data();
-        const members = Array.isArray(data.members) ? [...data.members] : [];
+      const gRef = doc(db,'groups',gid); const gSnap = await tx.get(gRef);
+      if (!gSnap.exists()) { tx.set(gRef, { id: gid, members: [student.roll || student.id] }); }
+      else {
+        const data = gSnap.data(); const members = Array.isArray(data.members) ? [...data.members] : [];
         if (members.includes(student.roll || student.id)) return;
         if (members.length >= 4) throw new Error('Group full');
-        members.push(student.roll || student.id);
-        tx.update(gRef, { members });
+        members.push(student.roll || student.id); tx.update(gRef, { members });
       }
-      const sRef = doc(studentsColl, student.roll || student.id);
-      tx.update(sRef, { groupId: gid });
+      const sRef = doc(db,'students', student.roll || student.id); tx.update(sRef, { groupId: gid });
     });
-    actionMsg.textContent = 'Joined group!';
-    pendingRoll = null; pendingStudent = null;
-    hideActionBox();
-  } catch(err) {
-    console.error(err);
-    actionMsg.textContent = err.message || 'Failed to join (maybe group full)';
-  }
+    actionMsg.textContent='Joined group!'; pendingRoll=null; pendingStudent=null; hideActionBox();
+  } catch(err){ console.error(err); actionMsg.textContent = err.message || 'Failed to join'; }
 });
 
-/* leave logic */
-leaveBtn.addEventListener('click', async () => {
-  actionMsg.textContent = '';
-  const entered = rollInput.value.trim();
-  if (!pendingRoll) { actionMsg.textContent = 'Pick your name first.'; return; }
-  if (!entered) { actionMsg.textContent = 'Enter your roll number.'; return; }
-  if (entered !== pendingRoll) { actionMsg.textContent = 'Roll number does not match.'; return; }
-
+// leave
+leaveBtn.addEventListener('click', async ()=>{
+  actionMsg.textContent=''; const entered = rollInput.value.trim();
+  if (!pendingRoll) { actionMsg.textContent='Pick yourself first.'; return; }
+  if (!entered) { actionMsg.textContent='Enter your roll number.'; return; }
+  if (entered !== pendingRoll) { actionMsg.textContent='Roll number does not match.'; return; }
   const student = students.find(s => (s.roll && s.roll === entered) || s.id === entered);
-  if (!student) { actionMsg.textContent = 'Student not found.'; return; }
-  if (!student.groupId) { actionMsg.textContent = 'You are not in a group.'; return; }
-
+  if (!student) { actionMsg.textContent='Student not found.'; return; }
+  if (!student.groupId) { actionMsg.textContent='You are not in a group.'; return; }
   const gid = String(student.groupId);
   try {
     await runTransaction(db, async (tx) => {
-      const gRef = doc(groupsColl, gid);
-      const gSnap = await tx.get(gRef);
+      const gRef = doc(db,'groups',gid); const gSnap = await tx.get(gRef);
       if (!gSnap.exists()) return;
-      const data = gSnap.data();
-      const members = Array.isArray(data.members) ? [...data.members] : [];
+      const data = gSnap.data(); const members = Array.isArray(data.members) ? [...data.members] : [];
       const newMembers = members.filter(r => r !== (student.roll || student.id));
       tx.update(gRef, { members: newMembers });
-      const sRef = doc(studentsColl, student.roll || student.id);
-      tx.update(sRef, { groupId: null });
+      const sRef = doc(db,'students', student.roll || student.id); tx.update(sRef, { groupId: null });
     });
-    actionMsg.textContent = `Left Group ${gid}.`;
-    pendingRoll = null; pendingStudent = null;
-    hideActionBox();
-  } catch(err) {
-    console.error(err);
-    actionMsg.textContent = 'Failed to leave group: ' + (err.message || '');
-  }
+    actionMsg.textContent = `Left Group ${gid}.`; pendingRoll=null; pendingStudent=null; hideActionBox();
+  } catch(err){ console.error(err); actionMsg.textContent = 'Failed to leave group: '+(err.message||''); }
 });
 
-/* export */
+// export
 exportBtn.addEventListener('click', async () => {
   try {
-    const sSnap = await getDocs(studentsColl);
-    const gSnap = await getDocs(groupsColl);
-    const out = {
-      exportedAt: (new Date()).toISOString(),
-      students: sSnap.docs.map(d => d.data()),
-      groups: gSnap.docs.map(d => d.data())
-    };
+    const sSnap = await getDocs(studentsRef);
+    const gSnap = await getDocs(groupsRef);
+    const out = { exportedAt: new Date().toISOString(), students: sSnap.docs.map(d=>d.data()), groups: gSnap.docs.map(d=>d.data()) };
     const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'groups_export.json'; a.click(); URL.revokeObjectURL(a.href);
-  } catch(e){ alert('Export failed: '+(e.message||e)); }
+  } catch(e){ alert('Export failed: ' + (e.message || e)); }
 });
 
-refreshBtn.addEventListener('click', () => { renderAll(); });
+refreshBtn.addEventListener('click', ()=> renderAll());
+showRollsToggle.addEventListener('change', e => { showRolls = !!e.target.checked; renderAll(); });
 
-showRollsToggle.addEventListener('change', (e) => { showRolls = !!e.target.checked; renderAll(); });
-
-/* helpers */
+// small helpers
 function escapeHtml(s){ return String(s || '').replace(/[&<>"'`]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',"`":'&#96;'})[c]); }
 
-/* minimal firestore helpers (docs/collections) */
-function doc(collRef, id){ return db.doc ? db.doc(collRef.path + '/' + id) : db.doc ? db.doc(collRef.path + '/' + id) : db.collection(collRef.path).doc(id); }
-/* The above doc wrapper is only to keep compatibility with module import usage. */
-
-/* convenience imports that we used earlier but module style needs these direct references.
-   We'll call getDocs, setDoc, etc. from the module namespace we imported at top.
-*/
-import { setDoc as _setDoc, getDocs as _getDocs, doc as _doc, getDoc as _getDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-/* aliasing to avoid name conflict */
-const setDocRef = _setDoc;
-const getDocsRef = _getDocs;
-const docRef = _doc;
-
-/* Use correct doc/setDoc/getDocs methods */
-async function setDocSilent(pathDoc, data) { await setDocRef(pathDoc, data); }
-async function getDocsSilent(coll) { return await getDocsRef(coll); }
-
-/* But to preserve previous code flow, use the module functions directly when needed below.
-   For clarity and reliability we'll use the standard functions we imported earlier:
-*/
-import { setDoc as realSetDoc, getDocs as realGetDocs, doc as realDoc, getDoc as realGetDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-
-/* rebind collections to module collection() function */
-import { collection as realCollection, onSnapshot as realOnSnapshot, runTransaction as realRunTransaction, getDoc as realGetDoc2 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-
-/* overwrite earlier references to use correct module functions */
-const studentsCollection = realCollection(db, "students");
-const groupsCollection = realCollection(db, "groups");
-const onSnapshotFn = realOnSnapshot;
-const runTransactionFn = realRunTransaction;
-const getDocFn = realGetDoc2;
-
-/* Replace earlier onSnapshot and runTransaction calls to ensure module functions are used */
-onSnapshotFn(studentsCollection, snap => {
-  students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderAll();
-}, err => console.error("students snapshot", err));
-
-onSnapshotFn(groupsCollection, snap => {
-  groups = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderAll();
-}, err => console.error("groups snapshot", err));
-
-/* now rewrite functions that used doc(), setDoc(), getDocs(), runTransaction() to call module methods properly */
-async function createGroup(id){
-  try { await setDocRef(realDoc(db, "groups", String(id)), { id: String(id), members: [] }); }
-  catch(e){ console.error(e); alert('Create failed: ' + e.message); }
-}
-createGroupBtn.addEventListener('click', () => createGroup(nextGroupId()));
-createGroupCtrl.addEventListener('click', () => createGroup(nextGroupId()));
-
-/* join using real runTransaction and realDoc */
-joinBtn.removeEventListener && joinBtn.removeEventListener('click', ()=>{}); // no-op safety
-joinBtn.addEventListener('click', async () => {
-  actionMsg.textContent = '';
-  const entered = rollInput.value.trim();
-  if (!pendingRoll) { actionMsg.textContent = 'Pick yourself from search first.'; return; }
-  if (!entered) { actionMsg.textContent = 'Enter your roll number.'; return; }
-  if (entered !== pendingRoll) { actionMsg.textContent = 'Roll number does not match selected name.'; return; }
-
-  const student = students.find(s => (s.roll && s.roll === entered) || s.id === entered);
-  if (!student) { actionMsg.textContent = 'Student not found. Ask Dutta.'; return; }
-  if (student.groupId) { actionMsg.textContent = 'You are already enrolled.'; return; }
-
-  let gid = groupSelect.value;
-  if (gid === "__new") gid = String(nextGroupId());
-  gid = String(gid);
-
-  try {
-    await runTransactionFn(db, async (tx) => {
-      const gRef = realDoc(db, "groups", gid);
-      const gSnap = await tx.get(gRef);
-      if (!gSnap.exists()) {
-        tx.set(gRef, { id: gid, members: [student.roll || student.id] });
-      } else {
-        const data = gSnap.data();
-        const members = Array.isArray(data.members) ? [...data.members] : [];
-        if (members.includes(student.roll || student.id)) return;
-        if (members.length >= 4) throw new Error('Group full');
-        members.push(student.roll || student.id);
-        tx.update(gRef, { members });
-      }
-      const sRef = realDoc(db, "students", student.roll || student.id);
-      tx.update(sRef, { groupId: gid });
-    });
-    actionMsg.textContent = 'Joined group!';
-    pendingRoll = null; pendingStudent = null;
-    hideActionBox();
-  } catch(err) {
-    console.error(err);
-    actionMsg.textContent = err.message || 'Failed to join (maybe group full)';
-  }
-});
-
-/* leave using runTransactionFn */
-leaveBtn.addEventListener('click', async () => {
-  actionMsg.textContent = '';
-  const entered = rollInput.value.trim();
-  if (!pendingRoll) { actionMsg.textContent = 'Pick your name first.'; return; }
-  if (!entered) { actionMsg.textContent = 'Enter your roll number.'; return; }
-  if (entered !== pendingRoll) { actionMsg.textContent = 'Roll number does not match.'; return; }
-
-  const student = students.find(s => (s.roll && s.roll === entered) || s.id === entered);
-  if (!student) { actionMsg.textContent = 'Student not found.'; return; }
-  if (!student.groupId) { actionMsg.textContent = 'You are not in a group.'; return; }
-
-  const gid = String(student.groupId);
-  try {
-    await runTransactionFn(db, async (tx) => {
-      const gRef = realDoc(db, "groups", gid);
-      const gSnap = await tx.get(gRef);
-      if (!gSnap.exists()) return;
-      const data = gSnap.data();
-      const members = Array.isArray(data.members) ? [...data.members] : [];
-      const newMembers = members.filter(r => r !== (student.roll || student.id));
-      tx.update(gRef, { members: newMembers });
-      const sRef = realDoc(db, "students", student.roll || student.id);
-      tx.update(sRef, { groupId: null });
-    });
-    actionMsg.textContent = `Left Group ${gid}.`;
-    pendingRoll = null; pendingStudent = null;
-    hideActionBox();
-  } catch(err) {
-    console.error(err);
-    actionMsg.textContent = 'Failed to leave group: ' + (err.message || '');
-  }
-});
-
-/* export using realGetDocs */
-exportBtn.addEventListener('click', async () => {
-  try {
-    const sSnap = await realGetDocs(realCollection(db, "students"));
-    const gSnap = await realGetDocs(realCollection(db, "groups"));
-    const out = { exportedAt: (new Date()).toISOString(), students: sSnap.docs.map(d => d.data()), groups: gSnap.docs.map(d => d.data()) };
-    const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'groups_export.json'; a.click(); URL.revokeObjectURL(a.href);
-  } catch(e){ alert('Export failed: '+(e.message||e)); }
-});
-
-/* utility aliases used earlier */
-function realCollectionRef(name){ return realCollection(db, name); }
-function realDocRef(path, id){ return realDoc(db, path, id); }
-
-/* helper to escape HTML */
-function escapeHtml(s){ return String(s || '').replace(/[&<>"'`]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',"`":'&#96;'})[c]); }
-
-/* small init render (snapshots will drive UI) */
+// initial no-op render until snapshots load
 renderAll();
 </script>
 </body>
