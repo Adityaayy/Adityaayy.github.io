@@ -1,127 +1,103 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>CSE-sec A-3rd sem — Data Analysis Case study Student Grouping</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap CDN -->
+  <meta charset="utf-8" />
+  <title>CSE-sec A — 3rd Sem | Data Analysis Case Study — Grouping</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { padding: 1.25rem; background:#f7f9fc; }
-    .card { margin-bottom:1rem; }
-    .locked { opacity:0.65; pointer-events:none; }
-    .member-badge { margin-right:6px }
+    body { padding:18px; background:#f6f8fb; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
-    footer { font-size:0.9rem; opacity:0.8; margin-top:1.25rem; }
     .small-note { font-size:0.85rem; color:#666; }
+    .group-card { margin-bottom:0.8rem; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1 class="mb-2">CSE-sec A — 3rd Sem</h1>
-    <p class="small-note">Public group scoreboard. Students enroll using their roll number (used as password). Once joined, membership locks.</p>
+    <h1 class="mb-1">CSE-sec A — 3rd Sem</h1>
+    <p class="small-note">Public grouping page — local-only changes (saved in your browser). Export & commit to GitHub when you're happy.</p>
 
-    <div class="row">
+    <div class="row g-3">
       <div class="col-lg-7">
         <div class="card">
           <div class="card-body">
-            <h5>Public Group View</h5>
-            <div id="groupsArea" class="mb-3"></div>
+            <h5>Public Groups</h5>
+            <div id="groupsArea" class="mt-2"></div>
 
-            <h6>Unenrolled Students</h6>
-            <div id="unenrolledList" class="mb-0"></div>
+            <h6 class="mt-3">Unassigned Students</h6>
+            <div id="unenrolledArea" class="mt-2"></div>
           </div>
         </div>
 
-        <div class="card" id="actionCard">
+        <div class="card mt-3">
           <div class="card-body">
-            <h5>Find & Join a Group</h5>
-            <div class="mb-2">
-              <input id="searchName" class="form-control" placeholder="Type your name (or part of it) — e.g. Aditya">
-            </div>
-            <div id="searchResults" class="mb-3"></div>
+            <h5>Find Yourself & Join</h5>
+            <input id="searchName" class="form-control mb-2" placeholder="Type any part of your name (e.g. Aditya)" />
+            <div id="searchResults" class="mb-3 small-note">Type to search your name.</div>
 
-            <div id="joinPanel" style="display:none;">
-              <h6>Login & Choose Group</h6>
+            <div id="joinPanel" style="display:none">
+              <div class="mb-2"><input id="rollInput" placeholder="Enter your roll number (password)" class="form-control" /></div>
               <div class="mb-2">
-                <input id="rollInput" class="form-control" placeholder="Roll number (acts as password)">
-              </div>
-
-              <div class="mb-2">
-                <label class="form-label">Choose an existing group or create new</label>
+                <label class="form-label">Pick group</label>
                 <div class="input-group">
                   <select id="groupSelect" class="form-select"></select>
-                  <button id="createGroupBtn" class="btn btn-outline-secondary" type="button">Create new</button>
+                  <button id="createGroupBtn" class="btn btn-outline-secondary">Create</button>
                 </div>
-                <div class="small-note mt-1">New groups will be assigned the next available numeric ID.</div>
+                <div class="small-note mt-1">Max 4 members per group.</div>
               </div>
-
-              <div class="mb-2">
-                <button id="joinBtn" class="btn btn-primary">Join</button>
-                <button id="cancelJoinBtn" class="btn btn-link">Cancel</button>
-              </div>
-              <div id="joinMsg" class="small-note text-danger"></div>
+              <div><button id="confirmJoinBtn" class="btn btn-primary me-2">Join</button><button id="cancelJoinBtn" class="btn btn-link">Cancel</button></div>
+              <div id="joinError" class="text-danger mt-2"></div>
             </div>
-
           </div>
         </div>
 
-        <div class="card">
+        <div class="card mt-3">
           <div class="card-body">
-            <h5>Admin / CR Controls</h5>
+            <h5>CR Controls</h5>
             <div class="mb-2">
-              <label class="form-label">Import students JSON (optional)</label>
-              <input id="studentsJsonInput" type="file" class="form-control" accept=".json">
-              <div class="small-note mt-1">Use to replace the class list (name + roll). Format: [{ "name":"Full Name", "roll":"245805132" }, ...]</div>
+              <input id="studentsJsonInput" type="file" accept=".json" class="form-control" />
+              <div class="small-note mt-1">Import new student list JSON: [{ "name":"Full Name", "roll":"245805132" }, ... ] (will reset groups)</div>
             </div>
             <div class="mb-2">
-              <button id="exportBtn" class="btn btn-success">Export data (groups.json)</button>
-              <button id="resetBtn" class="btn btn-outline-danger">Reset local state</button>
+              <button id="exportBtn" class="btn btn-success">Export groups.json</button>
+              <button id="resetBtn" class="btn btn-outline-danger ms-2">Reset local state</button>
             </div>
-            <div class="small-note mt-2">After export, commit the downloaded <code>groups.json</code> to your GitHub repo for an official copy.</div>
           </div>
         </div>
 
       </div>
 
       <div class="col-lg-5">
-        <div class="card">
+        <div class="card mb-3">
           <div class="card-body">
             <h5>How it works</h5>
-            <ol>
-              <li>Student finds their name, enters roll number to verify.</li>
-              <li>Choose a group (or create one). Max 4 per group.</li>
-              <li>After joining, membership locks — shown publicly.</li>
-              <li>CR exports <code>groups.json</code> and commits to repo for persistent public record.</li>
+            <ol class="small-note">
+              <li>Search your name, confirm with roll number, choose/create a group.</li>
+              <li>After joining your membership is locked locally.</li>
+              <li>CR exports <code>groups.json</code> and commits to GitHub as the official copy.</li>
             </ol>
-            <div class="small-note mt-2">This is client-side only — no server. Roll numbers are checked in the browser against the student list.</div>
           </div>
         </div>
 
         <div class="card">
-          <div class="card-body">
-            <h5>Quick stats</h5>
-            <div><strong>Total students:</strong> <span id="totalStudents">0</span></div>
-            <div><strong>Enrolled:</strong> <span id="enrolledCount">0</span></div>
-            <div><strong>Groups:</strong> <span id="groupCount">0</span></div>
+          <div class="card-body small-note">
+            <div><strong>Total:</strong> <span id="statTotal">0</span></div>
+            <div><strong>Enrolled:</strong> <span id="statEnrolled">0</span></div>
+            <div><strong>Groups:</strong> <span id="statGroups">0</span></div>
+            <div class="mt-2 text-muted">All changes are local to your browser until you export & push.</div>
           </div>
         </div>
 
-        <footer>
-          <div>Made for: <strong>CSE-sec A — Data Analysis Case study</strong></div>
-          <div class="mt-1">Export & commit periodically. Keep roll numbers private if needed.</div>
-        </footer>
       </div>
     </div>
   </div>
 
 <script>
-/* ======= PRE-FILLED STUDENTS (extracted from provided class list PDF) =======
-   NOTE: This list includes names and roll numbers from the uploaded PDF file.
-   You can replace it later by importing a JSON file in admin controls.
-   Source: uploaded file in conversation.
-*/
-let PRESET_STUDENTS = [
+/* ---------------------------
+   Embedded student list (from your uploaded PDF)
+   You can replace by importing JSON via admin control.
+   --------------------------- */
+const PRESET_STUDENTS = [
 {"name":"ASHIQ RASOOL","roll":"245805050"},
 {"name":"Aayu Kedar Ketkar","roll":"245805027"},
 {"name":"Aditi Ilavajuthy","roll":"245805009"},
@@ -177,4 +153,280 @@ let PRESET_STUDENTS = [
 {"name":"SATHWIK HEJAMADY BHAT","roll":"245805366"},
 {"name":"SHLOK DINESH ARORA","roll":"245805372"},
 {"name":"SHREYA JAIN","roll":"245805046"},
-{"
+{"name":"SHRISTI AGARWAL","roll":"245805324"},
+{"name":"SIDDHARTHA SHANKAR","roll":"245890084"},
+{"name":"Soham Bhattacherjee","roll":"245805003"},
+{"name":"Sreejith Raghuprasad Pillai","roll":"245805025"},
+{"name":"Sumant Bhaskaruni","roll":"245805005"},
+{"name":"Swethika P","roll":"245805031"},
+{"name":"TANEESHA RAJIV PRASAD","roll":"245805198"},
+{"name":"TARUN BALASUBRAMANIAN","roll":"245805114"},
+{"name":"TEJAS N","roll":"245805242"},
+{"name":"VEDULA SRISAKET RAMA","roll":"245805146"},
+{"name":"ZAID NEMAT KHAN","roll":"245805042"}
+];
+
+/* ---------------------------
+   State and storage
+   --------------------------- */
+const STORAGE_KEY = 'cse_secA_group_v2';
+let state = { students: [], groups: [] }; // students: {name,roll,groupId|null}  groups: {id,members:[rolls]}
+
+function safeLoadState(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) { initFromPreset(); return; }
+    const parsed = JSON.parse(raw);
+    // basic validation
+    if (!parsed || !Array.isArray(parsed.students) || !Array.isArray(parsed.groups)) { initFromPreset(); return; }
+    state = parsed;
+  } catch(e){
+    console.warn('Corrupt local data — resetting to preset.');
+    initFromPreset();
+  }
+}
+
+function initFromPreset(){
+  state.students = PRESET_STUDENTS.map(s => ({ name: s.name, roll: s.roll, groupId: null }));
+  state.groups = []; // empty
+  persist();
+}
+
+function persist(){
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch(e){ console.error('Failed to save localStorage:', e); }
+  renderAll();
+}
+
+/* ---------------------------
+   Rendering
+   --------------------------- */
+
+function renderAll(){
+  renderStats();
+  renderGroups();
+  renderUnenrolled();
+  populateGroupSelect();
+}
+
+function renderStats(){
+  document.getElementById('statTotal').innerText = state.students.length;
+  document.getElementById('statEnrolled').innerText = state.students.filter(s => s.groupId !== null).length;
+  document.getElementById('statGroups').innerText = state.groups.length;
+}
+
+function renderGroups(){
+  const area = document.getElementById('groupsArea');
+  if (!state.groups.length) {
+    area.innerHTML = '<div class="small-note">No groups created yet.</div>';
+    return;
+  }
+
+  // sort groups by id
+  const groups = [...state.groups].sort((a,b)=>a.id - b.id);
+
+  const html = groups.map(g => {
+    // map roll -> student display
+    const members = g.members.map((roll, idx) => {
+      const s = state.students.find(x => x.roll === roll);
+      const displayName = s ? s.name : roll;
+      return `<div class="d-flex justify-content-between align-items-center py-1">
+                <div><strong>#${idx+1}</strong> ${escapeHtml(displayName)}</div>
+                <div class="mono">${escapeHtml(roll)}</div>
+              </div>`;
+    }).join('');
+    return `
+      <div class="card group-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div><strong>Group ${g.id}</strong></div>
+            <div class="small-note">(${g.members.length}/4)</div>
+          </div>
+          <div>${ members || '<div class="small-note">No members yet</div>' }</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  area.innerHTML = html;
+}
+
+function renderUnenrolled(){
+  const area = document.getElementById('unenrolledArea');
+  const unen = state.students.filter(s => s.groupId === null).sort((a,b)=>a.name.localeCompare(b.name));
+  if (!unen.length) { area.innerHTML = '<div class="small-note">All students assigned.</div>'; return; }
+  const list = unen.map(s => `<li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>${escapeHtml(s.name)}</div><div class="mono">${escapeHtml(s.roll)}</div></li>`).join('');
+  area.innerHTML = `<ul class="list-group">${list}</ul>`;
+}
+
+/* ---------------------------
+   Helpers
+   --------------------------- */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"'`]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',"`":'&#96;'})[c]);
+}
+
+function nextGroupId(){
+  if (!state.groups.length) return 1;
+  return Math.max(...state.groups.map(g=>g.id)) + 1;
+}
+
+/* ---------------------------
+   Search & join flow
+   --------------------------- */
+const searchInput = document.getElementById('searchName');
+const searchResults = document.getElementById('searchResults');
+let pendingRoll = null; // roll of student selected to join
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q) { searchResults.innerHTML = 'Type to search your name.'; hideJoinPanel(); return; }
+  const matches = state.students.filter(s => s.name.toLowerCase().includes(q) || s.roll.includes(q));
+  if (!matches.length) { searchResults.innerHTML = '<div class="small-note">No matches.</div>'; hideJoinPanel(); return; }
+
+  // build results
+  const html = matches.map(s => {
+    const enrolled = s.groupId !== null;
+    return `<div class="py-1">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>${escapeHtml(s.name)} <span class="mono">(${escapeHtml(s.roll)})</span></div>
+        <div>${enrolled ? `<span class="badge bg-success">Enrolled: ${s.groupId}</span>` : `<button data-roll="${escapeHtml(s.roll)}" class="btn btn-sm btn-outline-primary select-me">I am this</button>`}</div>
+      </div>
+    </div>`;
+  }).join('');
+  searchResults.innerHTML = html;
+
+  // add click handlers for buttons (delegation)
+  const buttons = searchResults.querySelectorAll('button.select-me');
+  buttons.forEach(btn => btn.addEventListener('click', () => {
+    const roll = btn.getAttribute('data-roll');
+    startJoinFlow(roll);
+  }));
+});
+
+function startJoinFlow(roll){
+  pendingRoll = roll;
+  document.getElementById('rollInput').value = '';
+  document.getElementById('joinError').innerText = '';
+  populateGroupSelect();
+  document.getElementById('joinPanel').style.display = 'block';
+  document.getElementById('rollInput').focus();
+}
+
+document.getElementById('cancelJoinBtn').addEventListener('click', () => {
+  pendingRoll = null;
+  hideJoinPanel();
+});
+
+function hideJoinPanel(){ document.getElementById('joinPanel').style.display = 'none'; }
+
+/* populate group select with available groups + option to create new */
+function populateGroupSelect(){
+  const sel = document.getElementById('groupSelect');
+  sel.innerHTML = '';
+  // existing groups sorted
+  [...state.groups].sort((a,b)=>a.id-b.id).forEach(g => {
+    const opt = document.createElement('option');
+    opt.value = g.id;
+    opt.text = `Group ${g.id} (${g.members.length}/4)`;
+    sel.appendChild(opt);
+  });
+  const newOpt = document.createElement('option');
+  newOpt.value = '__new';
+  newOpt.text = `Create new group (next ${nextGroupId()})`;
+  sel.appendChild(newOpt);
+  sel.value = '__new';
+}
+
+document.getElementById('createGroupBtn').addEventListener('click', () => {
+  const id = nextGroupId();
+  state.groups.push({ id, members: [] });
+  persist();
+  populateGroupSelect();
+  // auto-select created group
+  const sel = document.getElementById('groupSelect'); sel.value = id;
+});
+
+document.getElementById('confirmJoinBtn').addEventListener('click', () => {
+  const enteredRoll = document.getElementById('rollInput').value.trim();
+  const err = document.getElementById('joinError');
+  err.innerText = '';
+
+  if (!pendingRoll) { err.innerText = 'Please select yourself from search first.'; return; }
+  if (!enteredRoll) { err.innerText = 'Enter your roll number.'; return; }
+  if (enteredRoll !== pendingRoll) { err.innerText = 'Roll number does not match selected student.'; return; }
+
+  const student = state.students.find(s => s.roll === enteredRoll);
+  if (!student) { err.innerText = 'Your roll not found in class list. Ask CR to import.'; return; }
+  if (student.groupId !== null) { err.innerText = 'You are already enrolled.'; return; }
+
+  // choose group
+  const selVal = document.getElementById('groupSelect').value;
+  let gid;
+  if (selVal === '__new') {
+    gid = nextGroupId();
+    state.groups.push({ id: gid, members: []});
+  } else gid = parseInt(selVal);
+
+  const grp = state.groups.find(g => g.id === gid);
+  if (!grp) { err.innerText = 'Group missing (try again).'; return; }
+  if (grp.members.length >= 4) { err.innerText = 'Group full. Pick another.'; return; }
+
+  // add student
+  grp.members.push(student.roll);
+  student.groupId = gid;
+  persist();
+
+  // done
+  pendingRoll = null;
+  hideJoinPanel();
+  document.getElementById('searchName').value = '';
+  document.getElementById('searchResults').innerHTML = `<div class="small-note text-success">Joined Group ${gid} successfully.</div>`;
+});
+
+/* ---------------------------
+   Import / Export / Reset
+   --------------------------- */
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const out = { meta: { exportedAt: (new Date()).toISOString() }, students: state.students, groups: state.groups };
+  const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'groups.json'; document.body.appendChild(a); a.click();
+  a.remove(); URL.revokeObjectURL(url);
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (!confirm('Reset local state? This will remove all enrollments. Proceed?')) return;
+  initFromPreset();
+});
+
+document.getElementById('studentsJsonInput').addEventListener('change', (ev) => {
+  const f = ev.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const arr = JSON.parse(reader.result);
+      if (!Array.isArray(arr)) throw new Error('JSON must be an array');
+      const ok = arr.every(x => x.name && x.roll);
+      if (!ok) throw new Error('Each record must have name & roll');
+      // replace students and reset groups
+      state.students = arr.map(x => ({ name: x.name, roll: x.roll, groupId: null }));
+      state.groups = [];
+      persist();
+      alert('Student list imported. Groups reset.');
+    } catch(e){ alert('Import failed: ' + e.message); }
+  };
+  reader.readAsText(f);
+});
+
+/* ---------------------------
+   Init
+   --------------------------- */
+safeLoadState();
+renderAll();
+</script>
+</body>
+</html>
