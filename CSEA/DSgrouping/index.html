@@ -7,24 +7,88 @@
 <title>DS Case Study Grouping</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--muted:#b0b0b0;--accent:#ff6a00;--accent-weak:rgba(255,106,0,0.4);--card-shadow:0 12px 30px rgba(0,0,0,0.7);--radius:12px}
-*{box-sizing:border-box}body{margin:0;padding:32px;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:#0a0a0c;color:#fff}
-.wrap{max-width:1080px;margin:0 auto}header{display:flex;justify-content:space-between;align-items:end}h1{margin:0;font-size:1.25rem;font-weight:600}.muted{color:var(--muted);font-size:0.95rem}
-.grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:20px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
-.card{background:#111214;border-radius:var(--radius);padding:18px;box-shadow:var(--card-shadow);border:none;transition:transform .14s ease}
+:root{
+  --muted:#9aa0a6;
+  --accent:#ff6a00;           /* keep for borders and export */
+  --accent-soft:rgba(255,106,0,0.18);
+  --card-shadow:0 12px 30px rgba(0,0,0,0.7);
+  --radius:12px;
+  --bg:#090909;
+  --panel:#0f1011;
+  --panel-2:#141516;
+  --text:#e9ecef;
+  --line-grey:#2a2a2c;        /* other lines/graphics */
+  --btn-grey:#3a3c3e;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:32px;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+  background:var(--bg);color:var(--text);
+}
+.wrap{max-width:1080px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:end}
+h1{margin:0;font-size:1.25rem;font-weight:600;color:var(--muted)}
+.muted{color:var(--muted);font-size:0.95rem}
+
+.grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:20px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+.card{
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border-radius:var(--radius);padding:18px;box-shadow:var(--card-shadow);
+  border:1px solid var(--accent); /* keep borders orange as requested */
+  transition:transform .14s ease;
+}
 .card:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(0,0,0,0.85)}
-.title{font-size:1rem;font-weight:600;margin-bottom:8px}.meta{font-size:0.95rem;color:var(--muted)}.small{font-size:0.9rem;color:var(--muted)}
-input,select,button{font-family:inherit}input,select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--accent-weak);background:#1a1b1d;color:inherit;font-size:1rem}
-input:focus,select:focus{outline:none;box-shadow:0 8px 20px rgba(255,106,0,0.12);border-color:var(--accent)}
+
+.title{font-size:1rem;font-weight:600;margin-bottom:8px;color:var(--muted)}
+.meta{font-size:0.95rem;color:var(--muted)}.small{font-size:0.9rem;color:var(--muted)}
+input,select,button{font-family:inherit}
+input,select{
+  width:100%;padding:12px;border-radius:10px;border:1px solid var(--line-grey);
+  background:#0c0c0d;color:var(--text);font-size:1rem;
+}
+input:focus,select:focus{outline:none;box-shadow:0 8px 20px rgba(0,0,0,0.6);border-color:var(--line-grey)}
+
 .btn{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
-.btn-primary{background:linear-gradient(180deg,var(--accent),#e04f00);color:white;box-shadow:0 8px 20px rgba(255,106,0,0.15)}
-.btn-ghost{background:transparent;border:1px solid var(--accent-weak);color:var(--accent);padding:9px 12px;border-radius:10px}
+.btn-primary{
+  background:linear-gradient(180deg,var(--accent),#e04f00);color:#090909;box-shadow:0 8px 20px rgba(255,106,0,0.15)
+}
+/* export button kept orange; other buttons grey */
+.btn-ghost{background:transparent;border:1px solid var(--accent);color:var(--muted);padding:9px 12px;border-radius:10px}
 .btn-small{padding:6px 10px;border-radius:8px;font-size:0.93rem}
-.list{list-style:none;padding:0;margin:0}.item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid var(--accent-weak);background:#1a1b1d}
-.item .name{font-size:1.02rem;font-weight:500}
-.group{padding:10px;border-radius:10px;border:1px solid var(--accent-weak);margin-bottom:10px;background:#1a1b1d}
-.group .member{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--accent-weak)}
-.controls-row{display:flex;gap:10px;align-items:center;margin-top:12px}footer{margin-top:18px;color:var(--muted);font-size:0.95rem}.note{font-size:0.92rem;color:var(--muted);margin-top:8px}
+.btn-full{width:100%;display:inline-flex;justify-content:center}
+.btn-grey{background:var(--btn-grey);color:var(--text);border:1px solid var(--line-grey)}
+
+.list{list-style:none;padding:0;margin:0}
+.item{
+  display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin-bottom:8px;
+  border:1px solid var(--line-grey);background:#0c0c0d;color:var(--muted)
+}
+.item .name{font-size:1.02rem;font-weight:500;color:var(--text)}
+
+.group{
+  padding:10px;border-radius:10px;margin-bottom:10px;
+  border-top:1px solid var(--accent); /* keep accent for borders as requested */
+  background:#0c0c0d;color:var(--muted);
+}
+.group .member{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line-grey);color:var(--muted)}
+
+.controls-row{display:flex;gap:10px;align-items:center;margin-top:12px}
+footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
+.note{font-size:0.92rem;color:var(--muted);margin-top:8px}
+
+/* Confirmation modal */
+#confirmOverlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.65);display:none;align-items:center;justify-content:center;z-index:9999;
+}
+#confirmBox{
+  width:90%;max-width:420px;background:linear-gradient(180deg,var(--panel),var(--panel-2));border-radius:12px;padding:18px;border:1px solid var(--accent);
+  box-shadow:0 18px 50px rgba(0,0,0,0.8);
+}
+#confirmBox h3{margin:0 0 8px 0;color:var(--muted)}
+#confirmBox p{margin:0;color:var(--muted);line-height:1.4}
+.modal-controls{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
 </style>
 </head>
 <body>
@@ -34,7 +98,7 @@ input:focus,select:focus{outline:none;box-shadow:0 8px 20px rgba(255,106,0,0.12)
       <h1>CSE-sec A — Student Grouping</h1>
       <div class="muted">CSE sec A : 3rd Sem</div>
     </div>
-    <div class="meta">Groups: 1-4 · join or leavw a team</div>
+    <div class="meta">Groups: 1-4 · join or leave a team</div>
   </header>
 
   <main class="grid">
@@ -67,16 +131,16 @@ input:focus,select:focus{outline:none;box-shadow:0 8px 20px rgba(255,106,0,0.12)
 
           <div class="controls-row" style="margin-top:10px">
             <select id="groupSelect"></select>
-            <!-- createGroupBtn removed intentionally to prevent spamming -->
+            <!-- create buttons removed to prevent spamming -->
           </div>
 
           <div class="controls-row" style="margin-top:12px">
             <button id="joinBtn" class="btn btn-primary">Join</button>
-            <button id="leaveBtn" class="btn-ghost btn-small">Leave</button>
-            <button id="cancelBtn" class="btn-ghost btn-small">Cancel</button>
+            <button id="leaveBtn" class="btn btn-grey btn-small">Leave</button>
+            <button id="cancelBtn" class="btn btn-grey btn-small">Cancel</button>
           </div>
 
-          <div id="actionMsg" class="note" style="margin-top:8px;color:#b91c1c"></div>
+          <div id="actionMsg" class="note" style="margin-top:8px;color:#fca5a5"></div>
         </div>
       </div>
 
@@ -93,13 +157,8 @@ input:focus,select:focus{outline:none;box-shadow:0 8px 20px rgba(255,106,0,0.12)
         </div>
 
         <div class="controls-row" style="margin-top:12px">
-          <!-- larger export button -->
-          <button id="exportBtn" class="btn btn-primary" style="padding:14px 22px; font-size:1.06rem;">Export JSON</button>
-          <button id="refreshBtn" class="btn-ghost btn-small">Refresh</button>
-          <!-- createGroupCtrl removed intentionally to prevent spamming -->
+          <button id="exportBtn" class="btn btn-primary btn-full">Export JSON</button>
         </div>
-
-        <!-- Removed Show rolls and Export Markdown text entirely -->
 
         <div class="note" style="margin-top:10px">Join, Create (via join) or Leave a Team. Teams of 1-4, to present on a DS Topic, soon. </div>
       </div>
@@ -109,9 +168,20 @@ input:focus,select:focus{outline:none;box-shadow:0 8px 20px rgba(255,106,0,0.12)
   <footer>Made by Dutta. Refresh this page if stale. Text me if this fucks up</footer>
 </div>
 
+<!-- Confirmation modal -->
+<div id="confirmOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div id="confirmBox">
+    <h3>Confirm leave</h3>
+    <p id="confirmText">Are you sure you want to leave this group? This will remove you from the group's roster.</p>
+    <div class="modal-controls">
+      <button id="confirmCancel" class="btn btn-grey btn-small">Cancel</button>
+      <button id="confirmOk" class="btn btn-grey btn-small">Yes, leave</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
-// ====== REPLACE with your firebaseConfig from Project settings → SDK snippet (Config) ======
-// Your web app's Firebase configuration (left as you had it)
+// Your Firebase config (left as you had it)
 const firebaseConfig = {
   apiKey: "AIzaSyC7872cCC6wXWgy8Drj1N0yET9nk0a7KM4",
   authDomain: "csea-dsgrouping.firebaseapp.com",
@@ -120,11 +190,10 @@ const firebaseConfig = {
   messagingSenderId: "367385736275",
   appId: "1:367385736275:web:907bb7e06f7efc550cc2a6"
 };
-// ==========================================================================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import {
-  getFirestore, collection, doc, onSnapshot, setDoc, getDocs, runTransaction, getDoc, deleteDoc
+  getFirestore, collection, doc, onSnapshot, setDoc, getDocs, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 const app = initializeApp(firebaseConfig);
@@ -149,14 +218,21 @@ const actionMsg = document.getElementById("actionMsg");
 const statsTotal = document.getElementById("statsTotal");
 const statsEnrolled = document.getElementById("statsEnrolled");
 const exportBtn = document.getElementById("exportBtn");
-const refreshBtn = document.getElementById("refreshBtn");
 const noGroups = document.getElementById("noGroups");
+
+const confirmOverlay = document.getElementById('confirmOverlay');
+const confirmOk = document.getElementById('confirmOk');
+const confirmCancel = document.getElementById('confirmCancel');
+const confirmText = document.getElementById('confirmText');
 
 let students = [];
 let groups = [];
 let pendingRoll = null;
 let pendingStudent = null;
-let showRolls = false;
+
+// variables to hold the pending leave context
+let _leaveStudent = null;
+let _leaveGroupId = null;
 
 // realtime listeners
 onSnapshot(studentsRef, snap => {
@@ -185,8 +261,7 @@ function renderGroups(){
     const mems = (g.members || []).map((roll, idx) => {
       const s = students.find(x => x.roll === roll || x.id === roll);
       const name = s ? escapeHtml(s.name) : escapeHtml(roll);
-      const rollHtml = showRolls ? `<span class="mono" style="float:right">${escapeHtml(roll)}</span>` : "";
-      return `<div class="member"><div style="font-weight:500">${idx+1}. ${escapeHtml(name)}</div>${rollHtml}</div>`;
+      return `<div class="member"><div style="font-weight:500">${idx+1}. ${escapeHtml(name)}</div></div>`;
     }).join('') || '<div class="meta">No members yet</div>';
     return `<div class="group"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-weight:600">Group ${escapeHtml(g.id)}</div><div class="meta">(${(g.members||[]).length}/4)</div></div>${mems}</div>`;
   }).join('');
@@ -213,7 +288,6 @@ function populateGroupSelect(){
   const optNew=document.createElement('option'); optNew.value='__new'; optNew.textContent=`Create new (next ${nextGroupId()})`; groupSelect.appendChild(optNew); groupSelect.value='__new';
 }
 function nextGroupId(){
-  // return smallest positive integer not used as a group id
   const nums = groups.map(g=>Number(g.id)).filter(n=>!isNaN(n) && n>0);
   nums.sort((a,b)=>a-b);
   for(let i=1;i<= (nums.length+1); i++){
@@ -268,7 +342,7 @@ joinBtn.addEventListener('click', async () => {
   } catch(err){ console.error(err); actionMsg.textContent = err.message || 'Failed to join'; }
 });
 
-// leave - remove member and DELETE group doc if it becomes empty
+// leave - show confirmation modal first, then perform leave transaction
 leaveBtn.addEventListener('click', async ()=>{
   actionMsg.textContent=''; const entered = rollInput.value.trim();
   if (!pendingRoll) { actionMsg.textContent='Pick yourself first.'; return; }
@@ -277,7 +351,30 @@ leaveBtn.addEventListener('click', async ()=>{
   const student = students.find(s => (s.roll && s.roll === entered) || s.id === entered);
   if (!student) { actionMsg.textContent='Student not found.'; return; }
   if (!student.groupId) { actionMsg.textContent='You are not in a group.'; return; }
-  const gid = String(student.groupId);
+
+  // set pending leave context
+  _leaveStudent = student;
+  _leaveGroupId = String(student.groupId);
+  confirmText.textContent = `Leave Group ${_leaveGroupId}? This will remove you from the group's roster.`;
+  confirmOverlay.style.display = 'flex';
+  confirmOverlay.setAttribute('aria-hidden','false');
+});
+
+// modal handlers
+confirmCancel.addEventListener('click', () => {
+  confirmOverlay.style.display = 'none';
+  confirmOverlay.setAttribute('aria-hidden','true');
+  _leaveStudent = null; _leaveGroupId = null;
+});
+
+confirmOk.addEventListener('click', async () => {
+  confirmOverlay.style.display = 'none';
+  confirmOverlay.setAttribute('aria-hidden','true');
+  if (!_leaveStudent) return;
+  const student = _leaveStudent;
+  const gid = _leaveGroupId;
+  _leaveStudent = null; _leaveGroupId = null;
+
   try {
     await runTransaction(db, async (tx) => {
       const gRef = doc(db,'groups',gid); const gSnap = await tx.get(gRef);
@@ -301,7 +398,6 @@ exportBtn.addEventListener('click', async () => {
     const sSnap = await getDocs(studentsRef);
     const allStudents = sSnap.docs.map(d => d.data());
 
-    // build groups map
     const groupsMap = {};
     const unassigned = [];
     allStudents.forEach(stu => {
@@ -313,7 +409,6 @@ exportBtn.addEventListener('click', async () => {
       }
     });
 
-    // output ordered by numeric group id
     const ordered = {};
     Object.keys(groupsMap).map(k => Number(k)).filter(n => !isNaN(n)).sort((a,b)=>a-b).forEach(n => {
       ordered[`Group ${n}`] = groupsMap[String(n)];
@@ -325,9 +420,7 @@ exportBtn.addEventListener('click', async () => {
   } catch(e){ alert('Export failed: ' + (e.message || e)); }
 });
 
-refreshBtn.addEventListener('click', ()=> renderAll());
-
-// small helpers
+// small helpers (keep existing)
 function escapeHtml(s){ return String(s || '').replace(/[&<>"'`]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',"`":'&#96;'})[c]); }
 
 // initial no-op render until snapshots load
