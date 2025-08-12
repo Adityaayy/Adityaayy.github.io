@@ -6,23 +6,21 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>DS Case Study Grouping</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
 <style>
 :root{
-  --muted:#9ca3af;              /* lighter muted for dark bg */
-  --accent:#ff6a00;            /* orange accent */
-  --accent-weak:rgba(255,106,0,0.12); /* subtle orange borders */
-  --card-shadow:0 12px 30px rgba(0,0,0,0.6);
+  --muted:#b0b3b8;               /* softer light grey text for contrast */
+  --accent:#ff7a1a;              /* brighter orange */
+  --accent-weak:rgba(255,122,26,0.35); /* bolder orange borders */
+  --card-shadow:0 12px 30px rgba(0,0,0,0.65);
   --radius:12px
 }
 *{box-sizing:border-box}
 
-/* background + base text */
 body{
   margin:0;
   padding:32px;
   font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-  background:#0b0b0d; /* ultra dark gray */
+  background:#0a0a0c; /* deep charcoal */
   color:#ffffff;
 }
 
@@ -35,16 +33,16 @@ h1{margin:0;font-size:1.25rem;font-weight:600}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 
 .card{
-  background:#0f1113; /* card slightly lighter than page */
+  background:#141417; /* card grey */
   border-radius:var(--radius);
   padding:18px;
   box-shadow:var(--card-shadow);
-  border:1px solid var(--accent-weak); /* orange-tinged border */
+  border:2px solid var(--accent-weak); /* bold orange border */
   transition:transform .14s ease
 }
 .card:hover{
   transform:translateY(-3px);
-  box-shadow:0 20px 40px rgba(0,0,0,0.7)
+  box-shadow:0 20px 40px rgba(0,0,0,0.75)
 }
 
 .title{font-size:1rem;font-weight:600;margin-bottom:8px}
@@ -56,56 +54,72 @@ input,select{
   width:100%;
   padding:12px;
   border-radius:10px;
-  border:1px solid rgba(255,106,0,0.06); /* subtle orange border */
-  background:#111214;  /* dark input bg */
+  border:2px solid var(--accent-weak);
+  background:#1b1b1f; /* darker grey */
   color:inherit;
   font-size:1rem
 }
 input:focus,select:focus{
   outline:none;
-  box-shadow:0 8px 20px rgba(255,106,0,0.06); /* orange focus shadow */
-  border-color:rgba(255,106,0,0.18)
+  box-shadow:0 8px 20px rgba(255,122,26,0.2);
+  border-color:var(--accent)
 }
 
-.btn{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:10px;
+  border:0;
+  cursor:pointer;
+  font-weight:600
+}
 .btn-primary{
-  background:linear-gradient(180deg,var(--accent),#e04f00);
+  background:linear-gradient(180deg,var(--accent),#e06000);
   color:white;
-  box-shadow:0 8px 20px rgba(255,106,0,0.08)
+  box-shadow:0 8px 20px rgba(255,122,26,0.2)
 }
 .btn-ghost{
   background:transparent;
-  border:1px solid var(--accent-weak); /* orange ghost border */
+  border:2px solid var(--accent-weak);
   color:var(--accent);
-  padding:9px 12px;border-radius:10px
+  padding:9px 12px;
+  border-radius:10px
 }
 .btn-small{padding:6px 10px;border-radius:8px;font-size:0.93rem}
 
 .list{list-style:none;padding:0;margin:0}
 .item{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:10px;border-radius:8px;margin-bottom:8px;
-  border:1px solid rgba(255,106,0,0.04); /* faint orange border */
-  background:linear-gradient(180deg,#121214,#0f1113) /* dark item background */
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:8px;
+  border:2px solid var(--accent-weak);
+  background:linear-gradient(180deg,#1b1b1f,#161619)
 }
 .item .name{font-size:1.02rem;font-weight:500}
 
 .group{
-  padding:10px;border-radius:10px;
-  border:1px solid rgba(255,106,0,0.04); /* faint orange border */
+  padding:10px;
+  border-radius:10px;
+  border:2px solid var(--accent-weak);
   margin-bottom:10px;
-  background:linear-gradient(180deg,#121214,#0f1113)
+  background:linear-gradient(180deg,#1b1b1f,#161619)
 }
 .group .member{
-  display:flex;justify-content:space-between;padding:8px 0;
-  border-top:1px solid rgba(255,106,0,0.03); /* very subtle divider */
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-top:2px solid rgba(255,122,26,0.2)
 }
 
 .controls-row{display:flex;gap:10px;align-items:center;margin-top:12px}
 footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
 .note{font-size:0.92rem;color:var(--muted);margin-top:8px}
 </style>
-
 
   
 </head>
