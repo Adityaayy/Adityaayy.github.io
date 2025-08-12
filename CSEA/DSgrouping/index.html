@@ -6,110 +6,26 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>DS Case Study Grouping</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
- <style>
-:root{
-  --muted:#b0b0b0;
-  --accent:#ff6a00;
-  --accent-weak:rgba(255,106,0,0.4); /* medium orange for inner borders */
-  --card-shadow:0 12px 30px rgba(0,0,0,0.7);
-  --radius:12px
-}
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  padding:32px;
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-  background:#0a0a0c; /* ultra dark */
-  color:#fff;
-}
-
-.wrap{max-width:1080px;margin:0 auto}
-header{display:flex;justify-content:space-between;align-items:end}
-h1{margin:0;font-size:1.25rem;font-weight:600}.muted{color:var(--muted);font-size:0.95rem}
-
-.grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:20px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
-
-.card{
-  background:#111214;
-  border-radius:var(--radius);
-  padding:18px;
-  box-shadow:var(--card-shadow);
-  border:none; /* no outer border */
-  transition:transform .14s ease
-}
-.card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 20px 40px rgba(0,0,0,0.85)
-}
-
-.title{font-size:1rem;font-weight:600;margin-bottom:8px}
-.meta{font-size:0.95rem;color:var(--muted)}.small{font-size:0.9rem;color:var(--muted)}
-
-input,select,button{font-family:inherit}
-input,select{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid var(--accent-weak); /* orange-tinted */
-  background:#1a1b1d;
-  color:inherit;
-  font-size:1rem
-}
-input:focus,select:focus{
-  outline:none;
-  box-shadow:0 8px 20px rgba(255,106,0,0.12);
-  border-color:var(--accent)
-}
-
-.btn{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:10px 14px;border-radius:10px;border:0;
-  cursor:pointer;font-weight:600
-}
-.btn-primary{
-  background:linear-gradient(180deg,var(--accent),#e04f00);
-  color:white;
-  box-shadow:0 8px 20px rgba(255,106,0,0.15)
-}
-.btn-ghost{
-  background:transparent;
-  border:1px solid var(--accent-weak); /* medium orange */
-  color:var(--accent);
-  padding:9px 12px;
-  border-radius:10px
-}
+<style>
+:root{--muted:#b0b0b0;--accent:#ff6a00;--accent-weak:rgba(255,106,0,0.4);--card-shadow:0 12px 30px rgba(0,0,0,0.7);--radius:12px}
+*{box-sizing:border-box}body{margin:0;padding:32px;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:#0a0a0c;color:#fff}
+.wrap{max-width:1080px;margin:0 auto}header{display:flex;justify-content:space-between;align-items:end}h1{margin:0;font-size:1.25rem;font-weight:600}.muted{color:var(--muted);font-size:0.95rem}
+.grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:20px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:#111214;border-radius:var(--radius);padding:18px;box-shadow:var(--card-shadow);border:none;transition:transform .14s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(0,0,0,0.85)}
+.title{font-size:1rem;font-weight:600;margin-bottom:8px}.meta{font-size:0.95rem;color:var(--muted)}.small{font-size:0.9rem;color:var(--muted)}
+input,select,button{font-family:inherit}input,select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--accent-weak);background:#1a1b1d;color:inherit;font-size:1rem}
+input:focus,select:focus{outline:none;box-shadow:0 8px 20px rgba(255,106,0,0.12);border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+.btn-primary{background:linear-gradient(180deg,var(--accent),#e04f00);color:white;box-shadow:0 8px 20px rgba(255,106,0,0.15)}
+.btn-ghost{background:transparent;border:1px solid var(--accent-weak);color:var(--accent);padding:9px 12px;border-radius:10px}
 .btn-small{padding:6px 10px;border-radius:8px;font-size:0.93rem}
-
-.list{list-style:none;padding:0;margin:0}
-.item{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:10px;border-radius:8px;margin-bottom:8px;
-  border:1px solid var(--accent-weak); /* medium orange border */
-  background:#1a1b1d
-}
+.list{list-style:none;padding:0;margin:0}.item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid var(--accent-weak);background:#1a1b1d}
 .item .name{font-size:1.02rem;font-weight:500}
-
-.group{
-  padding:10px;border-radius:10px;
-  border:1px solid var(--accent-weak); /* medium orange border */
-  margin-bottom:10px;
-  background:#1a1b1d
-}
-.group .member{
-  display:flex;justify-content:space-between;padding:8px 0;
-  border-top:1px solid var(--accent-weak); /* orange inner divider */
-}
-
-.controls-row{display:flex;gap:10px;align-items:center;margin-top:12px}
-footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
-.note{font-size:0.92rem;color:var(--muted);margin-top:8px}
+.group{padding:10px;border-radius:10px;border:1px solid var(--accent-weak);margin-bottom:10px;background:#1a1b1d}
+.group .member{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--accent-weak)}
+.controls-row{display:flex;gap:10px;align-items:center;margin-top:12px}footer{margin-top:18px;color:var(--muted);font-size:0.95rem}.note{font-size:0.92rem;color:var(--muted);margin-top:8px}
 </style>
-
-  
-  
 </head>
 <body>
 <div class="wrap">
@@ -126,7 +42,7 @@ footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
       <div class="card" id="groupsCard">
         <div class="title">Groups</div>
         <div id="groupsList" class="meta"></div>
-        <div id="noGroups" class="meta" style="margin-top:8px;display:none">No groups yet — create one on the right.</div>
+        <div id="noGroups" class="meta" style="margin-top:8px;display:none">No groups yet — create one by joining and selecting “Create new”.</div>
       </div>
 
       <div class="card" style="margin-top:16px">
@@ -151,7 +67,7 @@ footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
 
           <div class="controls-row" style="margin-top:10px">
             <select id="groupSelect"></select>
-            <button id="createGroupBtn" class="btn-ghost btn-small">New</button>
+            <!-- createGroupBtn removed intentionally to prevent spamming -->
           </div>
 
           <div class="controls-row" style="margin-top:12px">
@@ -179,7 +95,7 @@ footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
         <div class="controls-row" style="margin-top:12px">
           <button id="exportBtn" class="btn btn-primary">Export JSON</button>
           <button id="refreshBtn" class="btn-ghost btn-small">Refresh</button>
-          <button id="createGroupCtrl" class="btn-ghost btn-small">Create group</button>
+          <!-- createGroupCtrl removed intentionally to prevent spamming -->
         </div>
 
         <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
@@ -188,7 +104,7 @@ footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
           <div style="margin-left:auto" class="meta">Export Markdown</div>
         </div>
 
-        <div class="note" style="margin-top:10px">Join, Create or Leave a Team. Teams of 1-4, to present on a DS Topic, soon. </div>
+        <div class="note" style="margin-top:10px">Join, Create (via join) or Leave a Team. Teams of 1-4, to present on a DS Topic, soon. </div>
       </div>
     </aside>
   </main>
@@ -198,7 +114,7 @@ footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
 
 <script type="module">
 // ====== REPLACE with your firebaseConfig from Project settings → SDK snippet (Config) ======
-// Your web app's Firebase configuration
+// Your web app's Firebase configuration (left as you had it)
 const firebaseConfig = {
   apiKey: "AIzaSyC7872cCC6wXWgy8Drj1N0yET9nk0a7KM4",
   authDomain: "csea-dsgrouping.firebaseapp.com",
@@ -229,7 +145,6 @@ const searchResults = document.getElementById("searchResults");
 const actionBox = document.getElementById("actionBox");
 const rollInput = document.getElementById("rollInput");
 const groupSelect = document.getElementById("groupSelect");
-const createGroupBtn = document.getElementById("createGroupBtn");
 const joinBtn = document.getElementById("joinBtn");
 const leaveBtn = document.getElementById("leaveBtn");
 const cancelBtn = document.getElementById("cancelBtn");
@@ -238,7 +153,6 @@ const statsTotal = document.getElementById("statsTotal");
 const statsEnrolled = document.getElementById("statsEnrolled");
 const exportBtn = document.getElementById("exportBtn");
 const refreshBtn = document.getElementById("refreshBtn");
-const createGroupCtrl = document.getElementById("createGroupCtrl");
 const showRollsToggle = document.getElementById("showRollsToggle");
 const noGroups = document.getElementById("noGroups");
 
@@ -302,7 +216,6 @@ function populateGroupSelect(){
   sorted.forEach(g => { const opt=document.createElement('option'); opt.value=g.id; opt.textContent=`Group ${g.id} (${(g.members||[]).length}/4)`; groupSelect.appendChild(opt); });
   const optNew=document.createElement('option'); optNew.value='__new'; optNew.textContent=`Create new (next ${nextGroupId()})`; groupSelect.appendChild(optNew); groupSelect.value='__new';
 }
-
 function nextGroupId(){
   // return smallest positive integer not used as a group id
   const nums = groups.map(g=>Number(g.id)).filter(n=>!isNaN(n) && n>0);
@@ -331,23 +244,6 @@ function startJoinFlow(roll, name){
 }
 cancelBtn.addEventListener('click', ()=>{ pendingRoll=null; pendingStudent=null; hideActionBox(); });
 function hideActionBox(){ actionBox.style.display='none'; actionMsg.textContent=''; }
-
-// create group (safe): uses a transaction to avoid races and duplicate empty groups
-createGroupBtn.addEventListener('click', async ()=> createGroup(nextGroupId()));
-createGroupCtrl.addEventListener('click', async ()=> createGroup(nextGroupId()));
-async function createGroup(id){
-  try {
-    await runTransaction(db, async (tx) => {
-      const gRef = doc(db, 'groups', String(id));
-      const gSnap = await tx.get(gRef);
-      if (gSnap.exists()) {
-        // someone already created it; do nothing
-        return;
-      }
-      tx.set(gRef, { id: String(id), members: [] });
-    });
-  } catch(e){ console.error(e); alert('Create failed: '+e.message); }
-}
 
 // join
 joinBtn.addEventListener('click', async () => {
