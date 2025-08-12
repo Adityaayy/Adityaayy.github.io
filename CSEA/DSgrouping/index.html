@@ -93,16 +93,13 @@ input:focus,select:focus{outline:none;box-shadow:0 8px 20px rgba(255,106,0,0.12)
         </div>
 
         <div class="controls-row" style="margin-top:12px">
-          <button id="exportBtn" class="btn btn-primary">Export JSON</button>
+          <!-- larger export button -->
+          <button id="exportBtn" class="btn btn-primary" style="padding:14px 22px; font-size:1.06rem;">Export JSON</button>
           <button id="refreshBtn" class="btn-ghost btn-small">Refresh</button>
           <!-- createGroupCtrl removed intentionally to prevent spamming -->
         </div>
 
-        <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
-          <label class="meta">Show rolls</label>
-          <input type="checkbox" id="showRollsToggle" />
-          <div style="margin-left:auto" class="meta">Export Markdown</div>
-        </div>
+        <!-- Removed Show rolls and Export Markdown text entirely -->
 
         <div class="note" style="margin-top:10px">Join, Create (via join) or Leave a Team. Teams of 1-4, to present on a DS Topic, soon. </div>
       </div>
@@ -153,7 +150,6 @@ const statsTotal = document.getElementById("statsTotal");
 const statsEnrolled = document.getElementById("statsEnrolled");
 const exportBtn = document.getElementById("exportBtn");
 const refreshBtn = document.getElementById("refreshBtn");
-const showRollsToggle = document.getElementById("showRollsToggle");
 const noGroups = document.getElementById("noGroups");
 
 let students = [];
@@ -330,7 +326,6 @@ exportBtn.addEventListener('click', async () => {
 });
 
 refreshBtn.addEventListener('click', ()=> renderAll());
-showRollsToggle.addEventListener('change', e => { showRolls = !!e.target.checked; renderAll(); });
 
 // small helpers
 function escapeHtml(s){ return String(s || '').replace(/[&<>"'`]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',"`":'&#96;'})[c]); }
