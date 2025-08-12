@@ -7,11 +7,11 @@
 <title>DS Case Study Grouping</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-<style>
+ <style>
 :root{
-  --muted:#b0b0b0; /* softer light gray text */
-  --accent:#ff6a00; /* strong orange */
-  --accent-weak:rgba(255,106,0,0.25); /* lighter orange for hover/ghost */
+  --muted:#b0b0b0;
+  --accent:#ff6a00;
+  --accent-weak:rgba(255,106,0,0.4); /* medium orange for inner borders */
   --card-shadow:0 12px 30px rgba(0,0,0,0.7);
   --radius:12px
 }
@@ -21,7 +21,7 @@ body{
   margin:0;
   padding:32px;
   font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-  background:#0a0a0c; /* ultra dark background */
+  background:#0a0a0c; /* ultra dark */
   color:#fff;
 }
 
@@ -38,7 +38,7 @@ h1{margin:0;font-size:1.25rem;font-weight:600}
   border-radius:var(--radius);
   padding:18px;
   box-shadow:var(--card-shadow);
-  border:2px solid var(--accent); /* bold outer orange border */
+  border:none; /* no outer border */
   transition:transform .14s ease
 }
 .card:hover{
@@ -55,7 +55,7 @@ input,select{
   width:100%;
   padding:12px;
   border-radius:10px;
-  border:1px solid var(--accent-weak); /* subtle orange border */
+  border:1px solid var(--accent-weak); /* orange-tinted */
   background:#1a1b1d;
   color:inherit;
   font-size:1rem
@@ -78,7 +78,7 @@ input:focus,select:focus{
 }
 .btn-ghost{
   background:transparent;
-  border:2px solid var(--accent); /* bold orange outline */
+  border:1px solid var(--accent-weak); /* medium orange */
   color:var(--accent);
   padding:9px 12px;
   border-radius:10px
@@ -89,20 +89,20 @@ input:focus,select:focus{
 .item{
   display:flex;justify-content:space-between;align-items:center;
   padding:10px;border-radius:8px;margin-bottom:8px;
-  border:1px solid #444; /* medium-gray inner borders */
-  background:linear-gradient(180deg,#1a1b1d,#121315)
+  border:1px solid var(--accent-weak); /* medium orange border */
+  background:#1a1b1d
 }
 .item .name{font-size:1.02rem;font-weight:500}
 
 .group{
   padding:10px;border-radius:10px;
-  border:1px solid #444; /* medium-gray inner borders */
+  border:1px solid var(--accent-weak); /* medium orange border */
   margin-bottom:10px;
-  background:linear-gradient(180deg,#1a1b1d,#121315)
+  background:#1a1b1d
 }
 .group .member{
   display:flex;justify-content:space-between;padding:8px 0;
-  border-top:1px solid #333; /* softer gray inner divider */
+  border-top:1px solid var(--accent-weak); /* orange inner divider */
 }
 
 .controls-row{display:flex;gap:10px;align-items:center;margin-top:12px}
@@ -110,6 +110,7 @@ footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
 .note{font-size:0.92rem;color:var(--muted);margin-top:8px}
 </style>
 
+  
   
 </head>
 <body>
