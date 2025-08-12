@@ -27,8 +27,7 @@ body{
 
 .wrap{max-width:1080px;margin:0 auto}
 header{display:flex;justify-content:space-between;align-items:end}
-h1{margin:0;font-size:1.25rem;font-weight:600}
-.muted{color:var(--muted);font-size:0.95rem}
+h1{margin:0;font-size:1.25rem;font-weight:600}.muted{color:var(--muted);font-size:0.95rem}
 
 .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:20px}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
@@ -47,8 +46,7 @@ h1{margin:0;font-size:1.25rem;font-weight:600}
 }
 
 .title{font-size:1rem;font-weight:600;margin-bottom:8px}
-.meta{font-size:0.95rem;color:var(--muted)}
-.small{font-size:0.9rem;color:var(--muted)}
+.meta{font-size:0.95rem;color:var(--muted)}.small{font-size:0.9rem;color:var(--muted)}
 
 input,select,button{font-family:inherit}
 input,select{
@@ -213,7 +211,7 @@ const firebaseConfig = {
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import {
-  getFirestore, collection, doc, onSnapshot, setDoc, getDocs, runTransaction
+  getFirestore, collection, doc, onSnapshot, setDoc, getDocs, runTransaction, getDoc, deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 const app = initializeApp(firebaseConfig);
@@ -304,7 +302,16 @@ function populateGroupSelect(){
   sorted.forEach(g => { const opt=document.createElement('option'); opt.value=g.id; opt.textContent=`Group ${g.id} (${(g.members||[]).length}/4)`; groupSelect.appendChild(opt); });
   const optNew=document.createElement('option'); optNew.value='__new'; optNew.textContent=`Create new (next ${nextGroupId()})`; groupSelect.appendChild(optNew); groupSelect.value='__new';
 }
-function nextGroupId(){ const nums = groups.map(g=>Number(g.id)).filter(n=>!isNaN(n)); return nums.length ? Math.max(...nums)+1 : 1; }
+
+function nextGroupId(){
+  // return smallest positive integer not used as a group id
+  const nums = groups.map(g=>Number(g.id)).filter(n=>!isNaN(n) && n>0);
+  nums.sort((a,b)=>a-b);
+  for(let i=1;i<= (nums.length+1); i++){
+    if(!nums.includes(i)) return i;
+  }
+  return nums.length ? Math.max(...nums)+1 : 1;
+}
 
 // search / action flow
 searchInput.addEventListener('input', () => {
@@ -325,10 +332,22 @@ function startJoinFlow(roll, name){
 cancelBtn.addEventListener('click', ()=>{ pendingRoll=null; pendingStudent=null; hideActionBox(); });
 function hideActionBox(){ actionBox.style.display='none'; actionMsg.textContent=''; }
 
-// create group
+// create group (safe): uses a transaction to avoid races and duplicate empty groups
 createGroupBtn.addEventListener('click', async ()=> createGroup(nextGroupId()));
 createGroupCtrl.addEventListener('click', async ()=> createGroup(nextGroupId()));
-async function createGroup(id){ try { await setDoc(doc(db,'groups',String(id)), { id: String(id), members: [] }); } catch(e){ console.error(e); alert('Create failed: '+e.message); } }
+async function createGroup(id){
+  try {
+    await runTransaction(db, async (tx) => {
+      const gRef = doc(db, 'groups', String(id));
+      const gSnap = await tx.get(gRef);
+      if (gSnap.exists()) {
+        // someone already created it; do nothing
+        return;
+      }
+      tx.set(gRef, { id: String(id), members: [] });
+    });
+  } catch(e){ console.error(e); alert('Create failed: '+e.message); }
+}
 
 // join
 joinBtn.addEventListener('click', async () => {
@@ -357,7 +376,7 @@ joinBtn.addEventListener('click', async () => {
   } catch(err){ console.error(err); actionMsg.textContent = err.message || 'Failed to join'; }
 });
 
-// leave
+// leave - remove member and DELETE group doc if it becomes empty
 leaveBtn.addEventListener('click', async ()=>{
   actionMsg.textContent=''; const entered = rollInput.value.trim();
   if (!pendingRoll) { actionMsg.textContent='Pick yourself first.'; return; }
@@ -373,20 +392,43 @@ leaveBtn.addEventListener('click', async ()=>{
       if (!gSnap.exists()) return;
       const data = gSnap.data(); const members = Array.isArray(data.members) ? [...data.members] : [];
       const newMembers = members.filter(r => r !== (student.roll || student.id));
-      tx.update(gRef, { members: newMembers });
+      if (newMembers.length === 0) {
+        tx.delete(gRef);
+      } else {
+        tx.update(gRef, { members: newMembers });
+      }
       const sRef = doc(db,'students', student.roll || student.id); tx.update(sRef, { groupId: null });
     });
     actionMsg.textContent = `Left Group ${gid}.`; pendingRoll=null; pendingStudent=null; hideActionBox();
   } catch(err){ console.error(err); actionMsg.textContent = 'Failed to leave group: '+(err.message||''); }
 });
 
-// export
+// export - groups 1..n with members (name+roll) then unassigned
 exportBtn.addEventListener('click', async () => {
   try {
     const sSnap = await getDocs(studentsRef);
-    const gSnap = await getDocs(groupsRef);
-    const out = { exportedAt: new Date().toISOString(), students: sSnap.docs.map(d=>d.data()), groups: gSnap.docs.map(d=>d.data()) };
-    const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+    const allStudents = sSnap.docs.map(d => d.data());
+
+    // build groups map
+    const groupsMap = {};
+    const unassigned = [];
+    allStudents.forEach(stu => {
+      if (stu.groupId) {
+        if (!groupsMap[stu.groupId]) groupsMap[stu.groupId] = [];
+        groupsMap[stu.groupId].push({ name: stu.name, roll: stu.roll });
+      } else {
+        unassigned.push({ name: stu.name, roll: stu.roll });
+      }
+    });
+
+    // output ordered by numeric group id
+    const ordered = {};
+    Object.keys(groupsMap).map(k => Number(k)).filter(n => !isNaN(n)).sort((a,b)=>a-b).forEach(n => {
+      ordered[`Group ${n}`] = groupsMap[String(n)];
+    });
+    ordered['Unassigned'] = unassigned;
+
+    const blob = new Blob([JSON.stringify(ordered, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'groups_export.json'; a.click(); URL.revokeObjectURL(a.href);
   } catch(e){ alert('Export failed: ' + (e.message || e)); }
 });
