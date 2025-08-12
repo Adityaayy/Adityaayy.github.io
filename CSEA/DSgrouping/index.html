@@ -6,12 +6,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>DS Case Study Grouping</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
 :root{
-  --muted:#b0b3b8;               /* softer light grey text for contrast */
-  --accent:#ff7a1a;              /* brighter orange */
-  --accent-weak:rgba(255,122,26,0.35); /* bolder orange borders */
-  --card-shadow:0 12px 30px rgba(0,0,0,0.65);
+  --muted:#b0b0b0; /* softer light gray text */
+  --accent:#ff6a00; /* strong orange */
+  --accent-weak:rgba(255,106,0,0.25); /* lighter orange for hover/ghost */
+  --card-shadow:0 12px 30px rgba(0,0,0,0.7);
   --radius:12px
 }
 *{box-sizing:border-box}
@@ -20,8 +21,8 @@ body{
   margin:0;
   padding:32px;
   font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-  background:#0a0a0c; /* deep charcoal */
-  color:#ffffff;
+  background:#0a0a0c; /* ultra dark background */
+  color:#fff;
 }
 
 .wrap{max-width:1080px;margin:0 auto}
@@ -33,16 +34,16 @@ h1{margin:0;font-size:1.25rem;font-weight:600}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 
 .card{
-  background:#141417; /* card grey */
+  background:#111214;
   border-radius:var(--radius);
   padding:18px;
   box-shadow:var(--card-shadow);
-  border:2px solid var(--accent-weak); /* bold orange border */
+  border:2px solid var(--accent); /* bold outer orange border */
   transition:transform .14s ease
 }
 .card:hover{
   transform:translateY(-3px);
-  box-shadow:0 20px 40px rgba(0,0,0,0.75)
+  box-shadow:0 20px 40px rgba(0,0,0,0.85)
 }
 
 .title{font-size:1rem;font-weight:600;margin-bottom:8px}
@@ -54,35 +55,30 @@ input,select{
   width:100%;
   padding:12px;
   border-radius:10px;
-  border:2px solid var(--accent-weak);
-  background:#1b1b1f; /* darker grey */
+  border:1px solid var(--accent-weak); /* subtle orange border */
+  background:#1a1b1d;
   color:inherit;
   font-size:1rem
 }
 input:focus,select:focus{
   outline:none;
-  box-shadow:0 8px 20px rgba(255,122,26,0.2);
+  box-shadow:0 8px 20px rgba(255,106,0,0.12);
   border-color:var(--accent)
 }
 
 .btn{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 14px;
-  border-radius:10px;
-  border:0;
-  cursor:pointer;
-  font-weight:600
+  display:inline-flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:10px;border:0;
+  cursor:pointer;font-weight:600
 }
 .btn-primary{
-  background:linear-gradient(180deg,var(--accent),#e06000);
+  background:linear-gradient(180deg,var(--accent),#e04f00);
   color:white;
-  box-shadow:0 8px 20px rgba(255,122,26,0.2)
+  box-shadow:0 8px 20px rgba(255,106,0,0.15)
 }
 .btn-ghost{
   background:transparent;
-  border:2px solid var(--accent-weak);
+  border:2px solid var(--accent); /* bold orange outline */
   color:var(--accent);
   padding:9px 12px;
   border-radius:10px
@@ -91,29 +87,22 @@ input:focus,select:focus{
 
 .list{list-style:none;padding:0;margin:0}
 .item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:10px;
-  border-radius:8px;
-  margin-bottom:8px;
-  border:2px solid var(--accent-weak);
-  background:linear-gradient(180deg,#1b1b1f,#161619)
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px;border-radius:8px;margin-bottom:8px;
+  border:1px solid #444; /* medium-gray inner borders */
+  background:linear-gradient(180deg,#1a1b1d,#121315)
 }
 .item .name{font-size:1.02rem;font-weight:500}
 
 .group{
-  padding:10px;
-  border-radius:10px;
-  border:2px solid var(--accent-weak);
+  padding:10px;border-radius:10px;
+  border:1px solid #444; /* medium-gray inner borders */
   margin-bottom:10px;
-  background:linear-gradient(180deg,#1b1b1f,#161619)
+  background:linear-gradient(180deg,#1a1b1d,#121315)
 }
 .group .member{
-  display:flex;
-  justify-content:space-between;
-  padding:8px 0;
-  border-top:2px solid rgba(255,122,26,0.2)
+  display:flex;justify-content:space-between;padding:8px 0;
+  border-top:1px solid #333; /* softer gray inner divider */
 }
 
 .controls-row{display:flex;gap:10px;align-items:center;margin-top:12px}
