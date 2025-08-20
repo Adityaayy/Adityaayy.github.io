@@ -19,6 +19,7 @@
   --text:#e9ecef;
   --line-grey:#2a2a2c;        /* other lines/graphics */
   --btn-grey:#3a3c3e;
+  --outer-border: #cfcfcf;    /* NEW: light gray outer borders */
 }
 *{box-sizing:border-box}
 body{
@@ -36,7 +37,7 @@ h1{margin:0;font-size:1.25rem;font-weight:600;color:var(--muted)}
 .card{
   background:linear-gradient(180deg,var(--panel),var(--panel-2));
   border-radius:var(--radius);padding:18px;box-shadow:var(--card-shadow);
-  border:1px solid var(--accent); /* keep borders orange as requested */
+  border:1px solid var(--outer-border); /* CHANGED: outer card border is light gray now */
   transition:transform .14s ease;
 }
 .card:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(0,0,0,0.85)}
@@ -69,7 +70,7 @@ input:focus,select:focus{outline:none;box-shadow:0 8px 20px rgba(0,0,0,0.6);bord
 
 .group{
   padding:10px;border-radius:10px;margin-bottom:10px;
-  border-top:1px solid var(--accent); /* keep accent for borders as requested */
+  border-top:1px solid var(--accent); /* keep accent for group header border as requested */
   background:#0c0c0d;color:var(--muted);
 }
 .group .member{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line-grey);color:var(--muted)}
@@ -261,10 +262,27 @@ function renderGroups(){
     const mems = (g.members || []).map((roll, idx) => {
       const s = students.find(x => x.roll === roll || x.id === roll);
       const name = s ? escapeHtml(s.name) : escapeHtml(roll);
-      return `<div class="member"><div style="font-weight:500">${idx+1}. ${escapeHtml(name)}</div></div>`;
+      // added small inline Leave button next to every member (opens action box so they can confirm)
+      return `<div class="member" style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:500">${idx+1}. ${escapeHtml(name)}</div><div><button class="btn btn-grey btn-small leave-inline" data-roll="${escapeHtml(roll)}" data-name="${escapeHtml(name)}">Leave</button></div></div>`;
     }).join('') || '<div class="meta">No members yet</div>';
     return `<div class="group"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-weight:600">Group ${escapeHtml(g.id)}</div><div class="meta">(${(g.members||[]).length}/4)</div></div>${mems}</div>`;
   }).join('');
+
+  // attach handlers to the inline leave buttons
+  groupsList.querySelectorAll('.leave-inline').forEach(b => {
+    b.addEventListener('click', () => {
+      const roll = b.dataset.roll;
+      const name = b.dataset.name;
+      // open action panel so the student can enter their roll and hit Leave (same flow)
+      pendingRoll = roll;
+      pendingStudent = name;
+      actionMsg.textContent = `Confirm your roll to leave ${name}.`;
+      rollInput.value = '';
+      actionBox.style.display = 'block';
+      rollInput.focus();
+      populateGroupSelect();
+    });
+  });
 }
 
 function renderUnenrolled(){
