@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RADAR — RC Configurator (Dark Glass)</title>
+
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN for convenience (ok for local demo) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root{
+      --bg: #0b0b0c;
+      --panel: rgba(255,255,255,0.04);
+      --panel-2: rgba(255,255,255,0.03);
+      --accent: rgba(139,92,246,0.95);
+      --muted: #bfc4d6;
+      --glass-border: rgba(255,255,255,0.06);
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background-color: var(--bg);
+      color: #e8eaf6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      /* subtle cyberpunk pattern using embedded SVG as background image */
+      background-image:
+        url("data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?>\
+<svg xmlns='http://www.w3.org/2000/svg' width='1600' height='900' viewBox='0 0 1600 900'>\
+  <defs>\
+    <linearGradient id='g' x1='0' x2='1' y1='0' y2='1'>\
+      <stop offset='0' stop-color='%23040a0f'/>\
+      <stop offset='1' stop-color='%23060b0f'/>\
+    </linearGradient>\
+    <filter id='grain' x='-20%' y='-20%' width='140%' height='140%'>\
+      <feTurbulence baseFrequency='0.8' numOctaves='1' stitchTiles='stitch' seed='3'/>\
+      <feColorMatrix type='saturate' values='0'/>\
+      <feBlend mode='overlay' in2='SourceGraphic'/>\
+    </filter>\
+  </defs>\
+  <rect width='100%' height='100%' fill='url(%23g)'/>\
+  <!-- faint circuit lines, purple -->\
+  <g opacity='0.06' stroke='%238B5CF6' stroke-width='1' stroke-linecap='round'>\
+    <path d='M120 40 L480 40 L600 160'/>\
+    <path d='M300 0 L300 220 L480 220'/>\
+    <path d='M800 120 L1100 120 L1300 320'/>\
+    <path d='M20 600 L420 600 L520 700'/>\
+    <path d='M1000 620 L1200 620 L1400 820'/>\
+    <path d='M600 420 L800 420 L820 520'/>\
+  </g>\
+</svg>");
+      background-size: cover;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+
+    /* layout */
+    .app {
+      min-height:100vh;
+      display:flex;
+      gap:18px;
+      padding:28px;
+      box-sizing:border-box;
+    }
+
+    /* glass panels */
+    .glass {
+      background: var(--panel);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(120%);
+      -webkit-backdrop-filter: blur(8px) saturate(120%);
+      border-radius: 12px;
+    }
+
+    .glass-2 {
+      background: var(--panel-2);
+      border: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-radius: 12px;
+    }
+
+    /* cards */
+    .option-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.016), rgba(255,255,255,0.008));
+      border-radius:10px;
+      border: 1px solid rgba(255,255,255,0.04);
+      padding:10px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      transition: transform .16s ease, box-shadow .16s ease;
+      cursor:pointer;
+    }
+    .option-card:hover { transform: translateY(-6px); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+    .option-card.selected { border: 1px solid rgba(139,92,246,0.9); box-shadow: 0 8px 28px rgba(139,92,246,0.07); }
+    .option-card.disabled { opacity:0.45; filter:grayscale(.12); cursor:not-allowed; transform:none; box-shadow:none; }
+
+    /* preview */
+    .preview-wrap {
+      width:100%;
+      max-width:1200px;
+      height:680px;
+      border-radius:14px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid rgba(255,255,255,0.04);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+      background: linear-gradient(180deg, rgba(10,10,12,0.6), rgba(10,10,12,0.8));
+    }
+    .preview-img { width:100%; height:100%; object-fit:contain; transition: opacity .25s ease; }
+
+    /* buttons */
+    .btn-accent { background:var(--accent); color:white; border-radius:8px; padding:8px 12px; font-weight:600; }
+    .btn-ghost { background:transparent; color: #d8d8ff; border:1px solid rgba(255,255,255,0.04); padding:8px 10px; border-radius:8px; }
+    .small-muted { color:#b6b6cf; font-size:13px; }
+
+    /* responsive */
+    @media (max-width:1000px){
+      .app { flex-direction:column; padding:16px; }
+      .sidebar { width:100%; }
+      .preview-wrap { height:420px; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- LEFT: preview -->
+    <main class="flex-1 flex flex-col items-center gap-4">
+      <div class="preview-wrap glass-2">
+        <img id="preview-img" class="preview-img" src="" alt="preview" />
+      </div>
+
+      <div class="flex gap-3">
+        <button class="btn-ghost" data-view="front">Front</button>
+        <button class="btn-ghost" data-view="side">Side</button>
+        <button class="btn-ghost" data-view="top">Top</button>
+      </div>
+
+      <div class="small-muted text-center max-w-2xl">
+        Preview uses `renders/{motor}/{driver}/{battery}/{view}.png` if present. Otherwise, a placeholder appears.
+      </div>
+    </main>
+
+    <!-- RIGHT: sidebar -->
+    <aside class="w-96 sidebar glass p-5 flex flex-col gap-4">
+      <div>
+        <div class="flex items-center justify-between">
+          <h1 style="font-size:1.2rem;font-weight:700">RADAR — RC Configurator</h1>
+          <div class="small-muted">Dark • Glass</div>
+        </div>
+        <div class="text-xs small-muted mt-1">No currency — credits only (1–3 scale).</div>
+      </div>
+
+      <!-- credits -->
+      <div class="glass-2 p-3">
+        <label class="text-sm small-muted">Credits / team</label>
+        <div class="mt-2 flex gap-2">
+          <input id="credits-input" type="number" min="0" value="8" class="w-2/3 p-2 bg-transparent border rounded" style="border-color:rgba(255,255,255,0.04); color:#e8eaf6" />
+          <button id="credits-reset" class="btn-accent">Reset</button>
+        </div>
+        <div class="small-muted mt-2">Default = 8 (4 groups × 2)</div>
+      </div>
+
+      <!-- options -->
+      <div class="flex-1 overflow-auto pr-2">
+        <!-- Motor -->
+        <section class="mb-3">
+          <div class="flex items-center justify-between mb-2">
+            <label class="font-medium">Motor</label>
+            <div class="text-xs small-muted">Credits</div>
+          </div>
+          <div id="motor-list" class="grid gap-2"></div>
+        </section>
+
+        <!-- Driver -->
+        <section class="mb-3">
+          <div class="flex items-center justify-between mb-2">
+            <label class="font-medium">Driver</label>
+            <div class="text-xs small-muted">Credits</div>
+          </div>
+          <div id="driver-list" class="grid gap-2"></div>
+        </section>
+
+        <!-- Battery -->
+        <section class="mb-3">
+          <div class="flex items-center justify-between mb-2">
+            <label class="font-medium">Battery</label>
+            <div class="text-xs small-muted">Credits</div>
+          </div>
+          <div id="battery-list" class="grid gap-2"></div>
+        </section>
+
+        <!-- Wheels -->
+        <section class="mb-3">
+          <div class="flex items-center justify-between mb-2">
+            <label class="font-medium">Wheels</label>
+            <div class="text-xs small-muted">Credits</div>
+          </div>
+          <div id="wheel-list" class="grid gap-2"></div>
+        </section>
+      </div>
+
+      <!-- summary -->
+      <div class="glass-2 p-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-xs small-muted">Build cost</div>
+            <div style="font-weight:700; font-size:1rem"><span id="credits-total">0</span> credits</div>
+          </div>
+          <div class="text-right">
+            <div class="text-xs small-muted">Remaining</div>
+            <div id="credits-remaining" style="font-weight:700;color:#55d36f">0</div>
+          </div>
+        </div>
+
+        <div class="mt-3 flex gap-2">
+          <button id="suggest-build" class="btn-accent">Suggest</button>
+          <button id="copy-config" class="btn-ghost">Copy</button>
+          <button id="export-json" class="btn-ghost">Export</button>
+        </div>
+
+        <div id="exceed-note" class="mt-3 p-2 rounded text-sm" style="background:rgba(255,80,80,0.06); color:#ffb4b4; display:none">
+          Exceeded credits. Pick lower-credit options or increase credits.
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+  /* ========= Vanilla JS configurator (dark glass) =========
+     - All functionality local
+     - MX1508 disables 3S battery
+     - Immediate updates on all card clicks
+     - Preview path: renders/{motor}/{driver}/{battery}/{view}.png
+  */
+
+  // Placeholder SVG dataURI generator (concise)
+  function ph(label='No image') {
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='1400' height='800'><rect width='100%' height='100%' fill='#0d0d0f'/><text x='50%' y='50%' fill='#6b6b79' font-family='Inter,Arial' font-size='24' text-anchor='middle' dominant-baseline='middle'>${label}</text></svg>`;
+    return 'data:image/svg+xml;base64,' + btoa(svg);
+  }
+
+  /* ======= Data (concise notes) ======= */
+  const motorOptions = [
+    {id:'n20-60',  name:'N20 · 60 RPM',    credits:1, thumb:'images/motor-n20-60-thumb.png',  note:'Precise, low draw.'},
+    {id:'n20-120', name:'N20 · 120 RPM',   credits:1, thumb:'images/motor-n20-120-thumb.png', note:'Efficient, steady.'},
+    {id:'n20-300', name:'N20 · 300 RPM',   credits:2, thumb:'images/motor-n20-300-thumb.png', note:'Good balance.'},
+    {id:'n20-500', name:'N20 · 500 RPM',   credits:2, thumb:'images/motor-n20-500-thumb.png', note:'Faster, higher draw.'},
+    {id:'12v-200', name:'12V Geared ·200', credits:3, thumb:'images/motor-12v-200-thumb.png', note:'High torque.'},
+    {id:'12v-400', name:'12V Geared ·400', credits:3, thumb:'images/motor-12v-400-thumb.png', note:'Powerful; needs supply.'}
+  ];
+
+  const driverOptions = [
+    {id:'l298n', name:'L298N', credits:1, thumb:'images/driver-l298n-thumb.png', note:'Robust, hot.'},
+    {id:'mx1508', name:'MX1508 (2S)', credits:2, thumb:'images/driver-mx1508-thumb.png', note:'Compact; avoid 3S.'},
+    {id:'tb6612', name:'TB6612', credits:3, thumb:'images/driver-tb6612-thumb.png', note:'Efficient, low heat.'}
+  ];
+
+  const batteryOptions = [
+    {id:'1s-18650', name:'1S (18650)', type:'1S', credits:1, thumb:'images/batt-1s-thumb.png', note:'USB charge via TP4056.'},
+    {id:'2s-lipo',   name:'2S LiPo',    type:'2S', credits:2, thumb:'images/batt-2s-thumb.png', note:'Good torque; BMS advised.'},
+    {id:'3s-lipo',   name:'3S LiPo',    type:'3S', credits:3, thumb:'images/batt-3s-thumb.png', note:'High voltage; use with care.'}
+  ];
+
+  const wheelOptionsByMotor = {
+    'n20': [
+      {id:'wheel-n20-1', name:'Rubber 40mm', credits:1, image:'images/wheel-n20-1.png', note:'Grip, low inertia.'},
+      {id:'wheel-n20-2', name:'Foam 45mm', credits:2, image:'images/wheel-n20-2.png', note:'Traction focus.'},
+      {id:'wheel-n20-3', name:'Slick 40mm', credits:3, image:'images/wheel-n20-3.png', note:'Low rolling loss.'}
+    ],
+    '12v': [
+      {id:'wheel-12v-1', name:'Tread 60mm', credits:1, image:'images/wheel-12v-1.png', note:'Offroad grip.'},
+      {id:'wheel-12v-2', name:'Alloy 58mm', credits:2, image:'images/wheel-12v-2.png', note:'Balanced.'},
+      {id:'wheel-12v-3', name:'Offroad 65mm', credits:3, image:'images/wheel-12v-3.png', note:'Max traction.'}
+    ]
+  };
+
+  // State
+  const state = {
+    motor: motorOptions[0].id,
+    driver: driverOptions[2].id, // TB6612 default
+    battery: batteryOptions[0].id,
+    wheel: wheelOptionsByMotor['n20'][0].id,
+    view: 'front',
+    creditsPerTeam: 8,
+    quantityTeams: 12
+  };
+
+  // Helpers
+  function motorFamily(m) {
+    if (!m) return 'n20';
+    return m.startsWith('12v') ? '12v' : 'n20';
+  }
+  function byId(list, id){ return list.find(x => x.id === id); }
+
+  // DOM refs
+  const motorList = document.getElementById('motor-list');
+  const driverList = document.getElementById('driver-list');
+  const batteryList = document.getElementById('battery-list');
+  const wheelList = document.getElementById('wheel-list');
+  const previewImg = document.getElementById('preview-img');
+  const creditsTotalEl = document.getElementById('credits-total');
+  const creditsRemainingEl = document.getElementById('credits-remaining');
+  const creditsTeamsEl = document.getElementById('credits-teams') || null; // optional
+  const exceedNote = document.getElementById('exceed-note');
+
+  // Create card DOM
+  function makeCard(opt, group, disabled=false) {
+    const el = document.createElement('div');
+    el.className = 'option-card';
+    if (disabled) el.classList.add('disabled');
+    el.dataset.value = opt.id;
+    el.innerHTML = `
+      <img src="${opt.thumb || opt.image || ''}" alt="${opt.name}" style="width:72px;height:48px;object-fit:contain;border-radius:6px;" />
+      <div style="flex:1">
+        <div style="font-weight:600">${opt.name}</div>
+        <div style="font-size:12px;color:#9aa0b8;margin-top:6px">Credits: ${opt.credits}</div>
+        <div style="font-size:12px;color:#9aa0b8;margin-top:6px">${opt.note}</div>
+      </div>
+    `;
+    // fallback image
+    const img = el.querySelector('img');
+    img.onerror = () => img.src = ph(opt.name);
+
+    el.addEventListener('click', (ev) => {
+      if (disabled) return;
+      if (group === 'motor') { state.motor = opt.id; onMotorChange(); }
+      if (group === 'driver') { state.driver = opt.id; onDriverChange(); }
+      if (group === 'battery') { state.battery = opt.id; updateAll(); }
+      if (group === 'wheel') { state.wheel = opt.id; updateAll(); }
+      // immediate full update
+      updateAll();
+    });
+    return el;
+  }
+
+  // Render lists
+  function renderMotorList(){
+    motorList.innerHTML = '';
+    motorOptions.forEach(o => motorList.appendChild(makeCard(o,'motor', false)));
+  }
+  function renderDriverList(){
+    driverList.innerHTML = '';
+    driverOptions.forEach(o => driverList.appendChild(makeCard(o,'driver', false)));
+  }
+  function renderBatteryList(){
+    batteryList.innerHTML = '';
+    batteryOptions.forEach(o => {
+      const disabled = (state.driver === 'mx1508' && o.id === '3s-lipo');
+      batteryList.appendChild(makeCard(o,'battery', disabled));
+    });
+  }
+  function renderWheelList(){
+    wheelList.innerHTML = '';
+    const fam = motorFamily(state.motor);
+    const list = wheelOptionsByMotor[fam] || [];
+    list.forEach(o => wheelList.appendChild(makeCard(o,'wheel', false)));
+  }
+
+  // Update highlight selection UI
+  function highlightAll(){
+    // motors
+    motorList.querySelectorAll('.option-card').forEach(c => {
+      c.classList.toggle('selected', c.dataset.value === state.motor);
+    });
+    driverList.querySelectorAll('.option-card').forEach(c => {
+      c.classList.toggle('selected', c.dataset.value === state.driver);
+    });
+    batteryList.querySelectorAll('.option-card').forEach(c => {
+      c.classList.toggle('selected', c.dataset.value === state.battery);
+    });
+    wheelList.querySelectorAll('.option-card').forEach(c => {
+      c.classList.toggle('selected', c.dataset.value === state.wheel);
+    });
+  }
+
+  // Compute credits
+  function computeCredits(){
+    const mo = byId(motorOptions, state.motor);
+    const dr = byId(driverOptions, state.driver);
+    const ba = byId(batteryOptions, state.battery);
+    const wh = (wheelOptionsByMotor[motorFamily(state.motor)] || []).find(w => w.id === state.wheel) || null;
+    const total = (mo?.credits || 0) + (dr?.credits || 0) + (ba?.credits || 0) + (wh?.credits || 0);
+    return { total, mo, dr, ba, wh };
+  }
+
+  // Update credits UI and preview
+  function updateAll(){
+    // If driver is MX1508 and battery is 3S, force battery to 2S default (defensive)
+    if (state.driver === 'mx1508' && state.battery === '3s-lipo') {
+      // pick 2S as fallback
+      state.battery = '2s-lipo';
+    }
+
+    // ensure wheel exists for family
+    const fam = motorFamily(state.motor);
+    const wheelListArr = wheelOptionsByMotor[fam] || [];
+    if (!wheelListArr.find(w=>w.id === state.wheel)) state.wheel = wheelListArr[0]?.id || state.wheel;
+
+    // render dependent lists
+    renderBatteryList();
+    renderWheelList();
+
+    highlightAll();
+
+    // credits display
+    const { total } = computeCredits();
+    const rem = state.creditsPerTeam - total;
+    creditsTotalEl.textContent = total;
+    creditsRemainingEl.textContent = rem;
+    creditsRemainingEl.style.color = rem < 0 ? '#ff7b7b' : '#55d36f';
+    if (exceedNote) exceedNote.style.display = rem < 0 ? 'block' : 'none';
+
+    // preview path
+    updatePreview();
+  }
+
+  // preview loader with fade
+  function updatePreview(){
+    const view = state.view || 'front';
+    const path = `renders/${state.motor}/${state.driver}/${state.battery}/${view}.png`;
+    const img = previewImg;
+    // fade out -> change -> fade in
+    img.style.opacity = 0;
+    setTimeout(() => {
+      img.src = path;
+      img.onerror = () => { img.src = ph(`${state.motor} / ${state.driver} / ${state.battery} (${view})`); };
+      img.onload = () => { img.style.opacity = 1; };
+    }, 180);
+  }
+
+  // handlers for motor/driver changes
+  function onMotorChange(){
+    // update wheel options to matching family and pick default wheel
+    const fam = motorFamily(state.motor);
+    const wList = wheelOptionsByMotor[fam] || [];
+    if (wList[0]) state.wheel = wList[0].id;
+    // re-render wheels, highlight
+    renderWheelList();
+  }
+
+  function onDriverChange(){
+    // re-render battery list (to reflect disabled 3S if MX1508 selected)
+    renderBatteryList();
+  }
+
+  // Suggest build: greedy lowest credits fit
+  function suggestBuild(){
+    const motorsSorted = [...motorOptions].sort((a,b)=>a.credits-b.credits);
+    const driversSorted = [...driverOptions].sort((a,b)=>a.credits-b.credits);
+    const battSorted = [...batteryOptions].sort((a,b)=>a.credits-b.credits);
+
+    let picked = null;
+    outer:
+    for (const m of motorsSorted){
+      const fam = motorFamily(m.id);
+      const wheels = wheelOptionsByMotor[fam] || [];
+      for (const d of driversSorted){
+        for (const b of battSorted){
+          if (d.id === 'mx1508' && b.id === '3s-lipo') continue;
+          for (const w of wheels){
+            const tot = m.credits + d.credits + b.credits + w.credits;
+            if (tot <= state.creditsPerTeam){
+              picked = {m,d,b,w}; break outer;
+            }
+          }
+        }
+      }
+    }
+    if (picked){
+      state.motor = picked.m.id;
+      state.driver = picked.d.id;
+      state.battery = picked.b.id;
+      state.wheel = picked.w.id;
+      updateAll();
+    } else {
+      alert('No combo fits current credits. Increase credits or relax selection.');
+    }
+  }
+
+  // copy/export
+  function copyConfig(){
+    const out = { motor: state.motor, driver: state.driver, battery: state.battery, wheel: state.wheel, creditsPerTeam: state.creditsPerTeam };
+    navigator.clipboard.writeText(JSON.stringify(out, null, 2)).then(()=>alert('Config copied'));
+  }
+  function exportJSON(){
+    const obj = { motor: state.motor, driver: state.driver, battery: state.battery, wheel: state.wheel, creditsPerTeam: state.creditsPerTeam, ts: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'rc-config.json'; a.click(); URL.revokeObjectURL(url);
+  }
+
+  // Wire UI and init
+  document.addEventListener('DOMContentLoaded', () => {
+    // view buttons
+    document.querySelectorAll('[data-view]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.view = btn.dataset.view;
+        updatePreview();
+        // highlight active view visually (simple)
+        document.querySelectorAll('[data-view]').forEach(b=>b.classList.remove('btn-accent'));
+        btn.classList.add('btn-accent');
+      });
+    });
+
+    // credits input
+    const creditsInput = document.getElementById('credits-input');
+    creditsInput.addEventListener('change', e => {
+      const v = parseInt(e.target.value || 0, 10);
+      state.creditsPerTeam = v;
+      updateAll();
+    });
+    document.getElementById('credits-reset').addEventListener('click', () => {
+      state.creditsPerTeam = 8;
+      creditsInput.value = 8;
+      updateAll();
+    });
+
+    // actions
+    document.getElementById('suggest-build').addEventListener('click', suggestBuild);
+    document.getElementById('copy-config').addEventListener('click', copyConfig);
+    document.getElementById('export-json').addEventListener('click', exportJSON);
+
+    // initial render
+    renderMotorList();
+    renderDriverList();
+    renderBatteryList();
+    renderWheelList();
+    highlightAll();
+    updateAll();
+  });
+  </script>
+</body>
+</html>
