@@ -8,227 +8,250 @@
   <!-- Inter font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind for quick styling -->
+  <!-- Tailwind for layout & quick styling -->
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
+    /*
+      Usage:
+        - Put images into ./images/ with the filenames below.
+        - Composite renders (optional) may go into: renders/{motor}/{driver}/{battery}/preview.png
+    */
     :root{
-      --bg: #0b0710;           /* dark purplish black */
-      --card: rgba(22,19,27,0.65);
-      --card-border: rgba(139,92,246,0.12);
-      --accent: #8B5CF6;       /* faint purple */
-      --muted: #9aa0a6;
+      --bg: #0a0a0c;           /* pitch black-gray */
+      --card: rgba(26,22,37,0.88);  /* purplish-gray cards (matte) */
+      --glass: rgba(255,255,255,0.03);
+      --accent: #8B5CF6;       /* faint purple accent */
+      --muted: #98a0a6;
     }
-    html,body { height:100%; background: linear-gradient(180deg,var(--bg), #07040b); font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; color:#e6e9ee; }
-    .glass {
+    html,body { height:100%; background: var(--bg); font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; color:#e8eaf0; margin:0; }
+    .glass-header {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: 12px;
+      border: 1px solid rgba(139,92,246,0.06);
+      backdrop-filter: blur(6px);
+    }
+    .card {
       background: var(--card);
-      border: 1px solid var(--card-border);
-      -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 8px 30px rgba(11,7,16,0.6);
+      border-radius: 10px;
+      padding:0.6rem;
+      display:flex;
+      gap:0.7rem;
+      align-items:center;
+      transition: transform .12s ease, box-shadow .12s ease;
     }
-    .option-card { transition: transform .12s ease, box-shadow .12s ease; }
-    .option-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(139,92,246,0.06); }
-    .disabled-card { opacity:0.5; filter:grayscale(12%); cursor:not-allowed; transform:none !important; box-shadow:none !important; }
-    .accent-btn { background: var(--accent); color: white; border-radius: 8px; padding: 0.5rem 0.9rem; }
-    .view-btn { border-radius:8px; padding:0.5rem 0.8rem; }
-    code { background: rgba(255,255,255,0.03); padding:0.12rem 0.4rem; border-radius:6px; color:#dcd6ff; }
-    /* layout tweaks */
-    #left { min-width: 0; } /* allow flex children to shrink */
-    /* ensure the preview doesn't scroll */
-    #preview-wrap { position: sticky; top: 20px; }
-    /* reduce text sizes a bit for compact cards */
-    .note { color: var(--muted); font-size: 0.86rem; }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 14px 40px rgba(139,92,246,0.06); }
+    .card.disabled { opacity:0.52; filter:grayscale(6%); cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+    .small-note { color:var(--muted); font-size:0.86rem; margin-top:0.18rem; }
+    .accent-btn { background:var(--accent); color:white; border-radius:8px; padding:0.45rem 0.9rem; font-weight:600; }
+    .muted { color:var(--muted); font-size:0.92rem; }
+    .preview-wrap { height:720px; border-radius:12px; overflow:hidden; box-shadow: 0 20px 60px rgba(2,2,6,0.7); border:1px solid rgba(255,255,255,0.03); }
+    .preview-img { width:100%; height:100%; object-fit:contain; background:#060507; display:block; }
+    .opt-scroll { max-height: calc(100vh - 260px); overflow:auto; padding-right:6px; }
+    code { background: rgba(255,255,255,0.03); padding:0.12rem 0.35rem; border-radius:6px; color:#efe7ff; font-size:0.92rem; }
   </style>
 </head>
 <body>
+  <!-- IMAGE FILENAME CONVENTION (place in ./images/) -->
+  <!-- Motors: n20.png, 12vG.png -->
+  <!-- Drivers: l298n.png, mx1508.png, tb6612.png -->
+  <!-- Batteries: 1s.png, 2s.png, 3s.png -->
+  <!-- Wheels: wheel-n20-a.png, wheel-n20-b.png, wheel-12v-a.png, wheel-12v-b.png -->
+  <!-- Placeholder: placeholder.png -->
+  <!-- Composite renders (optional): renders/{motor}/{driver}/{battery}/preview.png -->
 
-  <div class="flex flex-col md:flex-row h-screen">
-    <!-- LEFT: big preview, fixed (non-scrolling) -->
-    <main id="left" class="flex-1 p-6 flex flex-col items-center">
-      <div id="preview-wrap" class="w-full max-w-6xl rounded-lg glass p-4" style="height:720px;">
-        <div id="preview" class="w-full h-full rounded-md overflow-hidden bg-black flex items-center justify-center">
-          <img id="preview-img" src="" alt="preview" class="object-contain w-full h-full" />
+  <div class="max-w-7xl mx-auto p-6">
+    <header class="flex items-center justify-between mb-6">
+      <div>
+        <div class="text-sm muted">RADAR</div>
+        <h1 class="text-2xl font-semibold">RC Configurator</h1>
+      </div>
+      <div class="text-sm muted">Dark glass • Inter</div>
+    </header>
+
+    <!-- TOP: Large preview -->
+    <section class="preview-wrap glass-header mb-6">
+      <img id="preview-img" class="preview-img" src="" alt="preview">
+    </section>
+
+    <!-- OPTIONS + SUMMARY (below preview). Options scroll independently -->
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Left: options column (spans two cols on md) -->
+      <div class="md:col-span-2">
+        <div class="glass-header p-4 mb-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="font-medium">Credits / team</div>
+              <div class="muted text-xs">Each option rated 1–3 credits</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <input id="credits-input" type="number" min="0" value="8" class="p-2 rounded bg-transparent border border-[rgba(255,255,255,0.04)] text-white w-24 text-center" />
+              <button id="credits-reset" class="accent-btn">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-header p-4 mb-4">
+          <div class="flex items-center justify-between mb-2">
+            <div class="font-medium">Motor</div>
+            <div class="muted">Credits</div>
+          </div>
+          <div id="motor-list" class="space-y-3 opt-scroll"></div>
+        </div>
+
+        <div class="glass-header p-4 mb-4">
+          <div class="flex items-center justify-between mb-2">
+            <div class="font-medium">Driver</div>
+            <div class="muted">Credits</div>
+          </div>
+          <div id="driver-list" class="space-y-3 opt-scroll"></div>
+        </div>
+
+        <div class="glass-header p-4 mb-4">
+          <div class="flex items-center justify-between mb-2">
+            <div class="font-medium">Battery</div>
+            <div class="muted">Credits</div>
+          </div>
+          <div id="battery-list" class="space-y-3 opt-scroll"></div>
+        </div>
+
+        <div class="glass-header p-4 mb-4">
+          <div class="flex items-center justify-between mb-2">
+            <div class="font-medium">Wheels</div>
+            <div class="muted">Credits</div>
+          </div>
+          <div id="wheel-list" class="space-y-3 opt-scroll"></div>
         </div>
       </div>
 
-      <div class="flex gap-3 mt-4">
-        <button id="view-front" class="view-btn border text-sm" data-view="front" style="border-color: rgba(255,255,255,0.06);">Front</button>
-        <button id="view-side"  class="view-btn border text-sm" data-view="side"  style="border-color: rgba(255,255,255,0.06);">Side</button>
-        <button id="view-top"   class="view-btn border text-sm" data-view="top"   style="border-color: rgba(255,255,255,0.06);">Top</button>
-      </div>
-
-      <p class="mt-3 text-sm text-gray-400 text-center max-w-3xl">Preview loads composite renders from <code>renders/{motor}/{driver}/{battery}/{view}.png</code>. If absent, a placeholder shows.</p>
-    </main>
-
-    <!-- RIGHT: options panel (scrollable) -->
-    <aside class="w-full md:w-96 p-5 overflow-auto glass" style="max-height:100vh;">
-      <div class="flex items-center justify-between mb-4">
-        <h1 class="text-2xl font-semibold">RADAR — Configurator</h1>
-        <div style="font-size:12px;color:var(--muted)">Dark glass • Inter</div>
-      </div>
-
-      <!-- Credits -->
-      <div class="p-3 rounded mb-4" style="border:1px solid var(--card-border);">
-        <label class="block text-sm font-medium">Credits / team</label>
-        <div class="flex gap-2 mt-2">
-          <input id="credits-input" type="number" min="0" value="8" class="w-2/3 p-2 rounded bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)]" />
-          <button id="credits-reset" class="accent-btn">Reset</button>
-        </div>
-        <div class="text-xs text-gray-400 mt-2">Each option is rated 1–3 credits. Default = 8 credits.</div>
-      </div>
-
-      <!-- Option groups -->
-      <div id="options" class="space-y-5">
-        <!-- Motor -->
-        <section>
-          <div class="flex items-center justify-between mb-2">
-            <label class="font-medium">Motor</label>
-            <div class="text-xs text-gray-400">Credits</div>
-          </div>
-          <div id="motor-list" class="grid gap-2"></div>
-        </section>
-
-        <!-- Driver -->
-        <section>
-          <div class="flex items-center justify-between mb-2">
-            <label class="font-medium">Driver</label>
-            <div class="text-xs text-gray-400">Credits</div>
-          </div>
-          <div id="driver-list" class="grid gap-2"></div>
-        </section>
-
-        <!-- Battery -->
-        <section>
-          <div class="flex items-center justify-between mb-2">
-            <label class="font-medium">Battery</label>
-            <div class="text-xs text-gray-400">Credits</div>
-          </div>
-          <div id="battery-list" class="grid gap-2"></div>
-        </section>
-
-        <!-- Wheels -->
-        <section>
-          <div class="flex items-center justify-between mb-2">
-            <label class="font-medium">Wheels</label>
-            <div class="text-xs text-gray-400">Credits</div>
-          </div>
-          <div id="wheel-list" class="grid gap-2"></div>
-        </section>
-      </div>
-
-      <!-- Summary & actions -->
-      <div class="mt-5 p-3 rounded" style="border:1px solid var(--card-border); background: rgba(255,255,255,0.02);">
-        <h2 class="font-semibold">Credits</h2>
-        <p class="mt-2 text-sm">Build: <strong id="credits-total">0</strong> credits</p>
-        <p class="mt-1 text-sm">Remaining: <strong id="credits-remaining" class="text-green-400">0</strong></p>
-        <p class="mt-1 text-xs text-gray-400">Teams total: <strong id="credits-teams">0</strong></p>
-
-        <div class="mt-3 flex gap-2">
-          <button id="suggest-build" class="accent-btn">Suggest</button>
-          <button id="copy-config" class="px-3 py-2 rounded border">Copy</button>
-          <button id="export-json" class="px-3 py-2 rounded border">Export</button>
+      <!-- Right: summary -->
+      <aside class="glass-header p-4">
+        <div class="mb-3">
+          <div class="font-medium">Summary</div>
+          <div class="muted text-xs">Instant updates</div>
         </div>
 
-        <div id="exceed-note" class="mt-3 p-2 rounded bg-red-900/30 text-red-300 text-sm hidden">
-          Exceeded credits — reduce selections or increase credits.
+        <div class="mb-3">
+          <div class="flex justify-between">
+            <div class="muted">Build (credits)</div>
+            <div id="credits-total" class="font-semibold">0</div>
+          </div>
+          <div class="flex justify-between mt-1">
+            <div class="muted">Remaining</div>
+            <div id="credits-remaining" class="font-semibold text-green-400">0</div>
+          </div>
+          <div class="flex justify-between mt-1">
+            <div class="muted">Teams</div>
+            <input id="teams-input" type="number" min="1" value="12" class="p-1 rounded bg-transparent border border-[rgba(255,255,255,0.04)] w-20 text-center" />
+          </div>
+          <div class="mt-2 muted text-xs">Total credits = build × teams</div>
+          <div class="mt-2 font-mono text-sm" id="credits-teams">0</div>
         </div>
-      </div>
 
-      <p class="mt-4 text-xs text-gray-400">Tip: MX1508 is 2S-only — 3S will be disabled automatically when MX1508 is chosen.</p>
-    </aside>
+        <div class="mt-2 flex flex-col gap-2">
+          <button id="suggest-build" class="accent-btn w-full">Suggest</button>
+          <button id="copy-config" class="w-full py-2 rounded border border-[rgba(255,255,255,0.04)]">Copy</button>
+          <button id="export-json" class="w-full py-2 rounded border border-[rgba(255,255,255,0.04)]">Export</button>
+        </div>
+
+        <div id="exceed-note" class="mt-3 p-2 rounded text-sm hidden" style="background:rgba(255,20,60,0.06); color:#ffb3b3;">
+          Exceeded credits. Choose lower-rated options or raise credits per team.
+        </div>
+
+        <div class="mt-4 muted text-xs">
+          Note: MX1508 supports up to 2S. 3S disabled when MX1508 selected.
+        </div>
+      </aside>
+
+    </div>
   </div>
 
 <script>
-/* Dark glass configurator — vanilla JS
-   - Updates instantly on every selection (fixes lag).
-   - MX1508 disables 3S battery.
-   - Thumbnails/render fallbacks use embedded SVG placeholders.
-*/
+/* ------------- Configurator (vanilla JS) -------------
+   Image filenames (drop into ./images/):
+     motors: n20.png, 12vG.png
+     drivers: l298n.png, mx1508.png, tb6612.png
+     batteries: 1s.png, 2s.png, 3s.png
+     wheels: wheel-n20-a.png, wheel-n20-b.png, wheel-12v-a.png, wheel-12v-b.png
+     placeholder: placeholder.png
+   Composite preview (optional): renders/{motor}/{driver}/{battery}/preview.png
+-------------------------------------------------------*/
 
-/* helper: SVG placeholder */
-const placeholderSVG = (label='No image') => {
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'><rect width='100%' height='100%' fill='#0b0710'/><text x='50%' y='50%' font-family='Inter,Arial' font-size='22' fill='#999' text-anchor='middle' dominant-baseline='middle'>${label}</text></svg>`;
-  return 'data:image/svg+xml;base64,' + btoa(svg);
-};
+const placeholderPath = 'images/placeholder.png';
+function placeholderDataURI(label='No image') {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'><rect width='100%' height='100%' fill='#07060a'/><text x='50%' y='50%' font-family='Inter,Arial' font-size='24' fill='#8a8a8f' text-anchor='middle' dominant-baseline='middle'>${label}</text></svg>`;
+  return 'data:image/svg+xml;base64,'+btoa(svg);
+}
 
-/* ------------ DATA (concise notes) ------------ */
-/* Motors: credits sequence 1,1,2,2,3,3 */
+/* concise data (credits 1-3, short note) */
 const motorOptions = [
-  { id:'n20-60',  name:'N20 — 60 RPM', credits:1, thumb:'images/motor-n20-60-thumb.png', note:'Precise, low draw.' },
-  { id:'n20-120', name:'N20 — 120 RPM', credits:1, thumb:'images/motor-n20-120-thumb.png', note:'Efficient, slightly faster.' },
-  { id:'n20-300', name:'N20 — 300 RPM', credits:2, thumb:'images/motor-n20-300-thumb.png', note:'Balanced speed/draw.' },
-  { id:'n20-500', name:'N20 — 500 RPM', credits:2, thumb:'images/motor-n20-500-thumb.png', note:'Fast, higher current.' },
-  { id:'12v-200', name:'12V — 200 RPM', credits:3, thumb:'images/motor-12v-200-thumb.png', note:'High torque; needs higher voltage.' },
-  { id:'12v-400', name:'12V — 400 RPM', credits:3, thumb:'images/motor-12v-400-thumb.png', note:'Powerful; ensure capability.' }
+  { id:'n20-60',  name:'N20 — 60 RPM',  credits:1, thumb:'images/n20.png', note:'Precise, low draw.' },
+  { id:'n20-120', name:'N20 — 120 RPM', credits:1, thumb:'images/n20.png', note:'Efficient, slightly faster.' },
+  { id:'n20-300', name:'N20 — 300 RPM', credits:2, thumb:'images/n20.png', note:'Balanced speed.' },
+  { id:'n20-500', name:'N20 — 500 RPM', credits:2, thumb:'images/n20.png', note:'Fast; higher current.' },
+  { id:'12v-200', name:'12V Geared — 200 RPM', credits:3, thumb:'images/12vG.png', note:'High torque; needs higher voltage.' },
+  { id:'12v-400', name:'12V Geared — 400 RPM', credits:3, thumb:'images/12vG.png', note:'Powerful; ensure compat.' }
 ];
 
-/* Drivers */
 const driverOptions = [
-  { id:'l298n', name:'L298N', credits:1, thumb:'images/driver-l298n-thumb.png', note:'Cheap; heats up.' },
-  { id:'mx1508', name:'MX1508 (2S)', credits:2, thumb:'images/driver-mx1508-thumb.png', note:'Compact; 2S max.' },
-  { id:'tb6612', name:'TB6612', credits:3, thumb:'images/driver-tb6612-thumb.png', note:'Efficient; low heat.' }
+  { id:'l298n', name:'L298N', credits:1, thumb:'images/l298n.png', note:'Cheap; heats up.' },
+  { id:'mx1508', name:'MX1508 (2S)', credits:2, thumb:'images/mx1508.png', note:'Compact; 2S max.' },
+  { id:'tb6612', name:'TB6612', credits:3, thumb:'images/tb6612.png', note:'Efficient; low heat.' }
 ];
 
-/* Batteries (1S/2S/3S) */
 const batteryOptions = [
-  { id:'1s-18650', name:'1S 18650', type:'1S', credits:1, thumb:'images/batt-1s-thumb.png', note:'USB charge; low voltage.' },
-  { id:'2s-lipo',   name:'2S LiPo',   type:'2S', credits:2, thumb:'images/batt-2s-thumb.png',   note:'Good torque; BMS needed.' },
-  { id:'3s-lipo',   name:'3S LiPo',   type:'3S', credits:3, thumb:'images/batt-3s-thumb.png',   note:'High voltage; use with care.' }
+  { id:'1s-18650', name:'1S', type:'1S', credits:1, thumb:'images/1s.png', note:'USB charge; low V.' },
+  { id:'2s-lipo',   name:'2S',   type:'2S', credits:2, thumb:'images/2s.png', note:'Good torque; use BMS.' },
+  { id:'3s-lipo',   name:'3S',   type:'3S', credits:3, thumb:'images/3s.png', note:'High V; use with care.' }
 ];
 
-/* Wheels by motor family */
 const wheelOptionsByMotor = {
   'n20': [
-    { id:'wheel-n20-1', name:'Rubber 40mm', credits:1, image:'images/wheel-n20-1.png', note:'Good grip indoor.' },
-    { id:'wheel-n20-2', name:'Foam 45mm', credits:2, image:'images/wheel-n20-2.png', note:'More traction.' },
-    { id:'wheel-n20-3', name:'Slick 40mm', credits:3, image:'images/wheel-n20-3.png', note:'Low rolling resistance.' }
+    { id:'wheel-n20-a', name:'Rubber 40mm', credits:1, image:'images/wheel-n20-a.png', note:'Grip indoor.' },
+    { id:'wheel-n20-b', name:'Foam 45mm',   credits:2, image:'images/wheel-n20-b.png', note:'More traction.' }
   ],
   '12v': [
-    { id:'wheel-12v-1', name:'Tread 60mm', credits:1, image:'images/wheel-12v-1.png', note:'Offroad grip.' },
-    { id:'wheel-12v-2', name:'Alloy 58mm', credits:2, image:'images/wheel-12v-2.png', note:'Balanced choice.' },
-    { id:'wheel-12v-3', name:'Offroad 65mm', credits:3, image:'images/wheel-12v-3.png', note:'High traction.' }
+    { id:'wheel-12v-a', name:'Tread 60mm', credits:1, image:'images/wheel-12v-a.png', note:'Offroad grip.' },
+    { id:'wheel-12v-b', name:'Alloy 58mm', credits:2, image:'images/wheel-12v-b.png', note:'Balanced.' }
   ]
 };
 
-/* ------------------ state ------------------ */
+/* state */
 let state = {
   motor: motorOptions[0].id,
   driver: driverOptions[2].id,
   battery: batteryOptions[0].id,
   wheel: wheelOptionsByMotor['n20'][0].id,
-  view: 'front',
   creditsPerTeam: 8,
   quantityTeams: 12
 };
 
-/* ---------- helpers ---------- */
-const el = id => document.getElementById(id);
-function motorFamily(motorId){
-  if (!motorId) return 'n20';
-  return motorId.startsWith('12v') ? '12v' : 'n20';
-}
+/* DOM helpers */
+const $ = id => document.getElementById(id);
 function find(list,id){ return list.find(x=>x.id===id); }
+function motorFamily(m){ return m && m.startsWith('12v') ? '12v' : 'n20'; }
 
-/* ---------- render option card (immediate update) ---------- */
+/* create option card */
 function mkCard(item, groupKey, disabled=false){
   const btn = document.createElement('button');
-  btn.className = 'option-card flex items-center gap-3 p-2 rounded-lg glass';
-  if (disabled) { btn.classList.add('disabled-card'); btn.disabled=true; }
+  btn.className = 'card';
+  if (disabled){ btn.classList.add('disabled'); btn.disabled=true; }
   btn.dataset.value = item.id;
 
   const img = document.createElement('img');
   img.src = item.thumb || item.image || '';
   img.alt = item.name;
-  img.style.width = '72px'; img.style.height='48px'; img.style.objectFit='contain';
-  img.onerror = () => { img.src = placeholderSVG(item.name); };
+  img.style.width = '84px'; img.style.height='56px'; img.style.objectFit='contain';
+  img.onerror = () => { img.src = (placeholderPathExists() ? placeholderPath : placeholderDataURI(item.name)); };
 
   const info = document.createElement('div');
-  info.className = 'flex-1 text-left';
+  info.style.flex='1';
   info.innerHTML = `<div class="font-medium">${item.name}</div>
-                    <div class="text-xs note mt-1">Credits: ${item.credits}</div>
-                    <div class="text-xs note mt-1">${(item.note||'')}</div>`;
+                    <div class="small-note">Credits: ${item.credits}</div>
+                    <div class="small-note">${item.note || ''}</div>`;
 
-  btn.appendChild(img); btn.appendChild(info);
+  btn.appendChild(img);
+  btn.appendChild(info);
 
   btn.addEventListener('click', () => {
     if (disabled) return;
@@ -236,125 +259,143 @@ function mkCard(item, groupKey, disabled=false){
     if (groupKey === 'driver') { state.driver = item.id; onDriverChange(); }
     if (groupKey === 'battery') { state.battery = item.id; updateAll(); }
     if (groupKey === 'wheel') { state.wheel = item.id; updateAll(); }
-    highlight();
+    highlightAll();
   });
 
   return btn;
 }
 
-/* ---------- render lists ---------- */
+/* check if placeholder file exists (best-effort) */
+function placeholderPathExists(){
+  // can't reliably test local file existence cross-origin, so return false to use SVG unless the user provided placeholder.png
+  // attempt to use an <img> to pre-load - but we'll default to SVG.
+  return false;
+}
+
+/* render groups */
 function renderMotors(){
-  const c = el('motor-list'); c.innerHTML='';
+  const c = $('motor-list'); c.innerHTML = '';
   motorOptions.forEach(m => c.appendChild(mkCard(m,'motor',false)));
 }
 function renderDrivers(){
-  const c = el('driver-list'); c.innerHTML='';
+  const c = $('driver-list'); c.innerHTML = '';
   driverOptions.forEach(d => c.appendChild(mkCard(d,'driver',false)));
 }
 function renderBatteries(){
-  const c = el('battery-list'); c.innerHTML='';
+  const c = $('battery-list'); c.innerHTML = '';
   batteryOptions.forEach(b => {
     const disabled = (state.driver === 'mx1508' && b.id === '3s-lipo');
     c.appendChild(mkCard(b,'battery',disabled));
   });
 }
 function renderWheels(){
-  const c = el('wheel-list'); c.innerHTML='';
+  const c = $('wheel-list'); c.innerHTML = '';
   const fam = motorFamily(state.motor);
-  (wheelOptionsByMotor[fam]||[]).forEach(w => c.appendChild(mkCard(w,'wheel',false)));
+  (wheelOptionsByMotor[fam] || []).forEach(w => c.appendChild(mkCard(w,'wheel',false)));
 }
 
-/* ---------- update preview ---------- */
+/* update preview */
 function updatePreview(){
-  const view = state.view || 'front';
-  const path = `renders/${state.motor}/${state.driver}/${state.battery}/${view}.png`;
-  const img = el('preview-img');
+  // composite optional path
+  const path = `renders/${state.motor}/${state.driver}/${state.battery}/preview.png`;
+  const img = $('preview-img');
   img.src = path;
-  img.onerror = () => { img.src = placeholderSVG(`${state.motor} / ${state.driver} / ${state.battery} (${view})`); }
+  img.onerror = () => {
+    // fallback: try group-specific thumbs for motors/drivers/batt in preview area arranged as single image would be nicer,
+    // but we will prefer motor image if composite absent
+    const motorThumb = find(motorOptions, state.motor)?.thumb;
+    const driverThumb = find(driverOptions, state.driver)?.thumb;
+    img.src = motorThumb || driverThumb || placeholderDataURI(`${state.motor} ${state.driver} ${state.battery}`);
+  };
 }
 
-/* ---------- compute & update credits ---------- */
+/* compute credits, update summary */
 function updateCredits(){
   const mo = find(motorOptions, state.motor);
   const dr = find(driverOptions, state.driver);
   const ba = find(batteryOptions, state.battery);
   const whList = wheelOptionsByMotor[motorFamily(state.motor)] || [];
   const wh = whList.find(w=>w.id===state.wheel) || whList[0];
-  const total = (mo?.credits||0) + (dr?.credits||0) + (ba?.credits||0) + (wh?.credits||0);
+
+  const total = (mo?.credits || 0) + (dr?.credits || 0) + (ba?.credits || 0) + (wh?.credits || 0);
   const rem = state.creditsPerTeam - total;
+  $('credits-total').textContent = total;
+  $('credits-remaining').textContent = rem;
+  $('credits-teams').textContent = (total * state.quantityTeams).toString();
 
-  el('credits-total').textContent = total;
-  el('credits-remaining').textContent = rem;
-  el('credits-teams').textContent = total * state.quantityTeams;
-
-  if (rem < 0) { el('credits-remaining').classList.remove('text-green-400'); el('credits-remaining').classList.add('text-red-400'); el('exceed-note').classList.remove('hidden'); }
-  else { el('credits-remaining').classList.remove('text-red-400'); el('credits-remaining').classList.add('text-green-400'); el('exceed-note').classList.add('hidden'); }
+  if (rem < 0) {
+    $('credits-remaining').classList.remove('text-green-400');
+    $('credits-remaining').classList.add('text-red-400');
+    $('exceed-note').classList.remove('hidden');
+  } else {
+    $('credits-remaining').classList.remove('text-red-400');
+    $('credits-remaining').classList.add('text-green-400');
+    $('exceed-note').classList.add('hidden');
+  }
 }
 
-/* ---------- highlight selected ---------- */
-function highlight(){
-  // motors
-  document.querySelectorAll('#motor-list .option-card').forEach(btn => {
-    btn.classList.toggle('border-[var(--accent)]', btn.dataset.value === state.motor);
-    btn.classList.toggle('shadow-sm', btn.dataset.value === state.motor);
+/* highlight selected card */
+function highlightAll(){
+  document.querySelectorAll('#motor-list .card').forEach(btn => btn.classList.toggle('border-[2px]','' ) );
+  document.querySelectorAll('#motor-list .card').forEach(btn => {
+    btn.classList.toggle('ring-2', btn.dataset.value === state.motor);
+    btn.style.border = btn.dataset.value === state.motor ? `2px solid var(--accent)` : 'none';
   });
-  // drivers
-  document.querySelectorAll('#driver-list .option-card').forEach(btn => {
-    btn.classList.toggle('border-[var(--accent)]', btn.dataset.value === state.driver);
-    btn.classList.toggle('shadow-sm', btn.dataset.value === state.driver);
+  document.querySelectorAll('#driver-list .card').forEach(btn => {
+    btn.classList.toggle('ring-2', btn.dataset.value === state.driver);
+    btn.style.border = btn.dataset.value === state.driver ? `2px solid var(--accent)` : 'none';
   });
-  // batteries
-  document.querySelectorAll('#battery-list .option-card').forEach(btn => {
-    btn.classList.toggle('border-[var(--accent)]', btn.dataset.value === state.battery);
-    btn.classList.toggle('shadow-sm', btn.dataset.value === state.battery);
+  document.querySelectorAll('#battery-list .card').forEach(btn => {
+    btn.classList.toggle('ring-2', btn.dataset.value === state.battery);
+    btn.style.border = btn.dataset.value === state.battery ? `2px solid var(--accent)` : 'none';
   });
-  // wheels
-  document.querySelectorAll('#wheel-list .option-card').forEach(btn => {
-    btn.classList.toggle('border-[var(--accent)]', btn.dataset.value === state.wheel);
-    btn.classList.toggle('shadow-sm', btn.dataset.value === state.wheel);
+  document.querySelectorAll('#wheel-list .card').forEach(btn => {
+    btn.classList.toggle('ring-2', btn.dataset.value === state.wheel);
+    btn.style.border = btn.dataset.value === state.wheel ? `2px solid var(--accent)` : 'none';
   });
 
   updateCredits();
   updatePreview();
 }
 
-/* ---------- change handlers ---------- */
+/* change handlers */
 function onMotorChange(){
-  // set default wheel for family
+  // set default wheel for family, refresh wheels
   const fam = motorFamily(state.motor);
-  const list = wheelOptionsByMotor[fam] || [];
-  if (list.length) state.wheel = list[0].id;
+  const wl = wheelOptionsByMotor[fam] || [];
+  state.wheel = wl.length ? wl[0].id : state.wheel;
   renderWheels();
-  highlight();
+  highlightAll();
 }
 function onDriverChange(){
-  // MX1508 + 3S rule: re-render battery list to disable 3S when needed
+  // re-render battery list (MX1508 disables 3S)
   renderBatteries();
-  // ensure battery selection not invalid
+  // if current battery invalid, auto-select 2S
   if (state.driver === 'mx1508' && state.battery === '3s-lipo') {
-    // auto-select 2S
     state.battery = '2s-lipo';
   }
-  highlight();
+  highlightAll();
 }
 
-/* ---------- suggest build (greedy by credits) ---------- */
+/* suggest build (greedy cheapest credits, respects MX1508 rule) */
 function suggestBuild(){
-  const motorsSorted = [...motorOptions].sort((a,b)=>a.credits-b.credits);
-  const driversSorted = [...driverOptions].sort((a,b)=>a.credits-b.credits);
-  const battSorted = [...batteryOptions].sort((a,b)=>a.credits-b.credits);
+  const ms = [...motorOptions].sort((a,b)=>a.credits-b.credits);
+  const ds = [...driverOptions].sort((a,b)=>a.credits-b.credits);
+  const bs = [...batteryOptions].sort((a,b)=>a.credits-b.credits);
 
   let picked = null;
   outer:
-  for (const m of motorsSorted){
+  for (const m of ms){
     const fam = motorFamily(m.id);
     const wheels = wheelOptionsByMotor[fam] || [];
-    for (const d of driversSorted){
-      for (const b of battSorted){
+    for (const d of ds){
+      for (const b of bs){
         if (d.id === 'mx1508' && b.id === '3s-lipo') continue;
         for (const w of wheels){
           const total = m.credits + d.credits + b.credits + w.credits;
-          if (total <= state.creditsPerTeam){ picked = {m,d,b,w,total}; break outer; }
+          if (total <= state.creditsPerTeam){
+            picked = {m,d,b,w}; break outer;
+          }
         }
       }
     }
@@ -362,47 +403,41 @@ function suggestBuild(){
 
   if (picked){
     state.motor = picked.m.id; state.driver = picked.d.id; state.battery = picked.b.id; state.wheel = picked.w.id;
-    renderWheels(); renderBatteries(); highlight();
+    renderWheels(); renderBatteries(); highlightAll();
   } else {
     alert('No valid combo fits current credits. Raise credits or relax requirements.');
   }
 }
 
-/* ---------- copy & export ---------- */
+/* copy/export */
 function copyConfig(){
   const payload = { motor: state.motor, driver: state.driver, battery: state.battery, wheel: state.wheel, creditsPerTeam: state.creditsPerTeam, quantityTeams: state.quantityTeams };
   navigator.clipboard.writeText(JSON.stringify(payload,null,2)).then(()=> alert('Config copied'));
 }
 function exportJSON(){
   const payload = { motor: state.motor, driver: state.driver, battery: state.battery, wheel: state.wheel, creditsPerTeam: state.creditsPerTeam, quantityTeams: state.quantityTeams, ts: new Date().toISOString() };
-  const blob = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url; a.download = 'rc-config.json'; a.click(); URL.revokeObjectURL(url);
 }
 
-/* ---------- init ---------- */
+/* init wiring */
 document.addEventListener('DOMContentLoaded', () => {
-  // wire view buttons
-  el('view-front').addEventListener('click', ()=>{ state.view='front'; updatePreview(); });
-  el('view-side').addEventListener('click',  ()=>{ state.view='side'; updatePreview(); });
-  el('view-top').addEventListener('click',   ()=>{ state.view='top'; updatePreview(); });
+  // wire up UI controls
+  $('credits-input').addEventListener('change', e => { state.creditsPerTeam = parseInt(e.target.value || 0,10); updateCredits(); });
+  $('credits-reset').addEventListener('click', () => { state.creditsPerTeam = 8; $('credits-input').value = 8; updateCredits(); });
 
-  // credits input
-  const creditsInput = el('credits-input');
-  creditsInput.addEventListener('change', e => { state.creditsPerTeam = parseInt(e.target.value || 0,10); updateCredits(); });
-  el('credits-reset').addEventListener('click', ()=>{ state.creditsPerTeam = 8; creditsInput.value = 8; updateCredits(); });
+  $('teams-input').addEventListener('change', e => { state.quantityTeams = Math.max(1, parseInt(e.target.value || 1,10)); updateCredits(); });
 
-  // actions
-  el('suggest-build').addEventListener('click', suggestBuild);
-  el('copy-config').addEventListener('click', copyConfig);
-  el('export-json').addEventListener('click', exportJSON);
+  $('suggest-build').addEventListener('click', suggestBuild);
+  $('copy-config').addEventListener('click', copyConfig);
+  $('export-json').addEventListener('click', exportJSON);
 
   // initial render
   renderMotors(); renderDrivers(); renderBatteries(); renderWheels();
-  highlight();
+  highlightAll();
   updatePreview();
 });
 </script>
-
 </body>
 </html>
