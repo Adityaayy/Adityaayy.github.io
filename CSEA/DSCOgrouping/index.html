@@ -9,7 +9,7 @@
 <style>
 :root{
   --muted:#9aa0a6;
-  --accent:#7acad0;          /* cyan accent */
+  --accent:#00ffff;
   --card-shadow:0 12px 30px rgba(0,0,0,0.7);
   --radius:12px;
   --bg:#000000;
@@ -18,7 +18,7 @@
   --text:#e9ecef;
   --line-grey:#2a2a2c;
   --btn-grey:#3a3c3e;
-  --outer-border:#cfcfcf;     /* light gray outer borders */
+  --outer-border:#cfcfcf;
 }
 *{box-sizing:border-box}
 body{margin:0;padding:32px;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:var(--bg);color:var(--text)}
@@ -28,8 +28,7 @@ h1{margin:0;font-size:1.25rem;font-weight:600;color:var(--muted)}
 .muted{color:var(--muted);font-size:0.95rem}
 .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:20px}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
-.card{background:linear-gradient(180deg,var(--panel),var(--panel-2));border-radius:var(--radius);padding:18px;box-shadow:var(--card-shadow);border:1px solid var(--outer-border);transition:transform .14s ease}
-.card:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(0,0,0,0.85)}
+.card{background:linear-gradient(180deg,var(--panel),var(--panel-2));border-radius:var(--radius);padding:18px;box-shadow:var(--card-shadow);border:1px solid var(--outer-border)}
 .title{font-size:1rem;font-weight:600;margin-bottom:8px;color:var(--muted)}
 .meta{font-size:0.95rem;color:var(--muted)}
 input,select,button{font-family:inherit}
@@ -47,7 +46,7 @@ input,select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--l
 footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
 .note{font-size:0.92rem;color:var(--muted);margin-top:8px}
 #confirmOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);display:none;align-items:center;justify-content:center;z-index:9999}
-#confirmBox{width:90%;max-width:420px;background:linear-gradient(180deg,var(--panel),var(--panel-2));border-radius:12px;padding:18px;border:1px solid var(--accent);box-shadow:0 18px 50px rgba(0,0,0,0.8)}
+#confirmBox{width:90%;max-width:420px;background:linear-gradient(180deg,var(--panel),var(--panel-2));border-radius:12px;padding:18px;border:1px solid var(--accent)}
 #confirmBox h3{margin:0 0 8px;color:var(--muted)}
 .modal-controls{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
 </style>
@@ -70,7 +69,7 @@ footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
     <aside>
       <div class="card">
         <div class="title">Find yourself</div>
-        <div class="meta">Search by name — roll required to confirm. Use your old roll number if you have been assigned a new one. Text me if shit breaks idk</div>
+        <div class="meta">Search by name — roll required to confirm but not shown publicly.</div>
         <div style="margin-top:12px"><input id="searchInput" placeholder="Type any part of your name..."></div>
         <div id="searchResults" style="margin-top:12px"></div>
         <div id="actionBox" style="margin-top:14px;display:none">
@@ -110,40 +109,35 @@ const firebaseConfig = {
   appId: "1:726635274229:web:5cda4ef2f679eefc644abc"
 };
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-import { getFirestore, collection, doc, onSnapshot, getDocs, runTransaction, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+import { getFirestore, collection, doc, onSnapshot, runTransaction, deleteDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 const studentsRef = collection(db,"students"), groupsRef = collection(db,"groups");
-let students=[], groups=[], pendingRoll=null, pendingStudent=null, _leaveStudent=null,_leaveGroupId=null;
+
+let students=[], groups=[], pendingStudent=null, _leaveStudent=null,_leaveGroupId=null;
 
 // live updates
 onSnapshot(studentsRef, snap=>{students=snap.docs.map(d=>d.data());render();});
 onSnapshot(groupsRef, snap=>{groups=snap.docs.map(d=>({...d.data(),id:d.id}));render();});
 
-// render function
 function render(){
   const gbox=document.getElementById("groupsList");
   const unbox=document.getElementById("unenrolledList");
   gbox.innerHTML="";unbox.innerHTML="";
-  const enrolledRolls=new Set(students.filter(s=>s.groupId).map(s=>s.roll));
-  // groups
   const ordered=groups.sort((a,b)=>parseInt(a.id)-parseInt(b.id));
-  if(!ordered.length)document.getElementById("noGroups").style.display="block";else document.getElementById("noGroups").style.display="none";
+  document.getElementById("noGroups").style.display=ordered.length?"none":"block";
   ordered.forEach(gr=>{
     const div=document.createElement("div");div.className="group";
     div.innerHTML=`<div style="font-weight:600;color:var(--accent)">Group ${gr.id}</div>`;
     (gr.members||[]).forEach(m=>{const mem=document.createElement("div");mem.className="member";mem.innerHTML=`<span>${m.name}</span><span class="meta">${m.roll}</span>`;div.appendChild(mem);});
     gbox.appendChild(div);
   });
-  // unassigned
   students.filter(s=>!s.groupId).forEach(s=>{const it=document.createElement("div");it.className="item";it.innerHTML=`<span class="name">${s.name}</span>`;unbox.appendChild(it);});
-  // stats
   document.getElementById("statsTotal").textContent=`${students.length} students`;
   document.getElementById("statsEnrolled").textContent=`${students.filter(s=>s.groupId).length} enrolled · ${ordered.length} groups`;
 }
 
-// search
 document.getElementById("searchInput").addEventListener("input",e=>{
   const q=e.target.value.toLowerCase();const box=document.getElementById("searchResults");
   box.innerHTML="";if(!q)return;
@@ -153,30 +147,50 @@ document.getElementById("searchInput").addEventListener("input",e=>{
     div.onclick=()=>chooseStudent(s);box.appendChild(div);
   });
 });
-function chooseStudent(st){pendingStudent=st;document.getElementById("actionBox").style.display="block";document.getElementById("actionMsg").textContent="";document.getElementById("rollInput").value="";populateGroups(st);}
-function populateGroups(st){const sel=document.getElementById("groupSelect");sel.innerHTML="";groups.sort((a,b)=>parseInt(a.id)-parseInt(b.id)).forEach(g=>{const opt=document.createElement("option");opt.value=g.id;opt.textContent=`Group ${g.id}`;sel.appendChild(opt);});const newId=findNextGroupId();const opt=document.createElement("option");opt.value=newId;opt.textContent=`+ Create Group ${newId}`;sel.appendChild(opt);}
+
+function chooseStudent(st){
+  pendingStudent=st;
+  document.getElementById("actionBox").style.display="block";
+  document.getElementById("actionMsg").textContent="";
+  document.getElementById("rollInput").value="";
+  populateGroups(st);
+}
+
+function populateGroups(st){
+  const sel=document.getElementById("groupSelect");sel.innerHTML="";
+  groups.sort((a,b)=>parseInt(a.id)-parseInt(b.id)).forEach(g=>{
+    const opt=document.createElement("option");opt.value=g.id;opt.textContent=`Group ${g.id}`;sel.appendChild(opt);
+  });
+  const newId=findNextGroupId();
+  const opt=document.createElement("option");opt.value=newId;opt.textContent=`+ Create Group ${newId}`;sel.appendChild(opt);
+}
 function findNextGroupId(){const ids=new Set(groups.map(g=>parseInt(g.id)));let i=1;while(ids.has(i))i++;return i.toString();}
 
 // join
 document.getElementById("joinBtn").onclick=async()=>{
-  const roll=document.getElementById("rollInput").value.trim();if(!roll||roll!==pendingStudent.roll){document.getElementById("actionMsg").textContent="Incorrect roll";return;}
-  const gid=document.getElementById("groupSelect").value;
+  const roll=document.getElementById("rollInput").value.trim();
+  if(!roll||roll!==pendingStudent.roll){document.getElementById("actionMsg").textContent="Incorrect roll";return;}
   try{
     await runTransaction(db,async(tx)=>{
-      const gref=doc(groupsRef,gid);const sref=doc(studentsRef,pendingStudent.roll);
-      const gdoc=await tx.get(gref);let members=[];if(gdoc.exists())members=gdoc.data().members||[];
-      if(!pendingStudent.groupId){
-        if(members.length>=3)throw new Error("Group full"); // max 3
-        members.push({name:pendingStudent.name,roll:pendingStudent.roll});
-        tx.set(gref,{members},{merge:true});
-        tx.update(sref,{groupId:gid});
-      }
+      const sref=doc(studentsRef,pendingStudent.roll);
+      const sdoc=await tx.get(sref);
+      const studentData=sdoc.data();
+      if(studentData.groupId) throw new Error("Already in a group");
+      const gid=document.getElementById("groupSelect").value;
+      const gref=doc(groupsRef,gid);
+      const gdoc=await tx.get(gref);
+      let members=[];if(gdoc.exists())members=gdoc.data().members||[];
+      if(members.find(m=>m.roll===pendingStudent.roll)) throw new Error("Already in this group");
+      if(members.length>=3) throw new Error("Group full");
+      members.push({name:pendingStudent.name,roll:pendingStudent.roll});
+      tx.set(gref,{members},{merge:true});
+      tx.update(sref,{groupId:gid});
     });
     document.getElementById("actionBox").style.display="none";
   }catch(err){document.getElementById("actionMsg").textContent=err.message;}
 };
 
-// leave
+// leave with modal
 document.getElementById("leaveBtn").onclick=()=>{_leaveStudent=pendingStudent;_leaveGroupId=pendingStudent.groupId;document.getElementById("confirmOverlay").style.display="flex";};
 document.getElementById("confirmCancel").onclick=()=>document.getElementById("confirmOverlay").style.display="none";
 document.getElementById("confirmOk").onclick=async()=>{
@@ -188,11 +202,10 @@ document.getElementById("confirmOk").onclick=async()=>{
       if(gdoc.exists()){let members=gdoc.data().members||[];members=members.filter(m=>m.roll!==_leaveStudent.roll);if(members.length)tx.update(gref,{members});else tx.delete(gref);}
       tx.update(sref,{groupId:null});
     });
-    document.getElementById("actionBox").style.display="none";
+    document.getElementById("actionBox").style.display="none";pendingStudent=null;
   }catch(err){console.error(err);}
 };
 
-// cancel
 document.getElementById("cancelBtn").onclick=()=>document.getElementById("actionBox").style.display="none";
 
 // export
