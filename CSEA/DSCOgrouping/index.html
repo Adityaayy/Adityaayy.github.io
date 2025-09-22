@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<link rel="icon" href="favicon.ico">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DiSCO Presentation Grouping</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --muted:#9aa0a6;
+  --accent:#7acad0;          /* cyan accent */
+  --card-shadow:0 12px 30px rgba(0,0,0,0.7);
+  --radius:12px;
+  --bg:#000000;
+  --panel:#0c0c0c;
+  --panel-2:#121212;
+  --text:#e9ecef;
+  --line-grey:#2a2a2c;
+  --btn-grey:#3a3c3e;
+  --outer-border:#cfcfcf;     /* light gray outer borders */
+}
+*{box-sizing:border-box}
+body{margin:0;padding:32px;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:var(--bg);color:var(--text)}
+.wrap{max-width:1080px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:end}
+h1{margin:0;font-size:1.25rem;font-weight:600;color:var(--muted)}
+.muted{color:var(--muted);font-size:0.95rem}
+.grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:20px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,var(--panel),var(--panel-2));border-radius:var(--radius);padding:18px;box-shadow:var(--card-shadow);border:1px solid var(--outer-border);transition:transform .14s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(0,0,0,0.85)}
+.title{font-size:1rem;font-weight:600;margin-bottom:8px;color:var(--muted)}
+.meta{font-size:0.95rem;color:var(--muted)}
+input,select,button{font-family:inherit}
+input,select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line-grey);background:#0c0c0d;color:var(--text);font-size:1rem}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+.btn-primary{background:linear-gradient(180deg,var(--accent),#00a3a3);color:#000;box-shadow:0 8px 20px rgba(0,255,255,0.2)}
+.btn-grey{background:var(--btn-grey);color:var(--text);border:1px solid var(--line-grey)}
+.btn-small{padding:6px 10px;border-radius:8px;font-size:0.93rem}
+.btn-full{width:100%;justify-content:center}
+.item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid var(--line-grey);background:#0c0c0d;color:var(--muted)}
+.item .name{font-size:1.02rem;font-weight:500;color:var(--text)}
+.group{padding:10px;border-radius:10px;margin-bottom:10px;border-top:1px solid var(--accent);background:#0c0c0d;color:var(--muted)}
+.group .member{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line-grey)}
+.controls-row{display:flex;gap:10px;align-items:center;margin-top:12px}
+footer{margin-top:18px;color:var(--muted);font-size:0.95rem}
+.note{font-size:0.92rem;color:var(--muted);margin-top:8px}
+#confirmOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);display:none;align-items:center;justify-content:center;z-index:9999}
+#confirmBox{width:90%;max-width:420px;background:linear-gradient(180deg,var(--panel),var(--panel-2));border-radius:12px;padding:18px;border:1px solid var(--accent);box-shadow:0 18px 50px rgba(0,0,0,0.8)}
+#confirmBox h3{margin:0 0 8px;color:var(--muted)}
+.modal-controls{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>CSE secA DiSCO Presentation Grouping</h1>
+      <div class="muted">CSE sec A : 3rd Sem</div>
+    </div>
+    <div class="meta">Groups: 1–2 · join or leave a team</div>
+  </header>
+
+  <main class="grid">
+    <section>
+      <div class="card"><div class="title">Groups</div><div id="groupsList"></div><div id="noGroups" class="meta" style="display:none">No groups yet — create one by joining.</div></div>
+      <div class="card" style="margin-top:16px"><div class="title">Unassigned students</div><div id="unenrolledList" class="note" style="margin-top:8px"></div></div>
+    </section>
+    <aside>
+      <div class="card">
+        <div class="title">Find yourself</div>
+        <div class="meta">Search by name — roll required to confirm but not shown publicly.</div>
+        <div style="margin-top:12px"><input id="searchInput" placeholder="Type any part of your name..."></div>
+        <div id="searchResults" style="margin-top:12px"></div>
+        <div id="actionBox" style="margin-top:14px;display:none">
+          <div class="meta">Confirm with roll number</div>
+          <div style="margin-top:8px"><input id="rollInput" placeholder="Roll number (kept private)"></div>
+          <div class="controls-row" style="margin-top:10px"><select id="groupSelect"></select></div>
+          <div class="controls-row" style="margin-top:12px">
+            <button id="joinBtn" class="btn btn-primary">Join</button>
+            <button id="leaveBtn" class="btn btn-grey btn-small">Leave</button>
+            <button id="cancelBtn" class="btn btn-grey btn-small">Cancel</button>
+          </div>
+          <div id="actionMsg" class="note" style="margin-top:8px;color:#fca5a5"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div class="meta">Dutta controls</div><div style="font-weight:600">Export & admin</div></div>
+          <div style="text-align:right"><div id="statsTotal">0 students</div><div class="meta" id="statsEnrolled">0 enrolled · 0 groups</div></div>
+        </div>
+        <div class="controls-row" style="margin-top:12px"><button id="exportBtn" class="btn btn-primary btn-full">Export JSON</button></div>
+      </div>
+    </aside>
+  </main>
+  <footer>Made by Dutta. Refresh if stale. Text me if this breaks</footer>
+</div>
+
+<div id="confirmOverlay"><div id="confirmBox"><h3>Confirm leave</h3><p id="confirmText">Are you sure you want to leave?</p><div class="modal-controls"><button id="confirmCancel" class="btn btn-grey btn-small">Cancel</button><button id="confirmOk" class="btn btn-grey btn-small">Yes, leave</button></div></div></div>
+
+<script type="module">
+// TODO: paste your new Firebase config here
+const firebaseConfig = {
+  apiKey: "AIzaSyBwvzA0OrenvEUK4VS28FdOcYhi6NwApQg",
+  authDomain: "csea-dscogrouping.firebaseapp.com",
+  projectId: "csea-dscogrouping",
+  storageBucket: "csea-dscogrouping.firebasestorage.app",
+  messagingSenderId: "726635274229",
+  appId: "1:726635274229:web:5cda4ef2f679eefc644abc"
+};
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { getFirestore, collection, doc, onSnapshot, getDocs, runTransaction, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const studentsRef = collection(db,"students"), groupsRef = collection(db,"groups");
+let students=[], groups=[], pendingRoll=null, pendingStudent=null, _leaveStudent=null,_leaveGroupId=null;
+
+// live updates
+onSnapshot(studentsRef, snap=>{students=snap.docs.map(d=>d.data());render();});
+onSnapshot(groupsRef, snap=>{groups=snap.docs.map(d=>({...d.data(),id:d.id}));render();});
+
+// render function
+function render(){
+  const gbox=document.getElementById("groupsList");
+  const unbox=document.getElementById("unenrolledList");
+  gbox.innerHTML="";unbox.innerHTML="";
+  const enrolledRolls=new Set(students.filter(s=>s.groupId).map(s=>s.roll));
+  // groups
+  const ordered=groups.sort((a,b)=>parseInt(a.id)-parseInt(b.id));
+  if(!ordered.length)document.getElementById("noGroups").style.display="block";else document.getElementById("noGroups").style.display="none";
+  ordered.forEach(gr=>{
+    const div=document.createElement("div");div.className="group";
+    div.innerHTML=`<div style="font-weight:600;color:var(--accent)">Group ${gr.id}</div>`;
+    (gr.members||[]).forEach(m=>{const mem=document.createElement("div");mem.className="member";mem.innerHTML=`<span>${m.name}</span><span class="meta">${m.roll}</span>`;div.appendChild(mem);});
+    gbox.appendChild(div);
+  });
+  // unassigned
+  students.filter(s=>!s.groupId).forEach(s=>{const it=document.createElement("div");it.className="item";it.innerHTML=`<span class="name">${s.name}</span>`;unbox.appendChild(it);});
+  // stats
+  document.getElementById("statsTotal").textContent=`${students.length} students`;
+  document.getElementById("statsEnrolled").textContent=`${students.filter(s=>s.groupId).length} enrolled · ${ordered.length} groups`;
+}
+
+// search
+document.getElementById("searchInput").addEventListener("input",e=>{
+  const q=e.target.value.toLowerCase();const box=document.getElementById("searchResults");
+  box.innerHTML="";if(!q)return;
+  students.filter(s=>s.name.toLowerCase().includes(q)).forEach(s=>{
+    const div=document.createElement("div");div.className="item";
+    div.innerHTML=`<span class="name">${s.name}</span>`;
+    div.onclick=()=>chooseStudent(s);box.appendChild(div);
+  });
+});
+function chooseStudent(st){pendingStudent=st;document.getElementById("actionBox").style.display="block";document.getElementById("actionMsg").textContent="";document.getElementById("rollInput").value="";populateGroups(st);}
+function populateGroups(st){const sel=document.getElementById("groupSelect");sel.innerHTML="";groups.sort((a,b)=>parseInt(a.id)-parseInt(b.id)).forEach(g=>{const opt=document.createElement("option");opt.value=g.id;opt.textContent=`Group ${g.id}`;sel.appendChild(opt);});const newId=findNextGroupId();const opt=document.createElement("option");opt.value=newId;opt.textContent=`+ Create Group ${newId}`;sel.appendChild(opt);}
+function findNextGroupId(){const ids=new Set(groups.map(g=>parseInt(g.id)));let i=1;while(ids.has(i))i++;return i.toString();}
+
+// join
+document.getElementById("joinBtn").onclick=async()=>{
+  const roll=document.getElementById("rollInput").value.trim();if(!roll||roll!==pendingStudent.roll){document.getElementById("actionMsg").textContent="Incorrect roll";return;}
+  const gid=document.getElementById("groupSelect").value;
+  try{
+    await runTransaction(db,async(tx)=>{
+      const gref=doc(groupsRef,gid);const sref=doc(studentsRef,pendingStudent.roll);
+      const gdoc=await tx.get(gref);let members=[];if(gdoc.exists())members=gdoc.data().members||[];
+      if(!pendingStudent.groupId){
+        if(members.length>=2)throw new Error("Group full"); // max 2
+        members.push({name:pendingStudent.name,roll:pendingStudent.roll});
+        tx.set(gref,{members},{merge:true});
+        tx.update(sref,{groupId:gid});
+      }
+    });
+    document.getElementById("actionBox").style.display="none";
+  }catch(err){document.getElementById("actionMsg").textContent=err.message;}
+};
+
+// leave
+document.getElementById("leaveBtn").onclick=()=>{_leaveStudent=pendingStudent;_leaveGroupId=pendingStudent.groupId;document.getElementById("confirmOverlay").style.display="flex";};
+document.getElementById("confirmCancel").onclick=()=>document.getElementById("confirmOverlay").style.display="none";
+document.getElementById("confirmOk").onclick=async()=>{
+  if(!_leaveStudent)return;document.getElementById("confirmOverlay").style.display="none";
+  try{
+    await runTransaction(db,async(tx)=>{
+      const sref=doc(studentsRef,_leaveStudent.roll);const gref=doc(groupsRef,_leaveGroupId);
+      const gdoc=await tx.get(gref);
+      if(gdoc.exists()){let members=gdoc.data().members||[];members=members.filter(m=>m.roll!==_leaveStudent.roll);if(members.length)tx.update(gref,{members});else tx.delete(gref);}
+      tx.update(sref,{groupId:null});
+    });
+    document.getElementById("actionBox").style.display="none";
+  }catch(err){console.error(err);}
+};
+
+// cancel
+document.getElementById("cancelBtn").onclick=()=>document.getElementById("actionBox").style.display="none";
+
+// export
+document.getElementById("exportBtn").onclick=()=>{
+  const data={};
+  groups.sort((a,b)=>parseInt(a.id)-parseInt(b.id)).forEach(g=>{data[`Group ${g.id}`]={members:g.members||[]};});
+  data["Unassigned"]=students.filter(s=>!s.groupId).map(s=>({name:s.name,roll:s.roll}));
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="disco_groups.json";a.click();URL.revokeObjectURL(url);
+};
+</script>
+</body>
+</html>
