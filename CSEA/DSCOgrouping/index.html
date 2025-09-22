@@ -166,7 +166,7 @@ document.getElementById("joinBtn").onclick=async()=>{
       const gref=doc(groupsRef,gid);const sref=doc(studentsRef,pendingStudent.roll);
       const gdoc=await tx.get(gref);let members=[];if(gdoc.exists())members=gdoc.data().members||[];
       if(!pendingStudent.groupId){
-        if(members.length>=2)throw new Error("Group full"); // max 2
+        if(members.length>=3)throw new Error("Group full"); // max 3
         members.push({name:pendingStudent.name,roll:pendingStudent.roll});
         tx.set(gref,{members},{merge:true});
         tx.update(sref,{groupId:gid});
