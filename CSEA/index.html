@@ -1,101 +1,297 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>CSE Sec A — 3rd Sem</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#121212;
-    --panel:#1e1e1e;
-    --muted:#bfc5cc;
-    --accent:#afe0be;
-    --accent-strong:#8ae6a5;
-    --radius:14px;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    min-height:100vh;
-    font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-    background:linear-gradient(180deg,var(--bg),#0f0f10 120%);
-    color:var(--muted);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:28px;
-  }
-  .card{
-    width:100%;
-    max-width:920px;
-    background:linear-gradient(180deg,var(--panel),#232323);
-    border-radius:var(--radius);
-    padding:36px;
-    box-shadow:0 20px 50px rgba(0,0,0,0.6);
-    border:1px solid rgba(255,140,66,0.06);
-  }
-  header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .left { display:flex; flex-direction:column; gap:6px; }
-  h1{margin:0;color:var(--accent);font-size:1.6rem;letter-spacing:0.2px}
-  .subtitle{color:var(--muted);font-size:1rem}
-  .meta{color:#9aa0a6;font-size:0.95rem;margin-top:8px}
-  .cta-wrap{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap}
-  .btn-primary{
-    background:linear-gradient(180deg,var(--accent),var(--accent-strong));
-    color:#0b0b0b;
-    border:0;
-    padding:14px 20px;
-    border-radius:12px;
-    font-weight:700;
-    font-size:1rem;
-    text-decoration:none;
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    box-shadow:0 10px 30px rgba(255,140,66,0.08);
-  }
-  .btn-ghost{
-    background:transparent;
-    border:1px solid rgba(255,140,66,0.12);
-    color:var(--muted);
-    padding:12px 16px;
-    border-radius:10px;
-    text-decoration:none;
-    font-weight:600;
-  }
-  .note{margin-top:16px;color:#9aa0a6;font-size:0.92rem}
-  footer{margin-top:22px;color:#8f959a;font-size:0.9rem;text-align:right}
-  @media (max-width:720px){
-    .card{padding:20px}
-    h1{font-size:1.25rem}
-    .cta-wrap{flex-direction:column;align-items:stretch}
-  }
-</style>
+  <link rel="icon" href="favicon.ico" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSEA · Academic Hub</title>
+  <!-- Inter – clean & professional -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome 6 (free) – subtle icons only -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ---------- global reset – same square, glass, dark gray theme ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #111314;
+      --surface-dark: #1c1f21;
+      --surface-glass: rgba(28, 31, 33, 0.75);
+      --surface-lighter: #2c2f31;
+      --border-subtle: #3a3e40;
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --accent: #a3d65c;         /* muted lime – professional */
+      --accent-soft: rgba(163, 214, 92, 0.15);
+      --text-primary: #f2f4f6;
+      --text-secondary: #c8cdd0;
+      --text-muted: #90989e;
+      --radius: 8px;
+      --transition: 0.18s ease;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.5;
+      padding: 2rem 2rem 2.5rem;
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* ---------- top bar – frosted glass, square ---------- */
+    .top-bar {
+      background: var(--surface-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .top-bar h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: white;
+      margin: 0;
+    }
+
+    .top-bar .badge {
+      color: var(--accent);
+      font-weight: 500;
+      font-size: 0.9rem;
+      border: 1px solid var(--accent);
+      padding: 0.3rem 1rem;
+      border-radius: var(--radius);
+      background: var(--accent-soft);
+    }
+
+    /* ---------- section header ---------- */
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 0.3rem;
+    }
+
+    /* ---------- subject grid – alphabetical, clean cards ---------- */
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .subject-card {
+      background: var(--surface-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius);
+      padding: 1.8rem 1.5rem;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+    }
+
+    .subject-card:hover {
+      border-color: var(--accent);
+      background: rgba(28, 31, 33, 0.9);
+    }
+
+    /* icon – large, subtle, accent on hover */
+    .subject-icon {
+      font-size: 2.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.2rem;
+      transition: var(--transition);
+    }
+
+    .subject-card:hover .subject-icon {
+      color: var(--accent);
+    }
+
+    .subject-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 0.4rem;
+    }
+
+    .subject-desc {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+
+    .subject-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 0.4rem 1rem;
+      background: transparent;
+      transition: var(--transition);
+      text-decoration: none;
+      margin-top: auto;
+    }
+
+    .subject-card:hover .subject-link {
+      background: var(--accent);
+      color: #0e0f10;
+    }
+
+    .subject-link i {
+      font-size: 0.75rem;
+    }
+
+    /* disabled / placeholder state – for non‑AI subjects (soft) */
+    .subject-card.placeholder .subject-link {
+      color: var(--text-muted);
+      border-color: var(--border-subtle);
+      pointer-events: none;
+    }
+
+    .subject-card.placeholder:hover {
+      border-color: var(--border-subtle);
+    }
+
+    .subject-card.placeholder:hover .subject-icon {
+      color: var(--text-secondary);
+    }
+
+    /* ---------- footer – same as grouping tool ---------- */
+    footer {
+      margin-top: 4rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 2rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* responsive */
+    @media (max-width: 700px) {
+      body { padding: 1.5rem; }
+      .top-bar { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+    }
+  </style>
 </head>
 <body>
-  <div class="card" role="main">
-    <header>
-      <div class="left">
-        <h1>CSE — Section A (3rd Sem)</h1>
-        <div class="subtitle">Grouping Site for CSE-A: 2nd Year</div>
-      </div>
-      <div class="right meta">Groups • Live · Dutta</div>
-    </header>
-
-    <p class="note">Click the button below to open the student group signup page. The page opens in a new tab so you can keep this as a landing point.</p>
-
-    <div class="cta-wrap">
-      <a class="btn-primary" href="https://adityaayy.github.io/CSEA/DSgrouping/" target="_blank" rel="noopener">
-        Open DS Grouping
-      </a>
-      <a class="btn-ghost" href="https://adityaayy.github.io/CSEA/DSCOgrouping/" target="_blank" rel="noopener">
-        Open DiSCO Grouping
-      </a>
+  <div class="wrap">
+    <!-- top bar – CSEA identity -->
+    <div class="top-bar">
+      <h1>CSE Section A · Academic Hub</h1>
+      <span class="badge">3rd Semester</span>
     </div>
 
-    <footer>Managed by Dutta</footer>
+    <!-- intro -->
+    <div class="section-header">
+      <h2>Subject resources</h2>
+      <p>Select a course to access grouping tools, materials, and presentations.</p>
+    </div>
+
+    <!-- subject grid – alphabetical order (AI, DAA, DBS, OS, P&O) -->
+    <div class="subject-grid">
+      <!-- AI – active link to existing grouping page -->
+      <a href="AIpresentation" class="subject-card">
+        <div class="subject-icon">
+          <i class="fas fa-brain"></i> <!-- brain = AI -->
+        </div>
+        <div class="subject-title">AI</div>
+        <div class="subject-desc">Artificial Intelligence · Presentation grouping & team management</div>
+        <span class="subject-link">
+          Open tool <i class="fas fa-arrow-right"></i>
+        </span>
+      </a>
+
+      <!-- DAA – placeholder (coming soon) -->
+      <div class="subject-card placeholder">
+        <div class="subject-icon">
+          <i class="fas fa-chart-line"></i> <!-- algorithm / analysis -->
+        </div>
+        <div class="subject-title">DAA</div>
+        <div class="subject-desc">Design and Analysis of Algorithms · Material & group sign‑up (coming soon)</div>
+        <span class="subject-link">
+          <i class="fas fa-clock"></i> In preparation
+        </span>
+      </div>
+
+      <!-- DBS – placeholder -->
+      <div class="subject-card placeholder">
+        <div class="subject-icon">
+          <i class="fas fa-database"></i> <!-- database -->
+        </div>
+        <div class="subject-title">DBS</div>
+        <div class="subject-desc">Database Systems · Project teams and schema workshops (coming soon)</div>
+        <span class="subject-link">
+          <i class="fas fa-clock"></i> In preparation
+        </span>
+      </div>
+
+      <!-- OS – placeholder -->
+      <div class="subject-card placeholder">
+        <div class="subject-icon">
+          <i class="fas fa-terminal"></i> <!-- operating system -->
+        </div>
+        <div class="subject-title">OS</div>
+        <div class="subject-desc">Operating Systems · Process synchronization, group assignments (coming soon)</div>
+        <span class="subject-link">
+          <i class="fas fa-clock"></i> In preparation
+        </span>
+      </div>
+
+      <!-- P&O – placeholder (Probability & Optimization) -->
+      <div class="subject-card placeholder">
+        <div class="subject-icon">
+          <i class="fas fa-dice-d6"></i> <!-- probability / optimization -->
+        </div>
+        <div class="subject-title">P&O</div>
+        <div class="subject-desc">Probability & Optimization · Statistical methods, case studies (coming soon)</div>
+        <span class="subject-link">
+          <i class="fas fa-clock"></i> In preparation
+        </span>
+      </div>
+    </div>
+
+    <!-- footer – consistent with Dutta's style -->
+    <footer>
+      CSEA · maintained by Dutta · resources updated weekly
+    </footer>
   </div>
 </body>
 </html>
