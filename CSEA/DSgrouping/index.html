@@ -3,12 +3,12 @@
 <head>
   <link rel="icon" href="favicon.ico" />
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
-  <title>AI PRESENTATION · CSE · LIME INVASION</title>
-  <!-- Inter, plus a splash of Playfair for swag -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Presentation Grouping · CSE</title>
+  <!-- Inter only – clean, professional -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* ---------- RESET / GLOBAL ---------- */
+    /* ---------- global reset – no nonsense ---------- */
     * {
       margin: 0;
       padding: 0;
@@ -16,438 +16,336 @@
     }
 
     :root {
-      --bg-dark: #0a0c0e;
-      --bg-panel: #12171b;
-      --glass-bg: rgba(20, 28, 33, 0.7);
-      --glass-border: rgba(50, 65, 75, 0.4);
-      --lime: #b9ff50;
-      --lime-glow: rgba(185, 255, 80, 0.5);
-      --lime-soft: rgba(185, 255, 80, 0.15);
-      --white-primary: #ffffff;
-      --white-secondary: #e2e8f0;
-      --white-muted: #a0b3c9;
-      --danger: #ff8a8a;
-      --card-shadow: 0 25px 45px -15px rgba(0,0,0,0.8), 0 0 0 1px rgba(185,255,80,0.2);
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 16px;
-      --radius-sm: 12px;
-      --transition-slow: 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
-      --transition-bounce: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      --bg-dark: #111314;        /* deep neutral dark */
+      --surface-dark: #1c1f21;
+      --surface-glass: rgba(28, 31, 33, 0.75);
+      --surface-lighter: #2c2f31;
+      --border-subtle: #3a3e40;
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --accent: #a3d65c;         /* muted lime, professional */
+      --accent-soft: rgba(163, 214, 92, 0.15);
+      --text-primary: #f2f4f6;
+      --text-secondary: #c8cdd0;
+      --text-muted: #90989e;
+      --danger: #e88181;
+      --radius: 8px;            /* square, only slight rounding */
+      --transition: 0.18s ease;
     }
 
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
       background: var(--bg-dark);
-      color: var(--white-primary);
+      color: var(--text-primary);
       line-height: 1.5;
-      position: relative;
+      padding: 2rem 2rem 2.5rem;
       min-height: 100vh;
-      padding: 0;
-      margin: 0;
-    }
-
-    /* ---------- animated background pattern ---------- */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background-image: 
-        radial-gradient(circle at 30% 40%, rgba(185, 255, 80, 0.08) 2px, transparent 2px),
-        radial-gradient(circle at 70% 80%, rgba(185, 255, 80, 0.06) 1px, transparent 1px),
-        linear-gradient(145deg, #0e1215 0%, #0a0c0e 100%);
-      background-size: 60px 60px, 40px 40px, 100% 100%;
-      pointer-events: none;
-      z-index: 0;
     }
 
     .wrap {
-      max-width: 1440px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 2rem 2.5rem 2.5rem;
-      position: relative;
-      z-index: 2;
     }
 
-    /* ---------- MASSIVE TOP BAR ---------- */
-    .megabar {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--lime);
-      border-radius: 80px 80px 80px 80px;
-      padding: 1.4rem 2.2rem;
-      margin-bottom: 3.5rem;
+    /* ---------- top bar – rectangular, frosted, no frills ---------- */
+    .top-bar {
+      background: var(--surface-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius);
+      padding: 1.25rem 2rem;
+      margin-bottom: 2.5rem;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 18px 35px -15px black, 0 0 0 1px rgba(185,255,80,0.3);
-      transition: var(--transition-slow);
-      animation: barPulse 8s infinite alternate;
+      flex-wrap: wrap;
     }
 
-    @keyframes barPulse {
-      0% { border-color: rgba(185,255,80,0.5); box-shadow: 0 18px 35px -15px black, 0 0 0 1px rgba(185,255,80,0.3); }
-      100% { border-color: rgba(185,255,80,0.9); box-shadow: 0 18px 45px -12px var(--lime-glow), 0 0 0 2px var(--lime); }
-    }
-
-    .megabar h1 {
-      font-size: 2.2rem;
-      font-weight: 800;
+    .top-bar h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
       letter-spacing: -0.02em;
-      background: linear-gradient(145deg, #ffffff, #e0ffb0);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      color: white;
       margin: 0;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
     }
 
-    .megabar h1 span {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.6rem;
-      color: var(--lime);
-      text-shadow: 0 0 10px var(--lime-glow);
-    }
-
-    .stat-globe {
+    .top-bar-stats {
       display: flex;
       gap: 2rem;
-      background: rgba(0,0,0,0.35);
-      padding: 0.8rem 2rem;
-      border-radius: 60px;
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--glass-border);
     }
 
-    .stat-item-big {
+    .stat-block {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
     }
 
     .stat-label {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
-      color: var(--lime);
-      letter-spacing: 2px;
-      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
     }
 
     .stat-number {
-      font-size: 2rem;
-      font-weight: 700;
-      line-height: 1;
+      font-size: 1.5rem;
+      font-weight: 600;
       color: white;
     }
 
-    /* ---------- MAIN GRID – HUGE CARDS, GLASS, LIME ---------- */
+    /* ---------- main grid – clean, spacious ---------- */
     .dashboard-grid {
       display: grid;
-      grid-template-columns: 1fr 420px;
-      gap: 2.5rem;
-      align-items: start;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
     }
 
-    @media (max-width: 1000px) {
+    @media (max-width: 900px) {
       .dashboard-grid { grid-template-columns: 1fr; }
-      .wrap { padding: 1.5rem; }
-      .megabar { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      body { padding: 1.5rem; }
     }
 
-    /* ---------- GLASS CARD BASE – larger, frosted, bold ---------- */
-    .glass-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-xl);
-      padding: 2.2rem;
-      box-shadow: var(--card-shadow);
-      transition: var(--transition-slow);
-      position: relative;
-      overflow: hidden;
+    /* ---------- glass card – squared, subtle border, no noise ---------- */
+    .card {
+      background: var(--surface-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      transition: var(--transition);
     }
 
-    .glass-card:hover {
-      border-color: var(--lime);
-      box-shadow: 0 30px 60px -20px rgba(185,255,80,0.35), 0 0 0 1px var(--lime);
-      transform: translateY(-6px);
-    }
-
-    /* decorative lime dot pattern inside cards */
-    .glass-card::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background-image: radial-gradient(circle at 20px 30px, rgba(185,255,80,0.1) 2px, transparent 2px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      opacity: 0.4;
+    .card:hover {
+      border-color: rgba(163, 214, 92, 0.5);
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.5rem;
     }
 
     .card-header h2 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: white;
-      letter-spacing: -0.02em;
-      display: flex;
-      gap: 0.6rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
     }
 
-    .card-header h2 i {
-      color: var(--lime);
-      filter: drop-shadow(0 0 6px var(--lime-glow));
+    .card-header span {
+      color: var(--text-muted);
+      font-size: 0.85rem;
     }
 
-    /* ---------- GROUP STYLES – big, airy, lime vibes ---------- */
+    /* ---------- group cards – clean, square, light border ---------- */
     .group {
-      background: rgba(10, 15, 20, 0.7);
-      backdrop-filter: blur(8px);
-      border-radius: var(--radius-lg);
-      padding: 1.6rem 1.8rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid rgba(185,255,80,0.25);
-      border-top: 4px solid var(--lime);
-      transition: var(--transition-bounce);
+      background: var(--surface-dark);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid var(--border-subtle);
+      border-top: 2px solid var(--accent);  /* only subtle lime line */
+      transition: var(--transition);
     }
 
     .group:hover {
-      border-color: var(--lime);
-      background: rgba(20, 30, 35, 0.8);
-      transform: scale(1.01);
+      border-color: var(--accent);
     }
 
     .group-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.2rem;
+      margin-bottom: 0.8rem;
     }
 
     .group-header strong {
-      font-size: 1.4rem;
-      font-weight: 700;
+      font-size: 1.1rem;
+      font-weight: 600;
       color: white;
-      text-shadow: 0 0 5px rgba(185,255,80,0.3);
     }
 
     .group .member {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.8rem 0.4rem;
-      border-bottom: 1px solid rgba(185,255,80,0.15);
-      font-size: 1.1rem;
-      color: var(--white-secondary);
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
     }
 
-    .group .member:last-child { border-bottom: none; }
-
-    .member-index {
-      display: inline-block;
-      width: 30px; height: 30px;
-      background: var(--lime-soft);
-      border-radius: 50%;
-      text-align: center;
-      line-height: 30px;
-      font-weight: 700;
-      color: black;
-      background-color: var(--lime);
-      margin-right: 0.8rem;
-      font-size: 0.9rem;
+    .group .member:last-child {
+      border-bottom: none;
     }
 
-    /* ----- unassigned item ----- */
+    .member-name {
+      font-weight: 500;
+      color: white;
+    }
+
+    /* ---------- unassigned list items ---------- */
     .item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1.2rem;
-      background: rgba(0,0,0,0.3);
-      border-radius: var(--radius-md);
-      margin-bottom: 0.8rem;
-      border: 1px solid var(--glass-border);
-      transition: var(--transition-bounce);
-    }
-
-    .item:hover {
-      border-color: var(--lime);
-      background: rgba(185,255,80,0.08);
+      padding: 0.75rem 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: var(--radius);
+      margin-bottom: 0.6rem;
+      border: 1px solid var(--border-subtle);
     }
 
     .item .name {
-      font-weight: 600;
-      font-size: 1.1rem;
+      font-weight: 500;
       color: white;
     }
 
-    /* ---------- BUTTONS – LIME OBSESSION ---------- */
+    /* ---------- buttons – squared, minimal, lime as subtle accent ---------- */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.6rem;
-      padding: 0.8rem 1.8rem;
-      border-radius: 60px;
-      font-weight: 700;
-      font-size: 1rem;
+      padding: 0.6rem 1.4rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.9rem;
       border: none;
       cursor: pointer;
-      transition: var(--transition-bounce);
-      border: 1px solid transparent;
-      letter-spacing: 0.4px;
+      transition: var(--transition);
       background: transparent;
+      border: 1px solid transparent;
     }
 
     .btn-primary {
-      background: var(--lime);
-      color: #0a0c0e;
-      font-weight: 800;
-      box-shadow: 0 0 15px var(--lime-glow);
-      border: 1px solid var(--lime);
+      background: var(--accent);
+      color: #0e0f10;
+      border: 1px solid var(--accent);
     }
 
     .btn-primary:hover {
-      background: #c6ff6b;
-      transform: scale(0.97);
-      box-shadow: 0 0 25px var(--lime-glow);
+      background: #b2e06b;
     }
 
     .btn-grey {
-      background: rgba(40, 50, 60, 0.7);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(185,255,80,0.3);
-      color: white;
+      background: var(--surface-lighter);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
     }
 
     .btn-grey:hover {
-      background: rgba(70, 90, 100, 0.8);
-      border-color: var(--lime);
+      border-color: var(--accent);
       color: white;
     }
 
     .btn-ghost {
+      border: 1px solid var(--accent);
+      color: var(--accent);
       background: transparent;
-      border: 1px solid var(--lime);
-      color: var(--lime);
-      padding: 0.5rem 1.4rem;
     }
 
     .btn-ghost:hover {
-      background: var(--lime-soft);
-      border-color: var(--lime);
-      color: white;
+      background: var(--accent-soft);
     }
 
     .btn-small {
-      padding: 0.4rem 1rem;
-      font-size: 0.9rem;
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
     }
 
-    .btn-full { width: 100%; }
+    .btn-full {
+      width: 100%;
+    }
 
     .leave-inline {
-      background: rgba(255, 80, 80, 0.15);
-      border: 1px solid rgba(255, 138, 138, 0.4);
-      color: #ffb3b3;
-    }
-    .leave-inline:hover {
-      background: rgba(220, 38, 38, 0.25);
-      border-color: var(--danger);
-      color: white;
+      background: rgba(232, 129, 129, 0.08);
+      border: 1px solid rgba(232, 129, 129, 0.3);
+      color: #f0b3b3;
     }
 
-    /* ---------- INPUTS – LIME GLOW ---------- */
+    .leave-inline:hover {
+      background: rgba(232, 129, 129, 0.18);
+      border-color: var(--danger);
+    }
+
+    /* ---------- inputs / selects – squared, dark ---------- */
     input, select {
       width: 100%;
-      padding: 1rem 1.6rem;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid var(--glass-border);
-      border-radius: 60px;
+      padding: 0.8rem 1.2rem;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
       color: white;
-      font-size: 1rem;
-      backdrop-filter: blur(8px);
-      transition: var(--transition-slow);
+      font-size: 0.95rem;
+      transition: var(--transition);
     }
 
     input:focus, select:focus {
       outline: none;
-      border-color: var(--lime);
-      box-shadow: 0 0 0 4px rgba(185,255,80,0.25);
-      background: rgba(0,0,0,0.7);
+      border-color: var(--accent);
+      background: rgba(0, 0, 0, 0.7);
     }
 
-    /* ---------- ACTION BOX – extra large ---------- */
+    /* ---------- action box – minimal, lime border ---------- */
     #actionBox {
-      margin-top: 2rem;
-      background: rgba(16, 24, 28, 0.9);
-      backdrop-filter: blur(20px);
-      border-radius: var(--radius-lg);
-      padding: 2rem;
-      border: 1px solid var(--lime);
-      box-shadow: 0 12px 35px rgba(185,255,80,0.2);
+      margin-top: 1.8rem;
+      background: var(--surface-dark);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      border: 1px solid var(--accent);
     }
 
     .controls-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 1.2rem;
+      gap: 0.8rem;
+      margin-top: 1rem;
     }
 
     #actionMsg {
-      color: #ffe484;
-      font-weight: 600;
+      color: var(--accent);
+      font-size: 0.9rem;
+      margin-top: 0.8rem;
     }
 
-    /* ---------- SEARCH RESULTS PANEL ---------- */
-    .search-results-panel {
-      margin-top: 1.5rem;
-      background: rgba(0,0,0,0.25);
-      border-radius: var(--radius-md);
-      padding: 0.8rem 0.2rem;
+    /* ---------- search results ---------- */
+    .search-results {
+      margin-top: 1.2rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: var(--radius);
+      padding: 0.2rem 0;
     }
 
     .tag {
-      background: var(--lime);
-      color: black;
-      border-radius: 40px;
-      padding: 0.3rem 1rem;
-      font-size: 0.8rem;
-      font-weight: 700;
+      background: var(--accent-soft);
+      border-radius: 4px;      /* square tag */
+      padding: 0.2rem 0.8rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      border: 1px solid var(--accent);
     }
 
-    /* ---------- STATS INSIDE EXPORT CARD ---------- */
-    .admin-stats {
-      background: rgba(0,0,0,0.35);
-      border-radius: var(--radius-lg);
-      padding: 1.4rem;
-      margin-bottom: 1.4rem;
+    /* ---------- export card stats ---------- */
+    .stats-mini {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: var(--radius);
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border-subtle);
     }
 
-    .mono {
-      font-size: 1.8rem;
-      font-weight: 700;
+    .stats-mini span {
+      font-weight: 600;
       color: white;
     }
 
-    /* ---------- CONFIRM MODAL – full glass, lime teeth ---------- */
+    /* ---------- confirmation modal – square, glass ---------- */
     #confirmOverlay {
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 10, 0.85);
-      backdrop-filter: blur(18px);
+      background: rgba(10, 12, 14, 0.85);
+      backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -455,188 +353,175 @@
     }
 
     #confirmBox {
-      background: var(--glass-bg);
-      backdrop-filter: blur(32px);
-      border: 2px solid var(--lime);
-      border-radius: 48px;
-      padding: 2.8rem;
-      max-width: 520px;
+      background: var(--surface-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 2rem 2rem 1.8rem;
+      max-width: 460px;
       width: 90%;
-      box-shadow: 0 30px 70px rgba(185,255,80,0.25);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
     }
 
     #confirmBox h3 {
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 1.3rem;
+      font-weight: 600;
       color: white;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.75rem;
     }
 
     #confirmBox p {
-      font-size: 1.2rem;
-      color: var(--white-secondary);
+      color: var(--text-secondary);
+      line-height: 1.6;
     }
 
     .modal-controls {
       display: flex;
-      gap: 1.2rem;
+      gap: 1rem;
       justify-content: flex-end;
-      margin-top: 2.2rem;
+      margin-top: 2rem;
     }
 
-    /* ---------- FOOTER – raised ---------- */
+    /* ---------- footer – discreet ---------- */
     footer {
-      margin-top: 4rem;
+      margin-top: 3.5rem;
       text-align: center;
-      color: var(--white-muted);
-      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-subtle);
       padding-top: 2rem;
-      border-top: 1px dashed rgba(185,255,80,0.4);
-      font-weight: 300;
-      letter-spacing: 1px;
+      letter-spacing: 0.3px;
     }
 
-    /* ---------- animations ---------- */
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
-      100% { transform: translateY(0px); }
+    /* ---------- utility ---------- */
+    .meta {
+      color: var(--text-muted);
+      font-size: 0.9rem;
     }
 
-    .glass-card {
-      animation: float 8s infinite ease-in-out;
+    #noGroups {
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      text-align: center;
     }
-
-    /* preserve everything – IDs intact, JS unharmed */
   </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- TOP MEGABAR – absolutely massive, lime pulse -->
-    <div class="megabar">
-      <h1>
-        <span>🧠</span> CSE secA · AI PRESENTATION
-      </h1>
-      <div class="stat-globe">
-        <div class="stat-item-big">
-          <span class="stat-label">BRAINS</span>
+    <!-- TOP BAR – clean, no emojis, professional stats -->
+    <div class="top-bar">
+      <h1>CSE Section A · AI Presentation Grouping</h1>
+      <div class="top-bar-stats">
+        <div class="stat-block">
+          <span class="stat-label">Students</span>
           <span class="stat-number" id="statsTotal">0</span>
         </div>
-        <div class="stat-item-big">
-          <span class="stat-label">TEAMS</span>
-          <span class="stat-number" id="statsEnrolled">0·0</span>
+        <div class="stat-block">
+          <span class="stat-label">Enrolled / Groups</span>
+          <span class="stat-number" id="statsEnrolled">0/0</span>
         </div>
       </div>
     </div>
 
-    <!-- MAIN GRID – SPACIOUS, GLASSY, LIME ACCENTS -->
+    <!-- MAIN GRID -->
     <div class="dashboard-grid">
-      <!-- LEFT COLUMN: GROUPS + UNASSIGNED (BIG panels) -->
-      <div class="left-col">
-        <!-- GROUPS CARD – id groupsCard preserved -->
-        <div id="groupsCard" class="glass-card" style="margin-bottom: 2.5rem;">
+      <!-- LEFT COLUMN: Groups & Unassigned -->
+      <div>
+        <!-- GROUPS CARD -->
+        <div id="groupsCard" class="card" style="margin-bottom: 2rem;">
           <div class="card-header">
-            <h2><i>⚡</i> AI TEAMS</h2>
-            <span class="stat-label" style="font-size:1rem;">max 4 per group</span>
+            <h2>AI Teams</h2>
+            <span>1‑4 members</span>
           </div>
-          <div id="groupsList" style="margin-top: 0.5rem;"></div>
-          <div id="noGroups" style="display: none; padding: 2rem; text-align: center; background: rgba(0,0,0,0.3); border-radius: var(--radius-lg); color: var(--white-muted);">✨ No groups yet — create one by joining and selecting “Create new”.</div>
+          <div id="groupsList"></div>
+          <div id="noGroups" style="display: none;">No groups yet — create one by joining and selecting “Create new”.</div>
         </div>
 
-        <!-- UNASSIGNED CARD – id unenrolledList -->
-        <div class="glass-card">
+        <!-- UNASSIGNED CARD -->
+        <div class="card">
           <div class="card-header">
-            <h2><i>👤</i> FREE AGENTS</h2>
+            <h2>Unassigned</h2>
           </div>
-          <div id="unenrolledList" style="margin-top: 0.5rem;"></div>
+          <div id="unenrolledList"></div>
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: FIND YOURSELF + EXPORT (larger than ever) -->
-      <div class="right-col">
-        <!-- FIND YOURSELF – big interactive area -->
-        <div class="glass-card" style="margin-bottom: 2.5rem;">
+      <!-- RIGHT COLUMN: Find yourself + Export -->
+      <div>
+        <!-- FIND YOURSELF CARD -->
+        <div class="card" style="margin-bottom: 2rem;">
           <div class="card-header">
-            <h2><i>🔍</i> FIND YOURSELF</h2>
-            <span class="tag" style="background: var(--lime); color: black;">private roll</span>
+            <h2>Find yourself</h2>
+            <span class="meta">roll private</span>
           </div>
-          <div style="font-size: 1.1rem; color: var(--white-secondary); margin-bottom: 1.8rem;">
-            Search by name — roll required to confirm, kept private. If roll changed, use old one.
+          <div class="meta" style="margin-bottom: 1.2rem;">
+            Search by name — roll number required to confirm, kept private. Use old roll if changed.
           </div>
 
           <!-- search input -->
-          <input id="searchInput" type="search" placeholder="e.g. Riya, Arjun, Ananya ..." autocomplete="off" style="font-size: 1.1rem; padding: 1.2rem 2rem;" />
+          <input id="searchInput" type="text" placeholder="Type name..." autocomplete="off" />
 
-          <!-- search results container -->
-          <div id="searchResults" class="search-results-panel"></div>
+          <!-- search results -->
+          <div id="searchResults" class="search-results"></div>
 
-          <!-- ACTION BOX – all IDs inside untouched -->
+          <!-- ACTION BOX (hidden by default) -->
           <div id="actionBox" style="display: none;">
-            <div style="font-size: 1.2rem; font-weight: 600; color: var(--lime); margin-bottom: 0.5rem;">
-              ⚡ confirm with roll number
-            </div>
-            <input id="rollInput" type="text" placeholder="Enter your exact roll number" autocomplete="off" style="margin-bottom: 0.8rem;" />
-
+            <div style="font-weight: 600; margin-bottom: 0.8rem; color: var(--accent);">Confirm with roll number</div>
+            <input id="rollInput" type="text" placeholder="Roll number" autocomplete="off" />
             <div style="margin-top: 0.8rem;">
               <select id="groupSelect"></select>
             </div>
-
             <div class="controls-row">
-              <button id="joinBtn" class="btn btn-primary" style="flex:1;">✅ JOIN</button>
-              <button id="leaveBtn" class="btn btn-grey btn-small">🚪 LEAVE</button>
-              <button id="cancelBtn" class="btn btn-grey btn-small">✖ CANCEL</button>
+              <button id="joinBtn" class="btn btn-primary">Join</button>
+              <button id="leaveBtn" class="btn btn-grey btn-small">Leave</button>
+              <button id="cancelBtn" class="btn btn-grey btn-small">Cancel</button>
             </div>
-            <div id="actionMsg" class="note" style="margin-top: 1rem; color: #ffe484; font-weight: 600;"></div>
+            <div id="actionMsg"></div>
           </div>
         </div>
 
-        <!-- EXPORT & ADMIN – DUTTA CONTROLS, now with lime attitude -->
-        <div class="glass-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem;">
+        <!-- EXPORT & ADMIN CARD -->
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <div>
-              <span style="font-size: 1rem; color: var(--lime); font-weight: 700; letter-spacing: 2px;">⚙️ DUTTA CONTROLS</span>
-              <div style="font-weight: 800; font-size: 2rem; letter-spacing: -0.02em; color: white;">EXPORT</div>
+              <span style="font-size: 0.75rem; color: var(--accent); letter-spacing: 0.5px; text-transform: uppercase;">Dutta controls</span>
+              <div style="font-weight: 700; font-size: 1.2rem; color: white;">Export & admin</div>
             </div>
-            <!-- mini stats – also show full numbers, but we already have top bar. extra style -->
-            <div style="background: rgba(0,0,0,0.4); padding: 0.8rem 1.8rem; border-radius: 60px; border:1px solid var(--lime);">
-              <div class="mono" id="statsTotalDuplicate" style="display:none;"><!-- keep for JS but we use topbar, still need ID --></div>
-              <div style="font-size:1.2rem; font-weight:700;">⚡<span id="statsEnrolledSmall"></span></div>
+            <div class="stats-mini">
+              <span id="statsEnrolledSmall">0 enrolled</span>
             </div>
           </div>
-
-          <!-- real export button, full width, lime -->
-          <button id="exportBtn" class="btn btn-primary btn-full" style="padding: 1.2rem; font-size: 1.2rem;">
-            ⬇️ EXPORT JSON (groups + unassigned)
-          </button>
-
-          <div style="margin-top: 1.8rem; color: var(--white-muted); font-size: 0.95rem; border-top: 1px dashed rgba(185,255,80,0.5); padding-top: 1.5rem;">
-            ➕ Join, create or leave a team. Teams of 1‑4, to present on an <strong style="color: var(--lime);">AI Topic</strong>, soon.
+          <button id="exportBtn" class="btn btn-primary btn-full">Export JSON</button>
+          <div style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-subtle); padding-top: 1.2rem;">
+            Join, create or leave a team. Teams of 1‑4, to present on an AI topic.
           </div>
         </div>
       </div>
     </div>
 
-    <!-- FOOTER – Dutta's signature -->
+    <!-- FOOTER -->
     <footer>
-      🛸 Made by Dutta · refresh if stale · text me if this fucks up
+      Made by Dutta · refresh if stale · contact if issues
     </footer>
   </div>
 
-  <!-- CONFIRMATION MODAL – glass + lime border, same IDs -->
+  <!-- CONFIRMATION MODAL – same IDs, no emojis -->
   <div id="confirmOverlay" role="dialog" aria-modal="true" aria-hidden="true">
     <div id="confirmBox">
-      <h3>⚠️ ABANDON TEAM?</h3>
-      <p id="confirmText" style="font-size: 1.2rem;">Are you sure you want to leave this group? This will remove you from the roster.</p>
+      <h3>Confirm leave</h3>
+      <p id="confirmText">Are you sure you want to leave this group? This will remove you from the roster.</p>
       <div class="modal-controls">
-        <button id="confirmCancel" class="btn btn-grey" style="font-size:1.1rem;">Cancel</button>
-        <button id="confirmOk" class="btn btn-grey" style="background: rgba(255,80,80,0.2); border-color: var(--danger); color: white;">Yes, leave</button>
+        <button id="confirmCancel" class="btn btn-grey">Cancel</button>
+        <button id="confirmOk" class="btn btn-grey" style="background: rgba(232,129,129,0.1); border-color: var(--danger);">Yes, leave</button>
       </div>
     </div>
   </div>
 
-  <!-- ========== FIREBASE – SAME BACKEND, SAME LOGIC, ZERO CHANGES ========== -->
+  <!-- ========== FIREBASE – 100% ORIGINAL, UNCHANGED ========== -->
   <script type="module">
-    // 🔒 EXACT FIREBASE CONFIG – UNTOUCHED, UNAPOLOGETIC
+    // Your Firebase config – untouched
     const firebaseConfig = {
       apiKey: "AIzaSyC7872cCC6wXWgy8Drj1N0yET9nk0a7KM4",
       authDomain: "csea-dsgrouping.firebaseapp.com",
@@ -654,11 +539,11 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // COLLECTIONS
+    // collections
     const studentsRef = collection(db, "students");
     const groupsRef = collection(db, "groups");
 
-    // UI – ALL IDs REMAIN 100% ORIGINAL (some extra IDs added but we keep the originals)
+    // UI – exact same IDs
     const groupsList = document.getElementById("groupsList");
     const unenrolledList = document.getElementById("unenrolledList");
     const searchInput = document.getElementById("searchInput");
@@ -671,7 +556,7 @@
     const cancelBtn = document.getElementById("cancelBtn");
     const actionMsg = document.getElementById("actionMsg");
     const statsTotal = document.getElementById("statsTotal");
-    const statsEnrolled = document.getElementById("statsEnrolled");   // top bar uses this ID
+    const statsEnrolled = document.getElementById("statsEnrolled");
     const exportBtn = document.getElementById("exportBtn");
     const noGroups = document.getElementById("noGroups");
 
@@ -680,7 +565,7 @@
     const confirmCancel = document.getElementById('confirmCancel');
     const confirmText = document.getElementById('confirmText');
 
-    // DATA
+    // data
     let students = [];
     let groups = [];
     let pendingRoll = null;
@@ -688,7 +573,7 @@
     let _leaveStudent = null;
     let _leaveGroupId = null;
 
-    // LISTENERS – untouched
+    // listeners – exactly as before
     onSnapshot(studentsRef, snap => {
       students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       renderAll();
@@ -699,7 +584,7 @@
       renderAll();
     }, err => console.error("groups snapshot:", err));
 
-    // RENDER FUNCTIONS – identical logic, only UI classes are styled
+    // render functions – identical logic
     function renderAll(){
       renderGroups();
       renderUnenrolled();
@@ -715,9 +600,9 @@
         const mems = (g.members || []).map((roll, idx) => {
           const s = students.find(x => x.roll === roll || x.id === roll);
           const name = s ? escapeHtml(s.name) : escapeHtml(roll);
-          return `<div class="member"><div style="font-weight:600; display:flex; align-items:center;"><span class="member-index">${idx+1}</span> ${escapeHtml(name)}</div><div><button class="btn btn-grey btn-small leave-inline" data-roll="${escapeHtml(roll)}" data-name="${escapeHtml(name)}">Leave</button></div></div>`;
-        }).join('') || '<div class="meta">No members yet</div>';
-        return `<div class="group"><div class="group-header"><strong>Group ${escapeHtml(g.id)}</strong><div class="meta" style="font-size:1.1rem;">(${(g.members||[]).length}/4)</div></div>${mems}</div>`;
+          return `<div class="member"><div class="member-name">${idx+1}. ${escapeHtml(name)}</div><div><button class="btn btn-grey btn-small leave-inline" data-roll="${escapeHtml(roll)}" data-name="${escapeHtml(name)}">Leave</button></div></div>`;
+        }).join('') || '<div class="meta">No members</div>';
+        return `<div class="group"><div class="group-header"><strong>Group ${escapeHtml(g.id)}</strong><div class="meta">${(g.members||[]).length}/4</div></div>${mems}</div>`;
       }).join('');
 
       groupsList.querySelectorAll('.leave-inline').forEach(b => {
@@ -737,23 +622,26 @@
 
     function renderUnenrolled(){
       const unen = students.filter(s => !s.groupId).sort((a,b)=>a.name.localeCompare(b.name));
-      if (!unen.length) { unenrolledList.innerHTML = '<div class="meta" style="padding: 1.5rem; text-align:center;">🎉 All assigned — no free agents</div>'; return; }
+      if (!unen.length) { unenrolledList.innerHTML = '<div class="meta">All assigned</div>'; return; }
       const html = unen.map(s => `<div class="item"><div class="name">${escapeHtml(s.name)}</div><div><button class="btn-ghost btn-small" data-roll="${escapeHtml(s.roll||s.id)}" data-name="${escapeHtml(s.name)}">I am this</button></div></div>`).join('');
       unenrolledList.innerHTML = html;
       unenrolledList.querySelectorAll('button[data-roll]').forEach(b => b.addEventListener('click', () => startJoinFlow(b.dataset.roll, b.dataset.name)));
     }
 
     function updateStats(){
-      statsTotal.textContent = `${students.length}`;  // top bar big number
+      statsTotal.textContent = `${students.length}`;
       const enrolledCount = students.filter(s=>s.groupId).length;
-      statsEnrolled.innerHTML = `${enrolledCount}·${groups.length}`;  // matches "BRAINS" & "TEAMS"
+      statsEnrolled.textContent = `${enrolledCount}/${groups.length}`;
+      // also update mini stat in export card if needed
+      const mini = document.getElementById('statsEnrolledSmall');
+      if (mini) mini.textContent = `${enrolledCount} enrolled`;
     }
 
     function populateGroupSelect(){
       groupSelect.innerHTML = "";
       const sorted = [...groups].sort((a,b)=>(Number(a.id)||0)-(Number(b.id)||0));
       sorted.forEach(g => { const opt=document.createElement('option'); opt.value=g.id; opt.textContent=`Group ${g.id} (${(g.members||[]).length}/4)`; groupSelect.appendChild(opt); });
-      const optNew=document.createElement('option'); optNew.value='__new'; optNew.textContent=`✨ Create new (next ${nextGroupId()})`; groupSelect.appendChild(optNew); groupSelect.value='__new';
+      const optNew=document.createElement('option'); optNew.value='__new'; optNew.textContent=`Create new (next ${nextGroupId()})`; groupSelect.appendChild(optNew); groupSelect.value='__new';
     }
 
     function nextGroupId(){
@@ -767,12 +655,12 @@
 
     searchInput.addEventListener('input', () => {
       const q = searchInput.value.trim().toLowerCase();
-      if (!q) { searchResults.innerHTML = '<div class="meta" style="padding:1rem;">🔎 Type part of your name</div>'; hideActionBox(); return; }
+      if (!q) { searchResults.innerHTML = '<div class="meta" style="padding:0.8rem;">Type part of name</div>'; hideActionBox(); return; }
       const matches = students.filter(s => s.name.toLowerCase().includes(q));
-      if (!matches.length) { searchResults.innerHTML = '<div class="meta">❌ No matches</div>'; hideActionBox(); return; }
+      if (!matches.length) { searchResults.innerHTML = '<div class="meta" style="padding:0.8rem;">No matches</div>'; hideActionBox(); return; }
       searchResults.innerHTML = matches.map(s => {
         const enrolled = s.groupId ? `<span class="tag">G${s.groupId}</span>` : `<button class="btn-ghost btn-small" data-roll="${escapeHtml(s.roll||s.id)}" data-name="${escapeHtml(s.name)}">I am this</button>`;
-        return `<div style="padding: 1rem 0.8rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(185,255,80,0.1);"><div style="font-weight:600; color: white; font-size:1.1rem;">${escapeHtml(s.name)}</div><div>${enrolled}</div></div>`;
+        return `<div style="padding:0.8rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle);"><div style="font-weight:500; color:white;">${escapeHtml(s.name)}</div><div>${enrolled}</div></div>`;
       }).join('');
       searchResults.querySelectorAll('button[data-roll]').forEach(b => b.onclick = () => startJoinFlow(b.dataset.roll, b.dataset.name));
     });
@@ -805,7 +693,7 @@
           }
           const sRef = doc(db,'students', student.roll || student.id); tx.update(sRef, { groupId: gid });
         });
-        actionMsg.textContent='✅ Joined group!'; pendingRoll=null; pendingStudent=null; hideActionBox();
+        actionMsg.textContent='Joined group!'; pendingRoll=null; pendingStudent=null; hideActionBox();
       } catch(err){ console.error(err); actionMsg.textContent = err.message || 'Failed to join'; }
     });
 
@@ -852,7 +740,7 @@
           }
           const sRef = doc(db,'students', student.roll || student.id); tx.update(sRef, { groupId: null });
         });
-        actionMsg.textContent = `🚪 Left Group ${gid}.`; pendingRoll=null; pendingStudent=null; hideActionBox();
+        actionMsg.textContent = `Left Group ${gid}.`; pendingRoll=null; pendingStudent=null; hideActionBox();
       } catch(err){ console.error(err); actionMsg.textContent = 'Failed to leave group: '+(err.message||''); }
     });
 
