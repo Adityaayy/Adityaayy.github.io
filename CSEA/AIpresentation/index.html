@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="favicon.ico" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Presentation Grouping · CSE</title>
+  <!-- Inter only – clean, professional -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ---------- global reset – no nonsense ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #111314;        /* deep neutral dark */
+      --surface-dark: #1c1f21;
+      --surface-glass: rgba(28, 31, 33, 0.75);
+      --surface-lighter: #2c2f31;
+      --border-subtle: #3a3e40;
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --accent: #a3d65c;         /* muted lime, professional */
+      --accent-soft: rgba(163, 214, 92, 0.15);
+      --text-primary: #f2f4f6;
+      --text-secondary: #c8cdd0;
+      --text-muted: #90989e;
+      --danger: #e88181;
+      --radius: 8px;            /* square, only slight rounding */
+      --transition: 0.18s ease;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.5;
+      padding: 2rem 2rem 2.5rem;
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* ---------- top bar – rectangular, frosted, no frills ---------- */
+    .top-bar {
+      background: var(--surface-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius);
+      padding: 1.25rem 2rem;
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .top-bar h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: white;
+      margin: 0;
+    }
+
+    .top-bar-stats {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .stat-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    /* ---------- main grid – clean, spacious ---------- */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+      body { padding: 1.5rem; }
+    }
+
+    /* ---------- glass card – squared, subtle border, no noise ---------- */
+    .card {
+      background: var(--surface-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      border-color: rgba(163, 214, 92, 0.5);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .card-header span {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ---------- group cards – clean, square, light border ---------- */
+    .group {
+      background: var(--surface-dark);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid var(--border-subtle);
+      border-top: 2px solid var(--accent);  /* only subtle lime line */
+      transition: var(--transition);
+    }
+
+    .group:hover {
+      border-color: var(--accent);
+    }
+
+    .group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .group-header strong {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .group .member {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    .group .member:last-child {
+      border-bottom: none;
+    }
+
+    .member-name {
+      font-weight: 500;
+      color: white;
+    }
+
+    /* ---------- unassigned list items ---------- */
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: var(--radius);
+      margin-bottom: 0.6rem;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .item .name {
+      font-weight: 500;
+      color: white;
+    }
+
+    /* ---------- buttons – squared, minimal, lime as subtle accent ---------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 1.4rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      background: transparent;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0e0f10;
+      border: 1px solid var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: #b2e06b;
+    }
+
+    .btn-grey {
+      background: var(--surface-lighter);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    .btn-grey:hover {
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      background: transparent;
+    }
+
+    .btn-ghost:hover {
+      background: var(--accent-soft);
+    }
+
+    .btn-small {
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .leave-inline {
+      background: rgba(232, 129, 129, 0.08);
+      border: 1px solid rgba(232, 129, 129, 0.3);
+      color: #f0b3b3;
+    }
+
+    .leave-inline:hover {
+      background: rgba(232, 129, 129, 0.18);
+      border-color: var(--danger);
+    }
+
+    /* ---------- inputs / selects – squared, dark ---------- */
+    input, select {
+      width: 100%;
+      padding: 0.8rem 1.2rem;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      color: white;
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    /* ---------- action box – minimal, lime border ---------- */
+    #actionBox {
+      margin-top: 1.8rem;
+      background: var(--surface-dark);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      border: 1px solid var(--accent);
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    #actionMsg {
+      color: var(--accent);
+      font-size: 0.9rem;
+      margin-top: 0.8rem;
+    }
+
+    /* ---------- search results ---------- */
+    .search-results {
+      margin-top: 1.2rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: var(--radius);
+      padding: 0.2rem 0;
+    }
+
+    .tag {
+      background: var(--accent-soft);
+      border-radius: 4px;      /* square tag */
+      padding: 0.2rem 0.8rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    /* ---------- export card stats ---------- */
+    .stats-mini {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: var(--radius);
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .stats-mini span {
+      font-weight: 600;
+      color: white;
+    }
+
+    /* ---------- confirmation modal – square, glass ---------- */
+    #confirmOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 12, 14, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #confirmBox {
+      background: var(--surface-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 2rem 2rem 1.8rem;
+      max-width: 460px;
+      width: 90%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+    }
+
+    #confirmBox h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 0.75rem;
+    }
+
+    #confirmBox p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .modal-controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+
+    /* ---------- footer – discreet ---------- */
+    footer {
+      margin-top: 3.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 2rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* ---------- utility ---------- */
+    .meta {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    #noGroups {
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- TOP BAR – clean, no emojis, professional stats -->
+    <div class="top-bar">
+      <h1>CSE Section A · AI Presentation Grouping</h1>
+      <div class="top-bar-stats">
+        <div class="stat-block">
+          <span class="stat-label">Students</span>
+          <span class="stat-number" id="statsTotal">0</span>
+        </div>
+        <div class="stat-block">
+          <span class="stat-label">Enrolled / Groups</span>
+          <span class="stat-number" id="statsEnrolled">0/0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="dashboard-grid">
+      <!-- LEFT COLUMN: Groups & Unassigned -->
+      <div>
+        <!-- GROUPS CARD -->
+        <div id="groupsCard" class="card" style="margin-bottom: 2rem;">
+          <div class="card-header">
+            <h2>AI Teams</h2>
+            <span>1‑4 members</span>
+          </div>
+          <div id="groupsList"></div>
+          <div id="noGroups" style="display: none;">No groups yet — create one by joining and selecting “Create new”.</div>
+        </div>
+
+        <!-- UNASSIGNED CARD -->
+        <div class="card">
+          <div class="card-header">
+            <h2>Unassigned</h2>
+          </div>
+          <div id="unenrolledList"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Find yourself + Export -->
+      <div>
+        <!-- FIND YOURSELF CARD -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <div class="card-header">
+            <h2>Find yourself</h2>
+            <span class="meta">roll private</span>
+          </div>
+          <div class="meta" style="margin-bottom: 1.2rem;">
+            Search by name — roll number required to confirm, kept private. Use old roll if changed.
+          </div>
+
+          <!-- search input -->
+          <input id="searchInput" type="text" placeholder="Type name..." autocomplete="off" />
+
+          <!-- search results -->
+          <div id="searchResults" class="search-results"></div>
+
+          <!-- ACTION BOX (hidden by default) -->
+          <div id="actionBox" style="display: none;">
+            <div style="font-weight: 600; margin-bottom: 0.8rem; color: var(--accent);">Confirm with roll number</div>
+            <input id="rollInput" type="text" placeholder="Roll number" autocomplete="off" />
+            <div style="margin-top: 0.8rem;">
+              <select id="groupSelect"></select>
+            </div>
+            <div class="controls-row">
+              <button id="joinBtn" class="btn btn-primary">Join</button>
+              <button id="leaveBtn" class="btn btn-grey btn-small">Leave</button>
+              <button id="cancelBtn" class="btn btn-grey btn-small">Cancel</button>
+            </div>
+            <div id="actionMsg"></div>
+          </div>
+        </div>
+
+        <!-- EXPORT & ADMIN CARD -->
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+              <span style="font-size: 0.75rem; color: var(--accent); letter-spacing: 0.5px; text-transform: uppercase;">Dutta controls</span>
+              <div style="font-weight: 700; font-size: 1.2rem; color: white;">Export & admin</div>
+            </div>
+            <div class="stats-mini">
+              <span id="statsEnrolledSmall">0 enrolled</span>
+            </div>
+          </div>
+          <button id="exportBtn" class="btn btn-primary btn-full">Export JSON</button>
+          <div style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-subtle); padding-top: 1.2rem;">
+            Join, create or leave a team. Teams of 1‑4, to present on an AI topic.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      Made by Dutta · refresh if stale · contact if issues
+    </footer>
+  </div>
+
+  <!-- CONFIRMATION MODAL – same IDs, no emojis -->
+  <div id="confirmOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div id="confirmBox">
+      <h3>Confirm leave</h3>
+      <p id="confirmText">Are you sure you want to leave this group? This will remove you from the roster.</p>
+      <div class="modal-controls">
+        <button id="confirmCancel" class="btn btn-grey">Cancel</button>
+        <button id="confirmOk" class="btn btn-grey" style="background: rgba(232,129,129,0.1); border-color: var(--danger);">Yes, leave</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== FIREBASE – 100% ORIGINAL, UNCHANGED ========== -->
+  <script type="module">
+    // Your Firebase config – untouched
+    const firebaseConfig = {
+      apiKey: "AIzaSyC7872cCC6wXWgy8Drj1N0yET9nk0a7KM4",
+      authDomain: "csea-dsgrouping.firebaseapp.com",
+      projectId: "csea-dsgrouping",
+      storageBucket: "csea-dsgrouping.firebasestorage.app",
+      messagingSenderId: "367385736275",
+      appId: "1:367385736275:web:907bb7e06f7efc550cc2a6"
+    };
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import {
+      getFirestore, collection, doc, onSnapshot, setDoc, getDocs, runTransaction
+    } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // collections
+    const studentsRef = collection(db, "students");
+    const groupsRef = collection(db, "groups");
+
+    // UI – exact same IDs
+    const groupsList = document.getElementById("groupsList");
+    const unenrolledList = document.getElementById("unenrolledList");
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+    const actionBox = document.getElementById("actionBox");
+    const rollInput = document.getElementById("rollInput");
+    const groupSelect = document.getElementById("groupSelect");
+    const joinBtn = document.getElementById("joinBtn");
+    const leaveBtn = document.getElementById("leaveBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const actionMsg = document.getElementById("actionMsg");
+    const statsTotal = document.getElementById("statsTotal");
+    const statsEnrolled = document.getElementById("statsEnrolled");
+    const exportBtn = document.getElementById("exportBtn");
+    const noGroups = document.getElementById("noGroups");
+
+    const confirmOverlay = document.getElementById('confirmOverlay');
+    const confirmOk = document.getElementById('confirmOk');
+    const confirmCancel = document.getElementById('confirmCancel');
+    const confirmText = document.getElementById('confirmText');
+
+    // data
+    let students = [];
+    let groups = [];
+    let pendingRoll = null;
+    let pendingStudent = null;
+    let _leaveStudent = null;
+    let _leaveGroupId = null;
+
+    // listeners – exactly as before
+    onSnapshot(studentsRef, snap => {
+      students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderAll();
+    }, err => console.error("students snapshot:", err));
+
+    onSnapshot(groupsRef, snap => {
+      groups = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderAll();
+    }, err => console.error("groups snapshot:", err));
+
+    // render functions – identical logic
+    function renderAll(){
+      renderGroups();
+      renderUnenrolled();
+      updateStats();
+      populateGroupSelect();
+    }
+
+    function renderGroups(){
+      if (groups.length === 0) { groupsList.innerHTML = ""; noGroups.style.display = "block"; return; }
+      noGroups.style.display = "none";
+      const sorted = [...groups].sort((a,b) => (Number(a.id)||0) - (Number(b.id)||0));
+      groupsList.innerHTML = sorted.map(g => {
+        const mems = (g.members || []).map((roll, idx) => {
+          const s = students.find(x => x.roll === roll || x.id === roll);
+          const name = s ? escapeHtml(s.name) : escapeHtml(roll);
+          return `<div class="member"><div class="member-name">${idx+1}. ${escapeHtml(name)}</div><div><button class="btn btn-grey btn-small leave-inline" data-roll="${escapeHtml(roll)}" data-name="${escapeHtml(name)}">Leave</button></div></div>`;
+        }).join('') || '<div class="meta">No members</div>';
+        return `<div class="group"><div class="group-header"><strong>Group ${escapeHtml(g.id)}</strong><div class="meta">${(g.members||[]).length}/4</div></div>${mems}</div>`;
+      }).join('');
+
+      groupsList.querySelectorAll('.leave-inline').forEach(b => {
+        b.addEventListener('click', () => {
+          const roll = b.dataset.roll;
+          const name = b.dataset.name;
+          pendingRoll = roll;
+          pendingStudent = name;
+          actionMsg.textContent = `Confirm your roll to leave ${name}.`;
+          rollInput.value = '';
+          actionBox.style.display = 'block';
+          rollInput.focus();
+          populateGroupSelect();
+        });
+      });
+    }
+
+    function renderUnenrolled(){
+      const unen = students.filter(s => !s.groupId).sort((a,b)=>a.name.localeCompare(b.name));
+      if (!unen.length) { unenrolledList.innerHTML = '<div class="meta">All assigned</div>'; return; }
+      const html = unen.map(s => `<div class="item"><div class="name">${escapeHtml(s.name)}</div><div><button class="btn-ghost btn-small" data-roll="${escapeHtml(s.roll||s.id)}" data-name="${escapeHtml(s.name)}">I am this</button></div></div>`).join('');
+      unenrolledList.innerHTML = html;
+      unenrolledList.querySelectorAll('button[data-roll]').forEach(b => b.addEventListener('click', () => startJoinFlow(b.dataset.roll, b.dataset.name)));
+    }
+
+    function updateStats(){
+      statsTotal.textContent = `${students.length}`;
+      const enrolledCount = students.filter(s=>s.groupId).length;
+      statsEnrolled.textContent = `${enrolledCount}/${groups.length}`;
+      // also update mini stat in export card if needed
+      const mini = document.getElementById('statsEnrolledSmall');
+      if (mini) mini.textContent = `${enrolledCount} enrolled`;
+    }
+
+    function populateGroupSelect(){
+      groupSelect.innerHTML = "";
+      const sorted = [...groups].sort((a,b)=>(Number(a.id)||0)-(Number(b.id)||0));
+      sorted.forEach(g => { const opt=document.createElement('option'); opt.value=g.id; opt.textContent=`Group ${g.id} (${(g.members||[]).length}/4)`; groupSelect.appendChild(opt); });
+      const optNew=document.createElement('option'); optNew.value='__new'; optNew.textContent=`Create new (next ${nextGroupId()})`; groupSelect.appendChild(optNew); groupSelect.value='__new';
+    }
+
+    function nextGroupId(){
+      const nums = groups.map(g=>Number(g.id)).filter(n=>!isNaN(n) && n>0);
+      nums.sort((a,b)=>a-b);
+      for(let i=1;i<= (nums.length+1); i++){
+        if(!nums.includes(i)) return i;
+      }
+      return nums.length ? Math.max(...nums)+1 : 1;
+    }
+
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.trim().toLowerCase();
+      if (!q) { searchResults.innerHTML = '<div class="meta" style="padding:0.8rem;">Type part of name</div>'; hideActionBox(); return; }
+      const matches = students.filter(s => s.name.toLowerCase().includes(q));
+      if (!matches.length) { searchResults.innerHTML = '<div class="meta" style="padding:0.8rem;">No matches</div>'; hideActionBox(); return; }
+      searchResults.innerHTML = matches.map(s => {
+        const enrolled = s.groupId ? `<span class="tag">G${s.groupId}</span>` : `<button class="btn-ghost btn-small" data-roll="${escapeHtml(s.roll||s.id)}" data-name="${escapeHtml(s.name)}">I am this</button>`;
+        return `<div style="padding:0.8rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle);"><div style="font-weight:500; color:white;">${escapeHtml(s.name)}</div><div>${enrolled}</div></div>`;
+      }).join('');
+      searchResults.querySelectorAll('button[data-roll]').forEach(b => b.onclick = () => startJoinFlow(b.dataset.roll, b.dataset.name));
+    });
+
+    function startJoinFlow(roll, name){
+      pendingRoll = roll; pendingStudent = name; actionMsg.textContent=''; rollInput.value=''; actionBox.style.display='block'; rollInput.focus(); populateGroupSelect();
+    }
+    cancelBtn.addEventListener('click', ()=>{ pendingRoll=null; pendingStudent=null; hideActionBox(); });
+    function hideActionBox(){ actionBox.style.display='none'; actionMsg.textContent=''; }
+
+    joinBtn.addEventListener('click', async () => {
+      actionMsg.textContent=''; const entered = rollInput.value.trim();
+      if (!pendingRoll) { actionMsg.textContent='Pick yourself first.'; return; }
+      if (!entered) { actionMsg.textContent='Enter your roll number.'; return; }
+      if (entered !== pendingRoll) { actionMsg.textContent='Roll number does not match.'; return; }
+      const student = students.find(s => (s.roll && s.roll === entered) || s.id === entered);
+      if (!student) { actionMsg.textContent='Student not found. Ask Dutta.'; return; }
+      if (student.groupId) { actionMsg.textContent='You are already enrolled.'; return; }
+      let gid = groupSelect.value; if (gid === "__new") gid = String(nextGroupId()); gid = String(gid);
+
+      try {
+        await runTransaction(db, async (tx) => {
+          const gRef = doc(db,'groups',gid); const gSnap = await tx.get(gRef);
+          if (!gSnap.exists()) { tx.set(gRef, { id: gid, members: [student.roll || student.id] }); }
+          else {
+            const data = gSnap.data(); const members = Array.isArray(data.members) ? [...data.members] : [];
+            if (members.includes(student.roll || student.id)) return;
+            if (members.length >= 4) throw new Error('Group full');
+            members.push(student.roll || student.id); tx.update(gRef, { members });
+          }
+          const sRef = doc(db,'students', student.roll || student.id); tx.update(sRef, { groupId: gid });
+        });
+        actionMsg.textContent='Joined group!'; pendingRoll=null; pendingStudent=null; hideActionBox();
+      } catch(err){ console.error(err); actionMsg.textContent = err.message || 'Failed to join'; }
+    });
+
+    leaveBtn.addEventListener('click', async ()=>{
+      actionMsg.textContent=''; const entered = rollInput.value.trim();
+      if (!pendingRoll) { actionMsg.textContent='Pick yourself first.'; return; }
+      if (!entered) { actionMsg.textContent='Enter your roll number.'; return; }
+      if (entered !== pendingRoll) { actionMsg.textContent='Roll number does not match.'; return; }
+      const student = students.find(s => (s.roll && s.roll === entered) || s.id === entered);
+      if (!student) { actionMsg.textContent='Student not found.'; return; }
+      if (!student.groupId) { actionMsg.textContent='You are not in a group.'; return; }
+
+      _leaveStudent = student;
+      _leaveGroupId = String(student.groupId);
+      confirmText.textContent = `Leave Group ${_leaveGroupId}? This will remove you from the team roster.`;
+      confirmOverlay.style.display = 'flex';
+      confirmOverlay.setAttribute('aria-hidden','false');
+    });
+
+    confirmCancel.addEventListener('click', () => {
+      confirmOverlay.style.display = 'none';
+      confirmOverlay.setAttribute('aria-hidden','true');
+      _leaveStudent = null; _leaveGroupId = null;
+    });
+
+    confirmOk.addEventListener('click', async () => {
+      confirmOverlay.style.display = 'none';
+      confirmOverlay.setAttribute('aria-hidden','true');
+      if (!_leaveStudent) return;
+      const student = _leaveStudent;
+      const gid = _leaveGroupId;
+      _leaveStudent = null; _leaveGroupId = null;
+
+      try {
+        await runTransaction(db, async (tx) => {
+          const gRef = doc(db,'groups',gid); const gSnap = await tx.get(gRef);
+          if (!gSnap.exists()) return;
+          const data = gSnap.data(); const members = Array.isArray(data.members) ? [...data.members] : [];
+          const newMembers = members.filter(r => r !== (student.roll || student.id));
+          if (newMembers.length === 0) {
+            tx.delete(gRef);
+          } else {
+            tx.update(gRef, { members: newMembers });
+          }
+          const sRef = doc(db,'students', student.roll || student.id); tx.update(sRef, { groupId: null });
+        });
+        actionMsg.textContent = `Left Group ${gid}.`; pendingRoll=null; pendingStudent=null; hideActionBox();
+      } catch(err){ console.error(err); actionMsg.textContent = 'Failed to leave group: '+(err.message||''); }
+    });
+
+    exportBtn.addEventListener('click', async () => {
+      try {
+        const sSnap = await getDocs(studentsRef);
+        const allStudents = sSnap.docs.map(d => d.data());
+
+        const groupsMap = {};
+        const unassigned = [];
+        allStudents.forEach(stu => {
+          if (stu.groupId) {
+            if (!groupsMap[stu.groupId]) groupsMap[stu.groupId] = [];
+            groupsMap[stu.groupId].push({ name: stu.name, roll: stu.roll });
+          } else {
+            unassigned.push({ name: stu.name, roll: stu.roll });
+          }
+        });
+
+        const ordered = {};
+        Object.keys(groupsMap).map(k => Number(k)).filter(n => !isNaN(n)).sort((a,b)=>a-b).forEach(n => {
+          ordered[`Group ${n}`] = groupsMap[String(n)];
+        });
+        ordered['Unassigned'] = unassigned;
+
+        const blob = new Blob([JSON.stringify(ordered, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'groups_export.json'; a.click(); URL.revokeObjectURL(a.href);
+      } catch(e){ alert('Export failed: ' + (e.message || e)); }
+    });
+
+    function escapeHtml(s){ return String(s || '').replace(/[&<>"'`]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',"`":'&#96;'})[c]); }
+
+    renderAll();
+  </script>
+</body>
+</html>
