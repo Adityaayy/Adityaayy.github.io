@@ -497,7 +497,7 @@
               <span id="statsEnrolledSmall">0 enrolled</span>
             </div>
           </div>
-          <button id="exportBtn" class="btn btn-primary btn-full">Download JSON</button>
+          <button id="exportBtn" class="btn btn-primary btn-full">Download Excel</button>
           <div style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-subtle); padding-top: 1.2rem;">
             Join, create or leave a team. Teams of 1‑4, to present on an AI topic.
           </div>
@@ -825,27 +825,130 @@
     exportBtn.addEventListener('click', async () => {
       try {
         const sSnap = await getDocs(studentsRef);
-        const allStudents = sSnap.docs.map(d => d.data());
+        const gSnap = await getDocs(groupsRef);
+        const allStudents = sSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const allGroups = gSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const studentMap = new Map();
+        allStudents.forEach(student => {
+          const key = String(student.roll || student.id);
+          studentMap.set(key, student);
+        });
 
-        const groupsMap = {};
-        const unassigned = [];
-        allStudents.forEach(stu => {
-          if (stu.groupId) {
-            if (!groupsMap[stu.groupId]) groupsMap[stu.groupId] = [];
-            groupsMap[stu.groupId].push({ name: stu.name, roll: stu.roll });
-          } else {
-            unassigned.push({ name: stu.name, roll: stu.roll });
+        const sortedGroups = [...allGroups].sort((a, b) => {
+          const aNum = Number(a.id);
+          const bNum = Number(b.id);
+          const aValid = !isNaN(aNum);
+          const bValid = !isNaN(bNum);
+          if (aValid && bValid) return aNum - bNum;
+          if (aValid) return -1;
+          if (bValid) return 1;
+          return String(a.id).localeCompare(String(b.id));
+        });
+
+        const rows = [];
+        sortedGroups.forEach(group => {
+          const groupId = String(group.id);
+          const groupTitle = getGroupTitle(group);
+          const members = Array.isArray(group.members) ? group.members : [];
+          if (!members.length) {
+            rows.push({
+              section: 'Grouped',
+              groupId,
+              groupName: groupTitle,
+              studentName: '',
+              rollNumber: '',
+              status: 'Empty group'
+            });
+            return;
           }
+
+          members.forEach(memberRoll => {
+            const student = studentMap.get(String(memberRoll));
+            rows.push({
+              section: 'Grouped',
+              groupId,
+              groupName: groupTitle,
+              studentName: student ? student.name : '',
+              rollNumber: student ? (student.roll || student.id || String(memberRoll)) : String(memberRoll),
+              status: 'Assigned'
+            });
+          });
         });
 
-        const ordered = {};
-        Object.keys(groupsMap).map(k => Number(k)).filter(n => !isNaN(n)).sort((a,b)=>a-b).forEach(n => {
-          ordered[`Group ${n}`] = groupsMap[String(n)];
-        });
-        ordered['Unassigned'] = unassigned;
+        const assignedRolls = new Set(
+          rows
+            .filter(row => row.status === 'Assigned')
+            .map(row => String(row.rollNumber))
+        );
 
-        const blob = new Blob([JSON.stringify(ordered, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'groups_export.json'; a.click(); URL.revokeObjectURL(a.href);
+        const unassignedStudents = allStudents
+          .filter(student => {
+            const roll = String(student.roll || student.id);
+            return !student.groupId || !assignedRolls.has(roll);
+          })
+          .sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
+
+        unassignedStudents.forEach(student => {
+          rows.push({
+            section: 'Unassigned',
+            groupId: '',
+            groupName: 'Unassigned',
+            studentName: student.name || '',
+            rollNumber: student.roll || student.id || '',
+            status: 'Unassigned'
+          });
+        });
+
+        const htmlRows = rows.map(row => `
+          <tr>
+            <td>${escapeHtml(row.section)}</td>
+            <td>${escapeHtml(row.groupId)}</td>
+            <td>${escapeHtml(row.groupName)}</td>
+            <td>${escapeHtml(row.studentName)}</td>
+            <td style="mso-number-format:'\\@';">${escapeHtml(row.rollNumber)}</td>
+            <td>${escapeHtml(row.status)}</td>
+          </tr>
+        `).join('');
+
+        const workbookHtml = `
+          <html xmlns:o="urn:schemas-microsoft-com:office:office"
+                xmlns:x="urn:schemas-microsoft-com:office:excel"
+                xmlns="http://www.w3.org/TR/REC-html40">
+          <head>
+            <meta charset="utf-8" />
+            <meta name="ProgId" content="Excel.Sheet" />
+            <meta name="Generator" content="CSEA AI Presentation Grouping" />
+            <style>
+              table { border-collapse: collapse; font-family: Arial, sans-serif; }
+              th, td { border: 1px solid #cbd5e1; padding: 8px 10px; }
+              th { background: #111827; color: #ffffff; font-weight: 700; }
+              tr:nth-child(even) td { background: #f8fafc; }
+            </style>
+          </head>
+          <body>
+            <table>
+              <thead>
+                <tr>
+                  <th>Section</th>
+                  <th>Group ID</th>
+                  <th>Group Name</th>
+                  <th>Student Name</th>
+                  <th>Roll Number</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>${htmlRows}</tbody>
+            </table>
+          </body>
+          </html>
+        `;
+
+        const blob = new Blob([workbookHtml], { type: 'application/vnd.ms-excel' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'ai_groups_export.xls';
+        a.click();
+        URL.revokeObjectURL(a.href);
       } catch(e){ alert('Export failed: ' + (e.message || e)); }
     });
 
