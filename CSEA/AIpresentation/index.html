@@ -490,7 +490,7 @@
         <div class="card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <div>
-              <span style="font-size: 0.75rem; color: var(--accent); letter-spacing: 0.5px; text-transform: uppercase;">Dutta controls</span>
+              <span style="font-size: 0.75rem; color: var(--accent); letter-spacing: 0.5px; text-transform: uppercase;">Export Controls</span>
               <div style="font-weight: 700; font-size: 1.2rem; color: white;">Export List</div>
             </div>
             <div class="stats-mini">
@@ -725,7 +725,7 @@
       if (!entered) { actionMsg.textContent='Enter your roll number.'; return; }
       if (entered !== pendingRoll) { actionMsg.textContent='Roll number does not match.'; return; }
       const student = students.find(s => (s.roll && s.roll === entered) || s.id === entered);
-      if (!student) { actionMsg.textContent='Student not found. Ask Dutta.'; return; }
+      if (!student) { actionMsg.textContent='Student not found. Ask Dutta ig.'; return; }
       if (student.groupId) { actionMsg.textContent='You are already enrolled.'; return; }
       let gid = groupSelect.value; if (gid === "__new") gid = String(nextGroupId()); gid = String(gid);
 
